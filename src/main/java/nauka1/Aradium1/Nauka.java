@@ -177,11 +177,11 @@ public final class Nauka extends JavaPlugin {
         Objects.requireNonNull(getCommand("obsydianregion")).setExecutor(new obsydian.obsydianRegionCommand());  //obsydian
         Objects.requireNonNull(getCommand("prismarinregion")).setExecutor(new prismarin.prismarinRegionCommand());  //prismarin
         Objects.requireNonNull(getCommand("redstoneregion")).setExecutor(new redstone.redstoneRegionCommand());  //redstone
-        Objects.requireNonNull(getCommand("dirtregion")).setExecutor(new dirt.dirtRegionCommand());  //dirt
+        Objects.requireNonNull(getCommand("dirtregion")).setExecutor(new Dirt.DirtRegionCommand());  //dirt
         Objects.requireNonNull(getCommand("emeraldregion")).setExecutor(new emerald.emeraldRegionCommand());  //emerald
         Objects.requireNonNull(getCommand("copperregion")).setExecutor(new copper.copperRegionCommand());   //copper
         Objects.requireNonNull(getCommand("cobelregion")).setExecutor(new cobel.cobelRegionCommand());  //cobel
-        Objects.requireNonNull(getCommand("netherrackregion")).setExecutor(new netherrack.netherrackRegionCommand());  //netherrack
+        Objects.requireNonNull(getCommand("netherrackregion")).setExecutor(new Netherrack.NetherrackRegionCommand());  //netherrack
 
     }
 
