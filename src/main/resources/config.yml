@@ -1,0 +1,64 @@
+# Konfiguracja pluginu Aradium
+# Cooldowny podane są w sekundach
+messages:
+  no_permission: "&cNie masz uprawnień do tego!"
+  player_only: "&cKomenda tylko dla graczy!"
+  magicitem_given: "&aOtrzymałeś magiczny przedmiot: %item% (poziom %level%)!"
+  magicitem_usage: "&cUżycie: /magicitem <gracz> <typ> <poziom>"
+  cooldown_wait: "&cMusisz poczekać jeszcze %time% sekund przed kolejnym użyciem!"
+  effect_applied: "&aAktywowałeś specjalną umiejętność!"
+  region_min_set: "&aPomyślnie ustawiono punkt MIN dla rudy: %ore%!"
+  region_max_set: "&aPomyślnie ustawiono punkt MAX dla rudy: %ore%!"
+  region_usage: "&cUżycie: /oreregion <ruda> <min|max>"
+  invalid_ore: "&cRuda %ore% nie istnieje! (Wpisz np. DIAMOND_ORE)"
+
+magic_items:
+  strength:
+    name: "&c&lHiper Siła"
+    material: "BLAZE_POWDER"
+    lore: "&7Kliknij, aby otrzymać nadludzką siłę!"
+    cooldown: 120
+    effect_type: "INCREASE_DAMAGE"
+    duration: 600
+  jump:
+    name: "&a&lSkok Zająca"
+    material: "RABBIT_FOOT"
+    lore: "&7Kliknij, aby skakać jak zając!"
+    cooldown: 120
+    effect_type: "JUMP"
+    duration: 600
+  health:
+    name: "&c&lWięcej Życia"
+    material: "APPLE"
+    lore: "&7Kliknij, aby zyskać więcej zdrowia!"
+    cooldown: 120
+    effect_type: "HEALTH_BOOST"
+    duration: 600
+  speed:
+    name: "&b&lSzybkość"
+    material: "SUGAR"
+    lore: "&7Kliknij, aby biegać szybciej!"
+    cooldown: 120
+    effect_type: "SPEED"
+    duration: 600
+  heist:
+    name: "&e&lHeist"
+    material: "GOLD_NUGGET"
+    lore: "&7Kliknij, aby szybciej kopać!"
+    cooldown: 120
+    effect_type: "FAST_DIGGING"
+    duration: 600
+  regeneration:
+    name: "&d&lRegeneracja"
+    material: "GHAST_TEAR"
+    lore: "&7Kliknij, aby uleczyć rany!"
+    cooldown: 120
+    effect_type: "REGENERATION"
+    duration: 600
+  duch:
+    name: "&f&lDuch"
+    material: "SOUL_SAND"
+    lore: "&7Specjalny atak!"
+    cooldown: 120
+    effect_type: "INVISIBILITY"
+    duration: 600
