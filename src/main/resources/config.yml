@@ -1,16 +1,198 @@
-# Konfiguracja pluginu Aradium
-# Cooldowny podane są w sekundach
+# Konfiguracja pluginu Aradium (Paper 26.3)
+# Cooldowny podane są w sekundach, a duration w tickach (20 ticków = 1 sekunda)
+
+modules:
+  magic_items: true
+  ore_regions: true
+  armor: true
+  economy: true
+  shop: true
+  spawners: true
+  skyblock: true
+
+database:
+  type: "SQLITE"
+  file: "aradium.db"
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "aradium"
+    username: "root"
+    password: ""
+
+economy:
+  starting_balance: 100.0
+  autosave_interval_seconds: 60
+
+ore_regions:
+  regen_delay_seconds: 10
+
+skyblock:
+  world_name: "skyblock_world"
+  island_spacing: 400
+  island_height: 100
+  default_border_radius: 50
+  max_warps_per_island: 3
+  max_members_default: 4
+  default_spawner_limit: 8
+  level_scan_cooldown_seconds: 10
+  upgrades:
+    world_border:
+      1:
+        value: 50
+        cost: 0.0
+      2:
+        value: 75
+        cost: 5000.0
+      3:
+        value: 100
+        cost: 15000.0
+      4:
+        value: 150
+        cost: 35000.0
+      5:
+        value: 190
+        cost: 75000.0
+    spawner_limit:
+      1:
+        value: 8
+        cost: 0.0
+      2:
+        value: 16
+        cost: 7500.0
+      3:
+        value: 32
+        cost: 20000.0
+      4:
+        value: 64
+        cost: 50000.0
+      5:
+        value: 128
+        cost: 100000.0
+    crop_growth:
+      1:
+        value: 0
+        cost: 0.0
+      2:
+        value: 25
+        cost: 4000.0
+      3:
+        value: 50
+        cost: 12000.0
+      4:
+        value: 75
+        cost: 25000.0
+      5:
+        value: 100
+        cost: 60000.0
+    member_limit:
+      1:
+        value: 4
+        cost: 0.0
+      2:
+        value: 6
+        cost: 3000.0
+      3:
+        value: 8
+        cost: 8000.0
+      4:
+        value: 12
+        cost: 20000.0
+      5:
+        value: 16
+        cost: 45000.0
+
 messages:
   no_permission: "&cNie masz uprawnień do tego!"
   player_only: "&cKomenda tylko dla graczy!"
+  player_not_found: "&cNie znaleziono gracza!"
+  invalid_level: "&cPoziom musi być liczbą całkowitą z zakresu 1-255!"
+  invalid_item_type: "&cTaki typ przedmiotu nie istnieje lub moduł jest wyłączony!"
   magicitem_given: "&aOtrzymałeś magiczny przedmiot: %item% (poziom %level%)!"
+  item_given_sender: "&aPomyślnie nadano przedmiot %item% (poziom %level%) graczowi %player%."
+  inventory_full_dropped: "&eTwój ekwipunek był pełny — magiczny przedmiot został upuszczony pod nogi!"
   magicitem_usage: "&cUżycie: /magicitem <gracz> <typ> <poziom>"
+  magicarmor_usage: "&cUżycie: /magicarmor <gracz> <zestaw> <tier> [all|helmet|chestplate|leggings|boots]"
+  magicarmor_given: "&aOtrzymałeś magiczną zbroję: &e%set% &8(&fTier %tier%&8)&a!"
+  magicarmor_given_sender: "&aPomyślnie nadano zbroję &e%set% (Tier %tier%) &agraczowi &f%player%&a."
+  armor_set_activated: "&aAktywowano bonus pełnego zestawu: &e%set% Tier %tier%&a!"
+  armor_set_deactivated: "&eDezaktywowano bonus zestawu: &f%set% Tier %tier%&e."
   cooldown_wait: "&cMusisz poczekać jeszcze %time% sekund przed kolejnym użyciem!"
   effect_applied: "&aAktywowałeś specjalną umiejętność!"
   region_min_set: "&aPomyślnie ustawiono punkt MIN dla rudy: %ore%!"
   region_max_set: "&aPomyślnie ustawiono punkt MAX dla rudy: %ore%!"
-  region_usage: "&cUżycie: /oreregion <ruda> <min|max>"
-  invalid_ore: "&cRuda %ore% nie istnieje! (Wpisz np. DIAMOND_ORE)"
+  region_usage: "&cUżycie: /oreregion <ruda> <min|max> [strefa]"
+  invalid_ore: "&cRuda %ore% nie istnieje lub nie jest blokiem! (Wpisz np. DIAMOND_ORE)"
+  reload_success: "&aKonfiguracja i moduły Aradium zostały pomyślnie przeładowane!"
+  module_list_header: "&6Moduły Aradium:"
+  economy_disabled: "&cModuł ekonomii jest aktualnie wyłączony!"
+  money_self: "&7Twój stan konta: &a%balance%"
+  money_other: "&7Stan konta gracza &e%player%&7: &a%balance%"
+  pay_usage: "&cUżycie: /pay <gracz> <kwota>"
+  pay_self: "&cNie możesz przelać pieniędzy samemu sobie!"
+  pay_invalid_amount: "&cKwota musi być liczbą dodatnią!"
+  pay_insufficient_funds: "&cNie masz wystarczających środków (%required%)!"
+  pay_sent: "&aPrzelałeś &e%amount% &agraczowi &f%player%&a."
+  pay_received: "&aOtrzymałeś &e%amount% &aod gracza &f%player%&a."
+  eco_usage: "&cUżycie: /eco <give|take|set> <gracz> <kwota>"
+  eco_given: "&aDodano &e%amount% &ado konta gracza &f%player% &8(&7Nowe saldo: &a%balance%&8)&a."
+  eco_taken: "&aPobrano &e%amount% &az konta gracza &f%player% &8(&7Nowe saldo: &a%balance%&8)&a."
+  eco_set: "&aUstawiono saldo gracza &f%player% &ana &e%balance%&a."
+  eco_insufficient_funds: "&cGracz &f%player% &cnie posiada wystarczających środków (%amount%)!"
+  shop_disabled: "&cModuł sklepu jest aktualnie wyłączony!"
+  shop_category_not_found: "&cNie znaleziono kategorii sklepu: &f%category%&c!"
+  shop_bought: "&aKupiono &e%amount%x %item% &aza &e%price%&a!"
+  shop_sold: "&aSprzedano &e%amount%x %item% &aza &a%price%&a!"
+  shop_no_items_to_sell: "&cNie posiadasz w ekwipunku tego przedmiotu do sprzedaży!"
+  shop_buy_disabled: "&cKupno tego przedmiotu jest wyłączone!"
+  shop_sell_disabled: "&cSprzedaż tego przedmiotu jest wyłączona!"
+  shop_insufficient_funds: "&cNie stać Cię! Koszt zakupu to &e%price%&c."
+  shop_inventory_full: "&cNie masz wystarczająco miejsca w ekwipunku na ten zakup!"
+  spawner_disabled: "&cModuł spawnerów jest aktualnie wyłączony!"
+  spawner_usage: "&cUżycie: /spawner give <gracz> <mob> [tier]"
+  spawner_invalid_entity: "&cNieprawidłowy lub niedozwolony typ moba: &f%entity%&c!"
+  spawner_invalid_tier: "&cTaki tier spawnera nie istnieje w spawners.yml: &f%tier%&c!"
+  spawner_given: "&aOtrzymałeś spawner: &e%entity% &8(&fTier %tier%&8)&a!"
+  spawner_given_sender: "&aNadano spawner &e%entity% (Tier %tier%) &agraczowi &f%player%&a."
+  spawner_placed: "&aPostawiono spawner: &e%entity% &8(&fTier %tier%&8)&a!"
+  spawner_mined_silk: "&aWydobyto spawner: &e%entity% &8(&fTier %tier%&8)&a!"
+  spawner_broken_no_silk: "&cZniszczyłeś spawner bez Jedwabnego Dotyku (Silk Touch) — spawner przepadł!"
+  spawner_not_found: "&cTen spawner już nie istnieje!"
+  spawner_max_tier: "&eTen spawner osiągnął już maksymalny poziom ulepszenia!"
+  spawner_insufficient_funds: "&cNie stać Cię na ulepszenie! Wymagany koszt: &e%price%&c."
+  spawner_missing_items: "&cBrakuje Ci wymaganych przedmiotów do ulepszenia: &f%items%&c!"
+  spawner_upgraded: "&aUlepszono spawner &e%entity% &ado poziomu &6Tier %tier%&a!"
+  skyblock_disabled: "&cModuł SkyBlock jest aktualnie wyłączony!"
+  island_created: "&aPomyślnie utworzono Twoją wyspę (&e%schematic%&a)! Miłej gry!"
+  island_already_exists: "&cPosiadasz już swoją wyspę! Użyj &e/is home&c."
+  island_none: "&cNie posiadasz jeszcze wyspy! Użyj &e/is create&c, aby wybrać schemat."
+  island_teleported_home: "&aPrzeteleportowano na dom Twojej wyspy!"
+  island_home_set: "&aUstawiono nową lokalizację domu wyspy (&e/is home&a)!"
+  island_home_outside: "&cDom wyspy musi znajdować się wewnątrz granic Twojej wyspy!"
+  island_privacy_changed: "&aStatus wyspy został zmieniony na: %status%&a."
+  island_border_changed: "&aKolor granicy WorldBorder został zmieniony na: %color%&a."
+  island_delete_confirm: "&cUwaga! Usunięcie wyspy jest nieodwracalne! Wpisz &e/is delete potwierdz &cw ciągu 30s."
+  island_deleted: "&eTwoja wyspa została trwale usunięta."
+  island_transferred: "&aPrzekazano własność wyspy graczowi &e%player%&a!"
+  island_invite_sent: "&aWysłano zaproszenie na wyspę do gracza &f%player%&a."
+  island_invite_received: "&aGracz &e%player% &azaprasza Cię na swoją wyspę! Wpisz &e/is join %player%&a."
+  island_joined: "&aDołączyłeś do wyspy gracza &e%player%&a!"
+  island_kicked: "&eWyrzucono gracza &f%player% &ez wyspy."
+  island_left: "&eOpuściłeś obecną wyspę."
+  island_trusted: "&aGracz &f%player% &aotrzymał tymczasową rolę &eTRUSTED &8(&7do wylogowania&8)&a."
+  island_untrusted: "&eCofnięto tymczasowe zaufanie dla gracza &f%player%&e."
+  island_warp_set: "&aUtworzono publiczny warp wyspy: &e%warp%&a!"
+  island_warp_deleted: "&eUsunięto warp wyspy: &f%warp%&e."
+  island_warp_teleported: "&aPrzeteleportowano na warp &e%warp%&a!"
+  island_private_blocked: "&cTa wyspa jest prywatna! Właściciel zablokował dostęp odwiedzającym."
+  island_no_permission: "&cNie masz uprawnień do tej akcji na tej wyspie!"
+  island_level_calculating: "&eTrwa asynchroniczne obliczanie poziomu Twojej wyspy..."
+  island_level_calculated: "&aPoziom Twojej wyspy wynosi: &6%level% &8(&7Spawnery: &f%spawners%/%max_spawners%&8)&a!"
+  island_level_cooldown: "&cMusisz odczekać jeszcze &e%seconds%s &cprzed kolejnym pełnym skanowaniem wyspy!"
+  island_upgrade_bought: "&aUlepszono &e%upgrade% &ana poziom &6Tier %tier% &8(&f%value%&8) &aza &e%cost%&a!"
+  island_upgrade_max: "&eTo ulepszenie osiągnęło już maksymalny poziom (&6Tier %tier%&e)!"
+  island_upgrade_no_money: "&cNie stać Cię na to ulepszenie! Wymagany koszt: &e%cost%&c."
+  island_spawner_limit_reached: "&cOsiągnięto limit spawnerów na tej wyspie (&e%current%/%max%&c)! Ulepsz limit w &e/is upgrades&c."
 
 magic_items:
   strength:
@@ -18,14 +200,14 @@ magic_items:
     material: "BLAZE_POWDER"
     lore: "&7Kliknij, aby otrzymać nadludzką siłę!"
     cooldown: 120
-    effect_type: "INCREASE_DAMAGE"
+    effect_type: "STRENGTH"
     duration: 600
   jump:
     name: "&a&lSkok Zająca"
     material: "RABBIT_FOOT"
     lore: "&7Kliknij, aby skakać jak zając!"
     cooldown: 120
-    effect_type: "JUMP"
+    effect_type: "JUMP_BOOST"
     duration: 600
   health:
     name: "&c&lWięcej Życia"
@@ -46,7 +228,7 @@ magic_items:
     material: "GOLD_NUGGET"
     lore: "&7Kliknij, aby szybciej kopać!"
     cooldown: 120
-    effect_type: "FAST_DIGGING"
+    effect_type: "HASTE"
     duration: 600
   regeneration:
     name: "&d&lRegeneracja"
@@ -58,7 +240,10 @@ magic_items:
   duch:
     name: "&f&lDuch"
     material: "SOUL_SAND"
-    lore: "&7Specjalny atak!"
+    lore: "&7Przejdź w tryb ducha na 2s (flyspeed 3), potem oślepienie 3s i szybkość 2s!"
     cooldown: 120
-    effect_type: "INVISIBILITY"
-    duration: 600
+    ability: "GHOST"
+    spectator_seconds: 2
+    fly_speed: 3.0
+    blindness_seconds: 3
+    speed_seconds: 2

@@ -1,0 +1,168 @@
+# Konfiguracja systemu Misji SkyBlock (Moduł 5: 5 etapów po 7 współdzielonych zadań na wyspę)
+# Status w QuestGUI:
+# - Zielona szyba = zadanie ukończone
+# - Żółta szyba = w trakcie realizacji (z paskiem postępu w lore)
+# - Czerwona szyba = etap zablokowany (wymaga ukończenia poprzedniego etapu)
+
+settings:
+  gui-title: "&8» &6Misje Wyspy &8(&eEtap %stage%/5&8)"
+  progress-bar:
+    length: 10
+    symbol: "■"
+    completed-color: "&a"
+    remaining-color: "&7"
+
+stages:
+  stage_1:
+    stage: 1
+    name: "&a&lEtap I: Początki na Wyspie"
+    description: "&7Ukończ wszystkie 7 podstawowych wyzwań, aby odblokować Etap II."
+    unlock-reward-money: 2500.0
+    quests:
+      mining_1:
+        slot: 10
+        type: "BLOCK_BREAK"
+        icon: "COBBLESTONE"
+        name: "&7&lGórnik z Wyspy"
+        lore:
+          - "&7Wykop surowce w generatorze:"
+          - "&8• &fBruk (Cobblestone): &e%progress_COBBLESTONE%&8/&a128"
+          - "&8• &fRuda węgla: &e%progress_COAL_ORE%&8/&a32"
+          - "&8• &fRuda żelaza: &e%progress_IRON_ORE%&8/&a16"
+        objectives:
+          COBBLESTONE: 128
+          COAL_ORE: 32
+          IRON_ORE: 16
+        rewards:
+          money: 500.0
+          items:
+            - "TORCH:32"
+            - "IRON_PICKAXE:1"
+
+      farming_1:
+        slot: 11
+        type: "COLLECT"
+        icon: "WHEAT"
+        name: "&e&lPierwsze Plony i Hodowla"
+        lore:
+          - "&7Zbierz wskazane produkty rolne i hodowlane:"
+          - "&8• &fPszenica: &e%progress_WHEAT%&8/&a64"
+          - "&8• &fZiemniaki: &e%progress_POTATO%&8/&a32"
+          - "&8• &fJajka: &e%progress_EGG%&8/&a16"
+          - "&8• &fSurowa wieprzowina: &e%progress_PORKCHOP%&8/&a16"
+        objectives:
+          WHEAT: 64
+          POTATO: 32
+          EGG: 16
+          PORKCHOP: 16
+        rewards:
+          money: 600.0
+          items:
+            - "BREAD:16"
+            - "BONE_MEAL:32"
+
+      woodcutting_1:
+        slot: 12
+        type: "BLOCK_BREAK"
+        icon: "OAK_LOG"
+        name: "&6&lDrwal"
+        lore:
+          - "&7Ścinaj dowolne pnie drzew na wyspie:"
+          - "&8• &fPnie drzew (Logi): &e%progress_ANY_LOG%&8/&a64"
+        objectives:
+          ANY_LOG: 64
+        rewards:
+          money: 450.0
+          items:
+            - "OAK_SAPLING:8"
+            - "IRON_AXE:1"
+
+      economy_1:
+        slot: 13
+        type: "BALANCE_REACH"
+        icon: "GOLD_INGOT"
+        name: "&a&lPierwszy Kapitał"
+        lore:
+          - "&7Zgromadź na koncie odpowiednią kwotę:"
+          - "&8• &fStan konta: &e%progress_BALANCE%&8/&a2000$"
+        objectives:
+          BALANCE: 2000
+        rewards:
+          money: 500.0
+          items:
+            - "EMERALD:4"
+
+      island_level_1:
+        slot: 14
+        type: "ISLAND_LEVEL"
+        icon: "GRASS_BLOCK"
+        name: "&b&lRozbudowa Terenu"
+        lore:
+          - "&7Zwiększ wartość bloków swojej wyspy:"
+          - "&8• &fPoziom wyspy: &e%progress_ISLAND_LEVEL%&8/&a500"
+        objectives:
+          ISLAND_LEVEL: 500
+        rewards:
+          money: 800.0
+          items:
+            - "DIRT:32"
+
+      slayer_1:
+        slot: 15
+        type: "ENTITY_KILL"
+        icon: "IRON_SWORD"
+        name: "&c&lObrońca Nocy"
+        lore:
+          - "&7Pokonaj potwory zagrażające wyspie:"
+          - "&8• &fZombie: &e%progress_ZOMBIE%&8/&a16"
+          - "&8• &fSzkielety: &e%progress_SKELETON%&8/&a8"
+          - "&8• &fPająki: &e%progress_SPIDER%&8/&a4"
+        objectives:
+          ZOMBIE: 16
+          SKELETON: 8
+          SPIDER: 4
+        rewards:
+          money: 750.0
+          items:
+            - "COOKED_BEEF:16"
+            - "GOLDEN_APPLE:2"
+
+      fishing_1:
+        slot: 16
+        type: "FISH_CATCH"
+        icon: "FISHING_ROD"
+        name: "&9&lCierpliwy Wędkarz"
+        lore:
+          - "&7Złów ryby z wody na swojej wyspie:"
+          - "&8• &fZłowione ryby: &e%progress_ANY_FISH%&8/&a16"
+        objectives:
+          ANY_FISH: 16
+        rewards:
+          money: 500.0
+          items:
+            - "PRISMARINE_SHARD:8"
+
+  # Przykładowe zadanie z Etapu 5 (w celu prezentacji docelowej struktury zaawansowanych etapów)
+  stage_5:
+    stage: 5
+    name: "&5&lEtap V: Legenda SkyBlocka"
+    description: "&7Najtrudniejsze wyzwania końcowe dla najlepszych wysp."
+    unlock-reward-money: 100000.0
+    quests:
+      mining_5:
+        slot: 10
+        type: "BLOCK_AND_CRAFT"
+        icon: "NETHERITE_INGOT"
+        name: "&4&lMistrz Wydobycia i Netheritu"
+        lore:
+          - "&7Zdobądź ogromne ilości budulca oraz najrzadszy metal:"
+          - "&8• &fWykopany bruk (Cobblestone): &e%progress_COBBLESTONE%&8/&a2048"
+          - "&8• &fSztabki Netheritu (Netherite Ingot): &e%progress_NETHERITE_INGOT%&8/&a16"
+        objectives:
+          COBBLESTONE: 2048
+          NETHERITE_INGOT: 16
+        rewards:
+          money: 50000.0
+          items:
+            - "BEACON:1"
+            - "DIAMOND_BLOCK:16"

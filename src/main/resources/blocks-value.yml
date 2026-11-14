@@ -1,0 +1,57 @@
+# Punktacja bloków używana do obliczania poziomu wyspy (/is level, /is top)
+# Liczba punktów wymaganych na 1.0 poziomu wyspy:
+points_per_level: 1.0
+
+blocks:
+  # Bloki budowlane i ziemia
+  COBBLESTONE: 0.25
+  STONE: 0.5
+  SMOOTH_STONE: 0.75
+  STONE_BRICKS: 0.75
+  GRASS_BLOCK: 0.5
+  DIRT: 0.2
+  SAND: 0.3
+  SANDSTONE: 0.5
+  GLASS: 0.5
+  OAK_LOG: 0.5
+  SPRUCE_LOG: 0.5
+  BIRCH_LOG: 0.5
+  JUNGLE_LOG: 0.5
+  ACACIA_LOG: 0.5
+  DARK_OAK_LOG: 0.5
+  CRIMSON_STEM: 0.75
+  WARPED_STEM: 0.75
+  BRICKS: 1.0
+  QUARTZ_BLOCK: 2.0
+  OBSIDIAN: 5.0
+  CRYING_OBSIDIAN: 12.0
+
+  # Rudy i bloki surowców
+  COAL_ORE: 1.0
+  COAL_BLOCK: 3.0
+  IRON_ORE: 1.5
+  IRON_BLOCK: 8.0
+  COPPER_BLOCK: 4.0
+  GOLD_ORE: 2.5
+  GOLD_BLOCK: 15.0
+  REDSTONE_BLOCK: 5.0
+  LAPIS_BLOCK: 5.0
+  DIAMOND_ORE: 6.0
+  DIAMOND_BLOCK: 35.0
+  EMERALD_ORE: 8.0
+  EMERALD_BLOCK: 50.0
+  ANCIENT_DEBRIS: 45.0
+  NETHERITE_BLOCK: 250.0
+
+  # Bloki funkcyjne i unikatowe
+  HOPPER: 6.0
+  ANVIL: 12.0
+  BOOKSHELF: 3.0
+  ENCHANTING_TABLE: 25.0
+  ENDER_CHEST: 20.0
+  SEA_LANTERN: 6.0
+  GLOWSTONE: 2.0
+  SPAWNER: 150.0
+  BEACON: 400.0
+  CONDUIT: 120.0
+  DRAGON_EGG: 1000.0

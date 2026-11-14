@@ -1,17 +1,56 @@
 name: Aradium
 version: '${project.version}'
 main: pl.nauka.aradium.AradiumPlugin
-api-version: 1.19
+api-version: '26.3'
 commands:
+  aradium:
+    description: Zarzadzanie pluginem Aradium i jego modulami
+    usage: /aradium <reload|modules>
+    permission: aradium.admin
   magicitem:
-    description: Nadaje magiczne przedmioty i zbroje graczom
+    description: Nadaje magiczne przedmioty graczom
     usage: /magicitem <gracz> <typ> <poziom>
     permission: aradium.admin
-  oreregion:
-    description: Narzedzie do oznaczania strefy rud (odnawialnych)
-    usage: /oreregion <ruda> <min|max>
+  magicarmor:
+    description: Nadaje magiczne zestawy zbroi graczom
+    usage: /magicarmor <gracz> <zestaw> <tier> [all|helmet|chestplate|leggings|boots]
     permission: aradium.admin
+  oreregion:
+    description: Narzedzie do oznaczania stref odnawialnych rud
+    usage: /oreregion <ruda> <min|max> [strefa]
+    permission: aradium.admin
+  money:
+    description: Sprawdza stan konta gracza
+    usage: /money [gracz]
+    permission: aradium.player
+    aliases: [bal, balance, kasa]
+  pay:
+    description: Przelewa pieniadze innemu graczowi
+    usage: /pay <gracz> <kwota>
+    permission: aradium.player
+    aliases: [przelej]
+  eco:
+    description: Administracyjne zarzadzanie ekonomia graczy
+    usage: /eco <give|take|set> <gracz> <kwota>
+    permission: aradium.admin
+  shop:
+    description: Otwiera GUI sklepu serwerowego
+    usage: /shop [kategoria]
+    permission: aradium.player
+    aliases: [sklep]
+  spawner:
+    description: Nadaje ulepszane spawnery graczom
+    usage: /spawner give <gracz> <mob> [tier]
+    permission: aradium.admin
+  island:
+    description: Zarzadzanie wyspa SkyBlock
+    usage: /is [create|home|sethome|panel|level|top|upgrades|roles|privacy|border|warp|setwarp|delwarp|invite|join|kick|leave|trust|untrust|transfer|delete]
+    permission: aradium.player
+    aliases: [is, wyspa]
 permissions:
   aradium.admin:
-    description: Dostęp do komend administracyjnych pluginu
+    description: Dostep do komend administracyjnych pluginu
     default: op
+  aradium.player:
+    description: Dostep do podstawowych komend ekonomii i sklepu
+    default: true

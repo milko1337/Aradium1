@@ -1,0 +1,20 @@
+# Główne menu sklepu GUI (Moduł 1: UltimateShop Clone)
+
+shop:
+  id: "main"
+  title: "&8» &6&lSklep Serwerowy"
+  size: 27
+  back-button-slot: -1
+
+items:
+  category_blocks:
+    slot: 13
+    material: "GRASS_BLOCK"
+    name: "&a&lBloki Budowlane"
+    target-shop: "blocks"
+    buy-price: -1.0
+    sell-price: -1.0
+    lore:
+      - "&8» &7Podstawowe bloki do rozbudowy Twojej wyspy."
+      - ""
+      - "&aKliknij, aby otworzyć kategorię!"

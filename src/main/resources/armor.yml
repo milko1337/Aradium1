@@ -1,0 +1,193 @@
+# Konfiguracja magicznych zestawów zbroi Aradium (Paper 26.3)
+# Wszystkie bonusy działają WYŁĄCZNIE wtedy, gdy gracz nosi pełny zestaw (4 części) tego samego zestawu i tego samego tieru.
+# Każdy element ma przypisywane ukryte tagi NBT (PersistentDataContainer: aradium:armor_set, aradium:armor_tier, aradium:armor_tag)
+# oraz CustomModelData w celu odróżnienia od zwykłych zbroi.
+
+armor_sets:
+  gornik:
+    display_name: "Górnik"
+    material_prefix: "IRON"
+    nbt_tag: "aradium_armor_gornik"
+    custom_model_data_base: 1000
+    pieces:
+      HELMET: "&7&lHełm Górnika &8[&eTier %tier%&8]"
+      CHESTPLATE: "&7&lNapierśnik Górnika &8[&eTier %tier%&8]"
+      LEGGINGS: "&7&lSpodnie Górnika &8[&eTier %tier%&8]"
+      BOOTS: "&7&lButy Górnika &8[&eTier %tier%&8]"
+    tiers:
+      "1":
+        custom_model_data: 1001
+        max_health_levels: 0
+        effects:
+          HASTE: 1
+        lore:
+          - "&8» &7Zestaw: &fGórnik &8(&eTier 1&8)"
+          - "&8» &7Wymaga założenia pełnego setu (%equipped%/4)"
+          - "&8» &aBonus pełnego setu:"
+          - "  &e• Haste I (Szybkość kopania I)"
+      "2":
+        custom_model_data: 1002
+        max_health_levels: 0
+        effects:
+          HASTE: 2
+        lore:
+          - "&8» &7Zestaw: &fGórnik &8(&eTier 2&8)"
+          - "&8» &7Wymaga założenia pełnego setu (%equipped%/4)"
+          - "&8» &aBonus pełnego setu:"
+          - "  &e• Haste II (Szybkość kopania II)"
+      "3":
+        custom_model_data: 1003
+        max_health_levels: 0
+        effects:
+          HASTE: 3
+        lore:
+          - "&8» &7Zestaw: &fGórnik &8(&eTier 3&8)"
+          - "&8» &7Wymaga założenia pełnego setu (%equipped%/4)"
+          - "&8» &aBonus pełnego setu:"
+          - "  &e• Haste III (Szybkość kopania III)"
+      "4":
+        custom_model_data: 1004
+        max_health_levels: 0
+        effects:
+          HASTE: 4
+        lore:
+          - "&8» &7Zestaw: &fGórnik &8(&eTier 4&8)"
+          - "&8» &7Wymaga założenia pełnego setu (%equipped%/4)"
+          - "&8» &aBonus pełnego setu:"
+          - "  &e• Haste IV (Szybkość kopania IV)"
+      "5":
+        custom_model_data: 1005
+        max_health_levels: 0
+        effects:
+          HASTE: 5
+        lore:
+          - "&8» &7Zestaw: &fGórnik &8(&eTier 5&8)"
+          - "&8» &7Wymaga założenia pełnego setu (%equipped%/4)"
+          - "&8» &aBonus pełnego setu:"
+          - "  &e• Haste V (Szybkość kopania V)"
+
+  handlarz:
+    display_name: "Handlarz"
+    material_prefix: "GOLDEN"
+    nbt_tag: "aradium_armor_handlarz"
+    custom_model_data_base: 2000
+    pieces:
+      HELMET: "&6&lHełm Handlarza &8[&eTier %tier%&8]"
+      CHESTPLATE: "&6&lNapierśnik Handlarza &8[&eTier %tier%&8]"
+      LEGGINGS: "&6&lSpodnie Handlarza &8[&eTier %tier%&8]"
+      BOOTS: "&6&lButy Handlarza &8[&eTier %tier%&8]"
+    tiers:
+      "1":
+        custom_model_data: 2001
+        max_health_levels: 0
+        effects:
+          HERO_OF_THE_VILLAGE: 1
+        lore:
+          - "&8» &7Zestaw: &6Handlarz &8(&eTier 1&8)"
+          - "&8» &7Wymaga założenia pełnego setu (%equipped%/4)"
+          - "&8» &aBonus pełnego setu:"
+          - "  &e• Hero of the Village I (Bohater Wioski I)"
+      "2":
+        custom_model_data: 2002
+        max_health_levels: 0
+        effects:
+          HERO_OF_THE_VILLAGE: 2
+        lore:
+          - "&8» &7Zestaw: &6Handlarz &8(&eTier 2&8)"
+          - "&8» &7Wymaga założenia pełnego setu (%equipped%/4)"
+          - "&8» &aBonus pełnego setu:"
+          - "  &e• Hero of the Village II (Bohater Wioski II)"
+      "3":
+        custom_model_data: 2003
+        max_health_levels: 0
+        effects:
+          HERO_OF_THE_VILLAGE: 3
+        lore:
+          - "&8» &7Zestaw: &6Handlarz &8(&eTier 3&8)"
+          - "&8» &7Wymaga założenia pełnego setu (%equipped%/4)"
+          - "&8» &aBonus pełnego setu:"
+          - "  &e• Hero of the Village III (Bohater Wioski III)"
+
+  wojownik:
+    display_name: "Wojownik"
+    material_prefix: "DIAMOND"
+    nbt_tag: "aradium_armor_wojownik"
+    custom_model_data_base: 3000
+    pieces:
+      HELMET: "&b&lHełm Wojownika &8[&eTier %tier%&8]"
+      CHESTPLATE: "&b&lNapierśnik Wojownika &8[&eTier %tier%&8]"
+      LEGGINGS: "&b&lSpodnie Wojownika &8[&eTier %tier%&8]"
+      BOOTS: "&b&lButy Wojownika &8[&eTier %tier%&8]"
+    tiers:
+      "1":
+        custom_model_data: 3001
+        max_health_levels: 0
+        effects:
+          RESISTANCE: 3
+        lore:
+          - "&8» &7Zestaw: &bWojownik &8(&eTier 1&8)"
+          - "&8» &7Wymaga założenia pełnego setu (%equipped%/4)"
+          - "&8» &aBonus pełnego setu:"
+          - "  &b• Odporność III (Resistance III)"
+      "2":
+        custom_model_data: 3002
+        max_health_levels: 0
+        effects:
+          RESISTANCE: 4
+        lore:
+          - "&8» &7Zestaw: &bWojownik &8(&eTier 2&8)"
+          - "&8» &7Wymaga założenia pełnego setu (%equipped%/4)"
+          - "&8» &aBonus pełnego setu:"
+          - "  &b• Odporność IV (Resistance IV)"
+      "3":
+        custom_model_data: 3003
+        max_health_levels: 2
+        effects:
+          RESISTANCE: 3
+        lore:
+          - "&8» &7Zestaw: &bWojownik &8(&eTier 3&8)"
+          - "&8» &7Wymaga założenia pełnego setu (%equipped%/4)"
+          - "&8» &aBonus pełnego setu:"
+          - "  &b• Odporność III (Resistance III)"
+          - "  &c• Maksymalne zdrowie +2 poziomy (+4 serca)"
+      "4":
+        custom_model_data: 3004
+        max_health_levels: 3
+        effects:
+          RESISTANCE: 4
+        lore:
+          - "&8» &7Zestaw: &bWojownik &8(&eTier 4&8)"
+          - "&8» &7Wymaga założenia pełnego setu (%equipped%/4)"
+          - "&8» &aBonus pełnego setu:"
+          - "  &b• Odporność IV (Resistance IV)"
+          - "  &c• Maksymalne zdrowie +3 poziomy (+6 serc)"
+      "5":
+        custom_model_data: 3005
+        max_health_levels: 5
+        effects:
+          RESISTANCE: 5
+          STRENGTH: 4
+        lore:
+          - "&8» &7Zestaw: &bWojownik &8(&eTier 5&8)"
+          - "&8» &7Wymaga założenia pełnego setu (%equipped%/4)"
+          - "&8» &aBonus pełnego setu:"
+          - "  &b• Odporność V (Resistance V)"
+          - "  &c• Maksymalne zdrowie +5 poziomów (+10 serc)"
+          - "  &4• Siła IV (Strength IV)"
+
+special_armor:
+  buty_lotnika:
+    name: "&b&lButy lotnika"
+    material: "LEATHER_BOOTS"
+    slot: "FEET"
+    unbreakable: true
+    ability: "FLIGHT"
+    nbt_tag: "aradium_special_buty_lotnika"
+    custom_model_data: 4001
+    lore:
+      - "&8» &7Unikalny element zbroi"
+      - "&8» &aUmiejętność specjalna:"
+      - "  &b• Pozwala latać po założeniu na stopy!"
+      - "  &e• Chroni przed pierwszym upadkiem po zdjęciu"
+      - ""
+      - "&9&lNIEZNISZCZALNE"

@@ -1,0 +1,76 @@
+# Konfiguracja ulepszanych spawnerów (Moduł 2: Zaawansowane Spawnery)
+# Tier spawnera jest zapisywany bezpośrednio na bloku i przedmiocie za pomocą PersistentDataContainer (NBT).
+
+settings:
+  gui-title: "&8» &6Ulepszenie Spawnera &8(&eTier %tier%&8)"
+  gui-size: 27
+  require-silk-touch: true
+  allowed-entities:
+    - "ZOMBIE"
+    - "SKELETON"
+    - "SPIDER"
+    - "CREEPER"
+    - "COW"
+    - "PIG"
+    - "SHEEP"
+    - "CHICKEN"
+    - "IRON_GOLEM"
+    - "BLAZE"
+    - "ENDERMAN"
+
+tiers:
+  "1":
+    name: "&e&lSpawner &8[&7Tier 1&8]"
+    upgrade-cost: 0.0
+    required-items: {}
+    min-spawn-delay: 200
+    max-spawn-delay: 600
+    spawn-count: 3
+    max-nearby-entities: 6
+    required-player-range: 16
+    lore:
+      - "&8» &7Poziom: &eTier 1 &8(Podstawowy)"
+      - "&8» &7Opóźnienie: &f10s - 30s"
+      - "&8» &7Ilość mobów: &f3"
+      - "&8» &7Limit w pobliżu: &f6"
+      - "&8» &7Zasięg gracza: &f16 kratek"
+      - ""
+      - "&7Kliknij &eShift + PPM&7, aby ulepszyć spawner."
+  "2":
+    name: "&6&lSpawner &8[&eTier 2&8]"
+    upgrade-cost: 5000.0
+    required-items:
+      IRON_BLOCK: 4
+      COAL_BLOCK: 8
+    min-spawn-delay: 140
+    max-spawn-delay: 400
+    spawn-count: 5
+    max-nearby-entities: 10
+    required-player-range: 24
+    lore:
+      - "&8» &7Poziom: &eTier 2 &8(Wzmocniony)"
+      - "&8» &7Opóźnienie: &f7s - 20s"
+      - "&8» &7Ilość mobów: &f5"
+      - "&8» &7Limit w pobliżu: &f10"
+      - "&8» &7Zasięg gracza: &f24 kratki"
+      - ""
+      - "&7Kliknij &eShift + PPM&7, aby ulepszyć spawner."
+  "3":
+    name: "&b&lSpawner &8[&aTier 3&8]"
+    upgrade-cost: 20000.0
+    required-items:
+      DIAMOND_BLOCK: 4
+      EMERALD_BLOCK: 4
+    min-spawn-delay: 80
+    max-spawn-delay: 220
+    spawn-count: 8
+    max-nearby-entities: 16
+    required-player-range: 32
+    lore:
+      - "&8» &7Poziom: &aTier 3 &8(Mistrzowski)"
+      - "&8» &7Opóźnienie: &f4s - 11s"
+      - "&8» &7Ilość mobów: &f8"
+      - "&8» &7Limit w pobliżu: &f16"
+      - "&8» &7Zasięg gracza: &f32 kratki"
+      - ""
+      - "&7Kliknij &eShift + PPM&7, aby zarządzać spawnerem."

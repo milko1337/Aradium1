@@ -1,0 +1,99 @@
+# Konfiguracja kategorii sklepu GUI: Bloki (Moduł 1: UltimateShop Clone)
+# buy-price: cena zakupu 1 sztuki (-1 wyłącza możliwość kupna)
+# sell-price: cena sprzedaży 1 sztuki (-1 wyłącza możliwość sprzedaży)
+
+shop:
+  id: "blocks"
+  title: "&8» &2Sklep: &aBloki Budowlane"
+  size: 54
+  back-button-slot: 49
+  parent-shop: "main"
+  action-lore-format:
+    buy-enabled: "&aLPM &8- &7Kup 1 szt. za &e%buy_1%$"
+    buy-stack-enabled: "&aShift+LPM &8- &7Kup 64 szt. za &e%buy_64%$"
+    buy-disabled: "&cKupno tego przedmiotu jest wyłączone"
+    sell-enabled: "&ePPM &8- &7Sprzedaj 1 szt. za &a%sell_1%$"
+    sell-all-enabled: "&6ŚPM (Kółko) &8- &7Sprzedaj wszystko z ekwipunku"
+    sell-disabled: "&cSprzedaż tego przedmiotu jest wyłączona"
+
+items:
+  cobblestone:
+    slot: 10
+    material: "COBBLESTONE"
+    name: "&7&lBruk (Cobblestone)"
+    buy-price: 4.0
+    sell-price: 1.5
+    lore:
+      - "&8» &7Podstawowy materiał budowlany wyspy."
+
+  stone:
+    slot: 11
+    material: "STONE"
+    name: "&7&lKamień (Stone)"
+    buy-price: 8.0
+    sell-price: 2.5
+    lore:
+      - "&8» &7Gładki kamień do eleganckich konstrukcji."
+
+  oak_log:
+    slot: 12
+    material: "OAK_LOG"
+    name: "&6&lPień Dębu (Oak Log)"
+    buy-price: 15.0
+    sell-price: 5.0
+    lore:
+      - "&8» &7Naturalne drewno dębowe."
+
+  grass_block:
+    slot: 13
+    material: "GRASS_BLOCK"
+    name: "&a&lBlok Trawy (Grass Block)"
+    buy-price: 35.0
+    sell-price: -1.0
+    lore:
+      - "&8» &7Niezbędny do farm zwierząt i poszerzania wyspy."
+
+  dirt:
+    slot: 14
+    material: "DIRT"
+    name: "&6&lZiemia (Dirt)"
+    buy-price: 12.0
+    sell-price: 3.0
+    lore:
+      - "&8» &7Podłoże pod uprawy roślin."
+
+  sand:
+    slot: 15
+    material: "SAND"
+    name: "&e&lPiasek (Sand)"
+    buy-price: 18.0
+    sell-price: 4.0
+    lore:
+      - "&8» &7Idealny do farm kaktusów i produkcji szkła."
+
+  obsidian:
+    slot: 16
+    material: "OBSIDIAN"
+    name: "&5&lObsydian (Obsidian)"
+    buy-price: 120.0
+    sell-price: 35.0
+    lore:
+      - "&8» &7Wytrzymały blok wymagany w zaawansowanych misjach."
+
+  ice:
+    slot: 19
+    material: "ICE"
+    name: "&b&lLód (Ice)"
+    buy-price: 45.0
+    sell-price: -1.0
+    lore:
+      - "&8» &7Źródło wody i szybki transport przedmiotów."
+
+  quartz_block:
+    slot: 20
+    material: "QUARTZ_BLOCK"
+    name: "&f&lBlok Kwarcu (Quartz Block)"
+    buy-price: 65.0
+    sell-price: 20.0
+    lore:
+      - "&8» &7Dekoracyjny blok zwiększający wartość wyspy."
