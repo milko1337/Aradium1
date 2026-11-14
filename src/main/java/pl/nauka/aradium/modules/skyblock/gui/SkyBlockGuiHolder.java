@@ -22,20 +22,27 @@ public class SkyBlockGuiHolder implements InventoryHolder {
         ROLES_MENU,
         WARPS_MENU,
         UPGRADES_MENU,
-        TOP_MENU
+        TOP_MENU,
+        QUESTS_MENU
     }
 
     private final GuiType guiType;
     private final UUID islandId;
     private final IslandRole selectedRole;
+    private final int selectedStage;
     private final Map<Integer, IslandWarp> warpSlots = new HashMap<>();
     private final Map<Integer, UUID> targetIslandSlots = new HashMap<>();
     private Inventory inventory;
 
     public SkyBlockGuiHolder(GuiType guiType, UUID islandId, IslandRole selectedRole) {
+        this(guiType, islandId, selectedRole, 1);
+    }
+
+    public SkyBlockGuiHolder(GuiType guiType, UUID islandId, IslandRole selectedRole, int selectedStage) {
         this.guiType = Objects.requireNonNull(guiType, "guiType");
         this.islandId = islandId;
         this.selectedRole = selectedRole;
+        this.selectedStage = Math.max(1, selectedStage);
     }
 
     public GuiType getGuiType() {
@@ -48,6 +55,10 @@ public class SkyBlockGuiHolder implements InventoryHolder {
 
     public IslandRole getSelectedRole() {
         return selectedRole;
+    }
+
+    public int getSelectedStage() {
+        return selectedStage;
     }
 
     public void registerWarpSlot(int slot, IslandWarp warp) {

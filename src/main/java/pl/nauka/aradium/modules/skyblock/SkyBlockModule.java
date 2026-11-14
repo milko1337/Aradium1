@@ -11,13 +11,16 @@ import pl.nauka.aradium.modules.skyblock.gui.IslandSchematicGUI;
 import pl.nauka.aradium.modules.skyblock.gui.IslandTopGUI;
 import pl.nauka.aradium.modules.skyblock.gui.IslandUpgradesGUI;
 import pl.nauka.aradium.modules.skyblock.gui.IslandWarpsGUI;
+import pl.nauka.aradium.modules.skyblock.gui.QuestGUI;
 import pl.nauka.aradium.modules.skyblock.gui.SkyBlockGuiHolder;
 import pl.nauka.aradium.modules.skyblock.island.IslandManager;
 import pl.nauka.aradium.modules.skyblock.level.BlockValueManager;
 import pl.nauka.aradium.modules.skyblock.level.IslandLevelCalculator;
 import pl.nauka.aradium.modules.skyblock.level.IslandTopCache;
 import pl.nauka.aradium.modules.skyblock.listeners.IslandProtectionListener;
+import pl.nauka.aradium.modules.skyblock.listeners.QuestProgressListener;
 import pl.nauka.aradium.modules.skyblock.listeners.SpawnerLimitListener;
+import pl.nauka.aradium.modules.skyblock.quests.QuestManager;
 import pl.nauka.aradium.modules.skyblock.upgrades.IslandUpgradeManager;
 
 import java.io.File;
@@ -32,12 +35,14 @@ public class SkyBlockModule extends AbstractModule {
     private BlockValueManager blockValueManager;
     private IslandTopCache topCache;
     private IslandLevelCalculator levelCalculator;
+    private QuestManager questManager;
     private IslandSchematicGUI schematicGUI;
     private IslandPanelGUI panelGUI;
     private IslandRolesGUI rolesGUI;
     private IslandWarpsGUI warpsGUI;
     private IslandUpgradesGUI upgradesGUI;
     private IslandTopGUI topGUI;
+    private QuestGUI questGUI;
 
     public SkyBlockModule(AradiumPlugin plugin) {
         super(plugin, "skyblock");
@@ -59,6 +64,8 @@ public class SkyBlockModule extends AbstractModule {
         this.topCache = new IslandTopCache();
         this.topCache.refresh(this.islandManager.getAllIslands());
         this.levelCalculator = new IslandLevelCalculator(plugin, islandManager, blockValueManager, topCache);
+        this.questManager = new QuestManager(plugin, islandManager);
+        this.levelCalculator.setQuestManager(this.questManager);
 
         this.schematicGUI = new IslandSchematicGUI(plugin, islandManager);
         this.panelGUI = new IslandPanelGUI(plugin, this);
@@ -66,10 +73,12 @@ public class SkyBlockModule extends AbstractModule {
         this.warpsGUI = new IslandWarpsGUI(plugin, this);
         this.upgradesGUI = new IslandUpgradesGUI(plugin, this);
         this.topGUI = new IslandTopGUI(plugin, this);
+        this.questGUI = new QuestGUI(plugin, this);
 
         registerCommand("island", new IslandCommand(plugin, this));
         registerListener(new IslandProtectionListener(plugin, this));
         registerListener(new SpawnerLimitListener(plugin, this));
+        registerListener(new QuestProgressListener(this));
 
         for (Player online : Bukkit.getOnlinePlayers()) {
             this.islandManager.refreshWorldBorder(online, true);
@@ -130,5 +139,13 @@ public class SkyBlockModule extends AbstractModule {
 
     public IslandTopGUI getTopGUI() {
         return topGUI;
+    }
+
+    public QuestManager getQuestManager() {
+        return questManager;
+    }
+
+    public QuestGUI getQuestGUI() {
+        return questGUI;
     }
 }

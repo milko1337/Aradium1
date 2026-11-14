@@ -193,6 +193,8 @@ messages:
   island_upgrade_max: "&eTo ulepszenie osiągnęło już maksymalny poziom (&6Tier %tier%&e)!"
   island_upgrade_no_money: "&cNie stać Cię na to ulepszenie! Wymagany koszt: &e%cost%&c."
   island_spawner_limit_reached: "&cOsiągnięto limit spawnerów na tej wyspie (&e%current%/%max%&c)! Ulepsz limit w &e/is upgrades&c."
+  island_quest_completed: "&a&lMISJA UKOŃCZONA! &7Wyspa ukończyła zadanie &e%quest% &8(&6Etap %stage%&8)&7! Nagroda: &a%money%"
+  island_stage_completed: "&6&lETAP UKOŃCZONY! &7Twoja wyspa ukończyła cały &eEtap %stage% &7i otrzymała bonus &a%reward%&7!"
 
 magic_items:
   strength:

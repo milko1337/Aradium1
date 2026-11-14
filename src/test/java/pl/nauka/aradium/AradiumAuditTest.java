@@ -27,6 +27,11 @@ import pl.nauka.aradium.modules.skyblock.island.IslandRole;
 import pl.nauka.aradium.modules.skyblock.level.BlockValueManager;
 import pl.nauka.aradium.modules.skyblock.level.IslandLevelCalculator;
 import pl.nauka.aradium.modules.skyblock.level.IslandTopCache;
+import pl.nauka.aradium.modules.skyblock.quests.QuestDefinition;
+import pl.nauka.aradium.modules.skyblock.quests.QuestManager;
+import pl.nauka.aradium.modules.skyblock.quests.QuestProgress;
+import pl.nauka.aradium.modules.skyblock.quests.QuestStage;
+import pl.nauka.aradium.modules.skyblock.quests.QuestType;
 import pl.nauka.aradium.modules.skyblock.upgrades.IslandUpgradeManager;
 import pl.nauka.aradium.modules.skyblock.upgrades.IslandUpgradeType;
 import pl.nauka.aradium.modules.spawners.SpawnerDataManager;
@@ -573,6 +578,103 @@ class AradiumAuditTest {
             assertEquals(32, i1.getSpawnerLimit());
             assertEquals(100, i1.getCropGrowthBonusPercent());
             assertEquals(6, i1.getMaxMembers());
+        }
+    }
+
+    @Test
+    void skyblockQuestsAllFiveStagesProgressAndGuiWorkCorrectly() throws Exception {
+        try (InputStream stream = getClass().getClassLoader().getResourceAsStream("quests.yml")) {
+            assertNotNull(stream);
+            YamlConfiguration questsYaml = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(stream, StandardCharsets.UTF_8)
+            );
+
+            QuestManager manager = new QuestManager(Logger.getLogger("QuestsTest"));
+            manager.reload(questsYaml);
+
+            Map<Integer, QuestStage> stages = manager.getStagesSnapshot();
+            assertEquals(5, stages.size());
+            int totalQuests = 0;
+            for (int stageNum = 1; stageNum <= 5; stageNum++) {
+                QuestStage stage = stages.get(stageNum);
+                assertNotNull(stage, "Brak etapu " + stageNum);
+                assertEquals(7, stage.getQuests().size(), "Etap " + stageNum + " powinien mieć 7 zadań");
+                totalQuests += stage.getQuests().size();
+            }
+            assertEquals(35, totalQuests);
+
+            // Weryfikacja JSON roundtrip oraz paska postępu
+            QuestProgress rawProgress = new QuestProgress("mining_1", 1, Map.of("COBBLESTONE", 64, "COAL_ORE", 16), false, 0L);
+            Map<String, Integer> decoded = QuestProgress.fromJson(rawProgress.toJson());
+            assertEquals(64, decoded.get("COBBLESTONE"));
+            assertEquals(16, decoded.get("COAL_ORE"));
+
+            assertEquals("&7■■■■■■■■■■ &e0%", manager.buildProgressBar(0, 100));
+            assertEquals("&a■■■■■&7■■■■■ &e50%", manager.buildProgressBar(50, 100));
+            assertEquals("&a■■■■■■■■■■ &e100%", manager.buildProgressBar(150, 100));
+
+            Island island = new Island(
+                    UUID.randomUUID(), UUID.randomUUID(), "skyblock_world", 0, 0,
+                    0.5, 100, 0.5, 0, 0, false, BorderColor.BLUE,
+                    0.0, 0.0, System.currentTimeMillis(), 50, 4, 8
+            );
+
+            assertTrue(manager.isStageUnlocked(island, 1));
+            assertFalse(manager.isStageUnlocked(island, 2));
+            assertEquals(1, manager.getHighestUnlockedStage(island));
+
+            // Zablokowany etap 2 nie powinien zliczać postępu przed ukończeniem etapu 1
+            manager.recordProgress(null, island, QuestType.BLOCK_BREAK, "COBBLESTONE", 100);
+            assertNull(island.getQuestProgress("mining_2"));
+            assertEquals(100, island.getQuestProgress("mining_1").getProgress("COBBLESTONE"));
+
+            // Dokończenie wszystkich 7 misji Etapu 1
+            manager.recordProgress(null, island, QuestType.BLOCK_BREAK, "COBBLESTONE", 50);
+            manager.recordProgress(null, island, QuestType.BLOCK_BREAK, "COAL_ORE", 32);
+            manager.recordProgress(null, island, QuestType.BLOCK_BREAK, "IRON_ORE", 16);
+            assertTrue(island.getQuestProgress("mining_1").isCompleted());
+
+            manager.recordProgress(null, island, QuestType.COLLECT, "WHEAT", 64);
+            manager.recordProgress(null, island, QuestType.COLLECT, "POTATO", 32);
+            manager.recordProgress(null, island, QuestType.COLLECT, "EGG", 16);
+            manager.recordProgress(null, island, QuestType.COLLECT, "PORKCHOP", 16);
+            assertTrue(island.getQuestProgress("farming_1").isCompleted());
+
+            manager.recordProgress(null, island, QuestType.BLOCK_BREAK, "ANY_LOG", 64);
+            assertTrue(island.getQuestProgress("woodcutting_1").isCompleted());
+
+            manager.updateAbsoluteProgress(null, island, QuestType.BALANCE_REACH, "BALANCE", 2000);
+            assertTrue(island.getQuestProgress("economy_1").isCompleted());
+
+            manager.updateAbsoluteProgress(null, island, QuestType.ISLAND_LEVEL, "ISLAND_LEVEL", 500);
+            assertTrue(island.getQuestProgress("island_level_1").isCompleted());
+
+            manager.recordProgress(null, island, QuestType.ENTITY_KILL, "ZOMBIE", 16);
+            manager.recordProgress(null, island, QuestType.ENTITY_KILL, "SKELETON", 8);
+            manager.recordProgress(null, island, QuestType.ENTITY_KILL, "SPIDER", 4);
+            assertTrue(island.getQuestProgress("slayer_1").isCompleted());
+
+            manager.recordProgress(null, island, QuestType.FISH_CATCH, "ANY_FISH", 16);
+            assertTrue(island.getQuestProgress("fishing_1").isCompleted());
+
+            // Po ukończeniu Etapu 1 odblokowuje się Etap 2
+            assertTrue(manager.isStageCompleted(island, 1));
+            assertTrue(manager.isStageUnlocked(island, 2));
+            assertFalse(manager.isStageUnlocked(island, 3));
+            assertEquals(2, manager.getHighestUnlockedStage(island));
+
+            // Odblokowanie etapów 2–4 w modelu postępu odblokowuje Etap 5 i złożone misje BLOCK_AND_CRAFT
+            for (int s = 2; s <= 4; s++) {
+                for (QuestDefinition q : manager.getStage(s).getQuests()) {
+                    island.getOrCreateQuestProgress(q.id(), s).markCompleted(System.currentTimeMillis());
+                }
+            }
+            assertTrue(manager.isStageUnlocked(island, 5));
+            assertEquals(5, manager.getHighestUnlockedStage(island));
+
+            manager.recordProgress(null, island, QuestType.BLOCK_BREAK, "COBBLESTONE", 2048);
+            manager.recordProgress(null, island, QuestType.CRAFT, "NETHERITE_INGOT", 16);
+            assertTrue(island.getQuestProgress("mining_5").isCompleted());
         }
     }
 }

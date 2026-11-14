@@ -32,7 +32,7 @@ import java.util.UUID;
 public class IslandCommand implements TabExecutor {
 
     private static final List<String> SUBCOMMANDS = List.of(
-            "create", "home", "sethome", "panel", "level", "top", "upgrades",
+            "create", "home", "sethome", "panel", "quests", "level", "top", "upgrades",
             "roles", "privacy", "border", "warp", "setwarp", "delwarp",
             "invite", "join", "kick", "leave", "trust", "untrust", "transfer", "delete"
     );
@@ -77,6 +77,7 @@ public class IslandCommand implements TabExecutor {
             case "home", "go" -> handleHome(player);
             case "sethome" -> handleSetHome(player);
             case "panel", "menu" -> handlePanel(player);
+            case "quests", "quest", "misje", "zadania" -> handleQuests(player);
             case "level", "poziom" -> handleLevel(player);
             case "top", "ranking" -> module.getTopGUI().open(player);
             case "upgrades", "upgrade", "ulepszenia" -> handleUpgrades(player);
@@ -549,6 +550,13 @@ public class IslandCommand implements TabExecutor {
         }
     }
 
+    private void handleQuests(Player player) {
+        Island island = requirePlayerIsland(player);
+        if (island != null && module.getQuestGUI() != null) {
+            module.getQuestGUI().open(player, island);
+        }
+    }
+
     private Island requirePlayerIsland(Player player) {
         Optional<Island> island = module.getIslandManager().getPlayerIsland(player.getUniqueId());
         if (island.isEmpty()) {
@@ -579,7 +587,7 @@ public class IslandCommand implements TabExecutor {
     private static void sendUsage(Player player) {
         player.sendMessage(ChatUtils.color("&6Komendy Wyspy (/is):"));
         player.sendMessage(ChatUtils.color("&e/is &8- &7Otwiera panel wyspy lub wybór schematu"));
-        player.sendMessage(ChatUtils.color("&e/is create | home | sethome | panel | level | top | upgrades | roles"));
+        player.sendMessage(ChatUtils.color("&e/is create | home | sethome | panel | quests | level | top | upgrades | roles"));
         player.sendMessage(ChatUtils.color("&e/is privacy | border | warp | setwarp | delwarp"));
         player.sendMessage(ChatUtils.color("&e/is invite | join | kick | leave | trust | untrust | transfer | delete"));
     }

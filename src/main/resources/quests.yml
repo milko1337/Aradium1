@@ -142,7 +142,390 @@ stages:
           items:
             - "PRISMARINE_SHARD:8"
 
-  # Przykładowe zadanie z Etapu 5 (w celu prezentacji docelowej struktury zaawansowanych etapów)
+  stage_2:
+    stage: 2
+    name: "&e&lEtap II: Rozwój Wyspy"
+    description: "&7Ukończ wszystkie 7 zadań Etapu II, aby odblokować Etap III."
+    unlock-reward-money: 6000.0
+    quests:
+      mining_2:
+        slot: 10
+        type: "BLOCK_BREAK"
+        icon: "IRON_ORE"
+        name: "&7&lZaawansowany Górnik"
+        lore:
+          - "&7Wykop większe zasoby surowców:"
+          - "&8• &fBruk (Cobblestone): &e%progress_COBBLESTONE%&8/&a256"
+          - "&8• &fRuda węgla: &e%progress_COAL_ORE%&8/&a64"
+          - "&8• &fRuda żelaza: &e%progress_IRON_ORE%&8/&a32"
+          - "&8• &fRuda złota: &e%progress_GOLD_ORE%&8/&a16"
+        objectives:
+          COBBLESTONE: 256
+          COAL_ORE: 64
+          IRON_ORE: 32
+          GOLD_ORE: 16
+        rewards:
+          money: 1500.0
+          items:
+            - "IRON_INGOT:16"
+            - "COAL:32"
+
+      farming_2:
+        slot: 11
+        type: "COLLECT"
+        icon: "POISONOUS_POTATO"
+        name: "&e&lWielka Farma"
+        lore:
+          - "&7Zbierz wskazane plony z pól uprawnych:"
+          - "&8• &fPszenica: &e%progress_WHEAT%&8/&a128"
+          - "&8• &fZiemniaki: &e%progress_POTATO%&8/&a64"
+          - "&8• &fTrujące ziemniaki: &e%progress_POISONOUS_POTATO%&8/&a4"
+        objectives:
+          WHEAT: 128
+          POTATO: 64
+          POISONOUS_POTATO: 4
+        rewards:
+          money: 1500.0
+          items:
+            - "GOLDEN_CARROT:16"
+
+      smelting_2:
+        slot: 12
+        type: "SMELT"
+        icon: "FURNACE"
+        name: "&6&lHutnik Wyspy"
+        lore:
+          - "&7Przepal bruk na gładki kamień w piecu:"
+          - "&8• &fPrzepalony kamień (Stone): &e%progress_STONE%&8/&a128"
+        objectives:
+          STONE: 128
+        rewards:
+          money: 1200.0
+          items:
+            - "COAL_BLOCK:4"
+            - "BLAST_FURNACE:1"
+
+      economy_2:
+        slot: 13
+        type: "BALANCE_REACH"
+        icon: "GOLD_BLOCK"
+        name: "&a&lRosnący Skarbiec"
+        lore:
+          - "&7Zwiększ stan swojego konta bankowego:"
+          - "&8• &fStan konta: &e%progress_BALANCE%&8/&a8000$"
+        objectives:
+          BALANCE: 8000
+        rewards:
+          money: 1500.0
+          items:
+            - "EMERALD:8"
+
+      island_level_2:
+        slot: 14
+        type: "ISLAND_LEVEL"
+        icon: "IRON_BLOCK"
+        name: "&b&lArchitekt Poziomu II"
+        lore:
+          - "&7Rozbuduj wyspę do wyższego poziomu:"
+          - "&8• &fPoziom wyspy: &e%progress_ISLAND_LEVEL%&8/&a750"
+        objectives:
+          ISLAND_LEVEL: 750
+        rewards:
+          money: 2000.0
+          items:
+            - "IRON_BLOCK:2"
+
+      slayer_2:
+        slot: 15
+        type: "ENTITY_KILL"
+        icon: "DIAMOND_SWORD"
+        name: "&c&lŁowca Wiedźm"
+        lore:
+          - "&7Pokonaj hordy nocnych potworów:"
+          - "&8• &fZombie: &e%progress_ZOMBIE%&8/&a32"
+          - "&8• &fSzkielety: &e%progress_SKELETON%&8/&a16"
+          - "&8• &fWiedźmy (Witch): &e%progress_WITCH%&8/&a2"
+        objectives:
+          ZOMBIE: 32
+          SKELETON: 16
+          WITCH: 2
+        rewards:
+          money: 2000.0
+          items:
+            - "GOLDEN_APPLE:4"
+
+      fishing_2:
+        slot: 16
+        type: "FISH_CATCH"
+        icon: "SALMON"
+        name: "&9&lPołów Łososia"
+        lore:
+          - "&7Wykaż się cierpliwością nad wodą:"
+          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a64"
+          - "&8• &fŁososie (Salmon): &e%progress_SALMON%&8/&a8"
+        objectives:
+          ANY_FISH: 64
+          SALMON: 8
+        rewards:
+          money: 1500.0
+          items:
+            - "COOKED_SALMON:16"
+
+  stage_3:
+    stage: 3
+    name: "&6&lEtap III: Mistrz Rzemiosła"
+    description: "&7Ukończ wszystkie 7 zadań Etapu III, aby odblokować Etap IV."
+    unlock-reward-money: 15000.0
+    quests:
+      mining_3:
+        slot: 10
+        type: "BLOCK_BREAK"
+        icon: "DIAMOND_ORE"
+        name: "&b&lDiamentowa Żyła"
+        lore:
+          - "&7Wydobądź cenne kruszce ze swojego generatora:"
+          - "&8• &fBruk (Cobblestone): &e%progress_COBBLESTONE%&8/&a512"
+          - "&8• &fRuda żelaza: &e%progress_IRON_ORE%&8/&a64"
+          - "&8• &fRuda diamentu: &e%progress_DIAMOND_ORE%&8/&a32"
+        objectives:
+          COBBLESTONE: 512
+          IRON_ORE: 64
+          DIAMOND_ORE: 32
+        rewards:
+          money: 4000.0
+          items:
+            - "DIAMOND:8"
+
+      farming_3:
+        slot: 11
+        type: "COLLECT"
+        icon: "CARROT"
+        name: "&e&lOgrodnik Ekspert"
+        lore:
+          - "&7Zbierz wielkie ilości warzyw i owoców:"
+          - "&8• &fMarchewki (Carrot): &e%progress_CARROT%&8/&a512"
+          - "&8• &fArbuzy (Melon): &e%progress_MELON%&8/&a256"
+          - "&8• &fDynie (Pumpkin): &e%progress_PUMPKIN%&8/&a256"
+        objectives:
+          CARROT: 512
+          MELON: 256
+          PUMPKIN: 256
+        rewards:
+          money: 4500.0
+          items:
+            - "COMPOSTER:4"
+            - "BONE_BLOCK:8"
+
+      trading_3:
+        slot: 12
+        type: "VILLAGER_TRADE"
+        icon: "EMERALD"
+        name: "&a&lKupiec Wioski"
+        lore:
+          - "&7Handluj z osadnikami i zdobywaj szmaragdy:"
+          - "&8• &fSzmaragdy z handlu: &e%progress_EMERALD%&8/&a32"
+        objectives:
+          EMERALD: 32
+        rewards:
+          money: 5000.0
+          items:
+            - "EMERALD_BLOCK:2"
+
+      economy_3:
+        slot: 13
+        type: "BALANCE_REACH"
+        icon: "EMERALD_BLOCK"
+        name: "&a&lKrezus SkyBlocka"
+        lore:
+          - "&7Osiągnij wysoki stan konta:"
+          - "&8• &fStan konta: &e%progress_BALANCE%&8/&a20000$"
+        objectives:
+          BALANCE: 20000
+        rewards:
+          money: 4000.0
+          items:
+            - "DIAMOND:6"
+
+      island_level_3:
+        slot: 14
+        type: "ISLAND_LEVEL"
+        icon: "DIAMOND_BLOCK"
+        name: "&b&lTysiąc Poziomu"
+        lore:
+          - "&7Rozbuduj wyspę do poziomu 1000:"
+          - "&8• &fPoziom wyspy: &e%progress_ISLAND_LEVEL%&8/&a1000"
+        objectives:
+          ISLAND_LEVEL: 1000
+        rewards:
+          money: 5000.0
+          items:
+            - "DIAMOND_BLOCK:1"
+
+      slayer_3:
+        slot: 15
+        type: "ENTITY_KILL"
+        icon: "IRON_BLOCK"
+        name: "&c&lPogromca Golemów"
+        lore:
+          - "&7Pokonaj potężnych żelaznych strażników:"
+          - "&8• &fŻelazne Golemy: &e%progress_IRON_GOLEM%&8/&a16"
+        objectives:
+          IRON_GOLEM: 16
+        rewards:
+          money: 6000.0
+          items:
+            - "IRON_BLOCK:8"
+
+      fishing_3:
+        slot: 16
+        type: "FISH_CATCH"
+        icon: "PUFFERFISH"
+        name: "&9&lPoszukiwacz Skarbów"
+        lore:
+          - "&7Złów ryby, rozdymkę oraz pierwszy skarb:"
+          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a128"
+          - "&8• &fRozdymki (Pufferfish): &e%progress_PUFFERFISH%&8/&a16"
+          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a1"
+        objectives:
+          ANY_FISH: 128
+          PUFFERFISH: 16
+          TREASURE: 1
+        rewards:
+          money: 5000.0
+          items:
+            - "NAUTILUS_SHELL:2"
+
+  stage_4:
+    stage: 4
+    name: "&d&lEtap IV: Władca Wymiarów"
+    description: "&7Ukończ wszystkie 7 zadań Etapu IV, aby odblokować finałowy Etap V."
+    unlock-reward-money: 40000.0
+    quests:
+      mining_4:
+        slot: 10
+        type: "BLOCK_BREAK"
+        icon: "OBSIDIAN"
+        name: "&5&lObsydianowy Kolos"
+        lore:
+          - "&7Wykop ogromne ilości kamienia, obsydianu i rud:"
+          - "&8• &fBruk (Cobblestone): &e%progress_COBBLESTONE%&8/&a1024"
+          - "&8• &fObsydian: &e%progress_OBSIDIAN%&8/&a128"
+          - "&8• &fRuda diamentu: &e%progress_DIAMOND_ORE%&8/&a64"
+          - "&8• &fRuda szmaragdu: &e%progress_EMERALD_ORE%&8/&a32"
+        objectives:
+          COBBLESTONE: 1024
+          OBSIDIAN: 128
+          DIAMOND_ORE: 64
+          EMERALD_ORE: 32
+        rewards:
+          money: 12000.0
+          items:
+            - "OBSIDIAN:32"
+            - "DIAMOND_BLOCK:4"
+
+      farming_4:
+        slot: 11
+        type: "COLLECT"
+        icon: "NETHER_WART"
+        name: "&e&lPlantator Trzciny i Brodawek"
+        lore:
+          - "&7Zbierz wielkie plantacje roślin:"
+          - "&8• &fTrzcina cukrowa: &e%progress_SUGAR_CANE%&8/&a1024"
+          - "&8• &fNetherowe brodawki: &e%progress_NETHER_WART%&8/&a512"
+        objectives:
+          SUGAR_CANE: 1024
+          NETHER_WART: 512
+        rewards:
+          money: 12000.0
+          items:
+            - "GLOWSTONE:16"
+            - "SOUL_SAND:32"
+
+      alchemy_4:
+        slot: 12
+        type: "BREW"
+        icon: "BREWING_STAND"
+        name: "&d&lMistrz Alchemii"
+        lore:
+          - "&7Uwarz w statywie alchemicznym wzmocnione mikstury:"
+          - "&8• &fMikstury poziomu II: &e%progress_POTION_TIER_2%&8/&a15"
+        objectives:
+          POTION_TIER_2: 15
+        rewards:
+          money: 15000.0
+          items:
+            - "BLAZE_ROD:16"
+            - "GLOWSTONE_DUST:32"
+
+      economy_4:
+        slot: 13
+        type: "BALANCE_REACH"
+        icon: "NETHERITE_SCRAP"
+        name: "&a&lMagnat Finansowy"
+        lore:
+          - "&7Zgromadź pokaźny majątek:"
+          - "&8• &fStan konta: &e%progress_BALANCE%&8/&a50000$"
+        objectives:
+          BALANCE: 50000
+        rewards:
+          money: 10000.0
+          items:
+            - "NETHERITE_SCRAP:4"
+
+      island_level_4:
+        slot: 14
+        type: "ISLAND_LEVEL"
+        icon: "BEACON"
+        name: "&b&lCytadela w Chmurach"
+        lore:
+          - "&7Rozbuduj wyspę do poziomu 2500:"
+          - "&8• &fPoziom wyspy: &e%progress_ISLAND_LEVEL%&8/&a2500"
+        objectives:
+          ISLAND_LEVEL: 2500
+        rewards:
+          money: 15000.0
+          items:
+            - "EMERALD_BLOCK:8"
+
+      slayer_4:
+        slot: 15
+        type: "ENTITY_KILL"
+        icon: "BLAZE_ROD"
+        name: "&c&lZabójca Netheru i Endu"
+        lore:
+          - "&7Pokonaj potężne istoty innych wymiarów:"
+          - "&8• &fEndermany: &e%progress_ENDERMAN%&8/&a64"
+          - "&8• &fPłomyki (Blaze): &e%progress_BLAZE%&8/&a32"
+          - "&8• &fGhasty: &e%progress_GHAST%&8/&a8"
+        objectives:
+          ENDERMAN: 64
+          BLAZE: 32
+          GHAST: 8
+        rewards:
+          money: 18000.0
+          items:
+            - "ENDER_PEARL:16"
+            - "ENCHANTED_GOLDEN_APPLE:1"
+
+      fishing_4:
+        slot: 16
+        type: "FISH_CATCH"
+        icon: "TROPICAL_FISH"
+        name: "&9&lKapitan Głębin"
+        lore:
+          - "&7Wyłów egzotyczne ryby i cenne skarby:"
+          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a256"
+          - "&8• &fTropikalne ryby: &e%progress_TROPICAL_FISH%&8/&a64"
+          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a5"
+        objectives:
+          ANY_FISH: 256
+          TROPICAL_FISH: 64
+          TREASURE: 5
+        rewards:
+          money: 14000.0
+          items:
+            - "HEART_OF_THE_SEA:1"
+
   stage_5:
     stage: 5
     name: "&5&lEtap V: Legenda SkyBlocka"
@@ -166,3 +549,98 @@ stages:
           items:
             - "BEACON:1"
             - "DIAMOND_BLOCK:16"
+
+      farming_5:
+        slot: 11
+        type: "COLLECT"
+        icon: "CACTUS"
+        name: "&2&lKaktusowe Imperium"
+        lore:
+          - "&7Zbierz gigantyczną ilość kaktusów:"
+          - "&8• &fKaktusy (Cactus): &e%progress_CACTUS%&8/&a2048"
+        objectives:
+          CACTUS: 2048
+        rewards:
+          money: 35000.0
+          items:
+            - "HOPPER:32"
+
+      crafting_5:
+        slot: 12
+        type: "CRAFT"
+        icon: "BEACON"
+        name: "&b&lTwórca Magicznej Latarni"
+        lore:
+          - "&7Wytwórz na stole rzemieślniczym magiczną latarnię:"
+          - "&8• &fStworzona Latarnia (Beacon): &e%progress_BEACON%&8/&a1"
+        objectives:
+          BEACON: 1
+        rewards:
+          money: 60000.0
+          items:
+            - "NETHERITE_BLOCK:1"
+
+      economy_5:
+        slot: 13
+        type: "BALANCE_REACH"
+        icon: "NETHERITE_BLOCK"
+        name: "&a&lMilioner Wysp"
+        lore:
+          - "&7Zgromadź fortunę na swoim koncie:"
+          - "&8• &fStan konta: &e%progress_BALANCE%&8/&a150000$"
+        objectives:
+          BALANCE: 150000
+        rewards:
+          money: 50000.0
+          items:
+            - "EMERALD_BLOCK:32"
+
+      island_level_5:
+        slot: 14
+        type: "ISLAND_LEVEL"
+        icon: "DRAGON_EGG"
+        name: "&d&lForteca Legendy"
+        lore:
+          - "&7Osiągnij prestiżowy poziom 10000 wyspy:"
+          - "&8• &fPoziom wyspy: &e%progress_ISLAND_LEVEL%&8/&a10000"
+        objectives:
+          ISLAND_LEVEL: 10000
+        rewards:
+          money: 75000.0
+          items:
+            - "NETHERITE_INGOT:8"
+
+      slayer_5:
+        slot: 15
+        type: "ENTITY_KILL"
+        icon: "WITHER_SKELETON_SKULL"
+        name: "&4&lPogromca Withera"
+        lore:
+          - "&7Pokonaj Withera i setkę Żelaznych Golemów:"
+          - "&8• &fWither: &e%progress_WITHER%&8/&a1"
+          - "&8• &fŻelazne Golemy: &e%progress_IRON_GOLEM%&8/&a100"
+        objectives:
+          WITHER: 1
+          IRON_GOLEM: 100
+        rewards:
+          money: 80000.0
+          items:
+            - "NETHER_STAR:1"
+            - "ENCHANTED_GOLDEN_APPLE:4"
+
+      fishing_5:
+        slot: 16
+        type: "FISH_CATCH"
+        icon: "HEART_OF_THE_SEA"
+        name: "&9&lWładca Oceanów"
+        lore:
+          - "&7Zostań największym wędkarzem serwera:"
+          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a1000"
+          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a25"
+        objectives:
+          ANY_FISH: 1000
+          TREASURE: 25
+        rewards:
+          money: 60000.0
+          items:
+            - "TRIDENT:1"

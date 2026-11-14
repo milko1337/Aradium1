@@ -236,6 +236,7 @@ public class IslandProtectionListener implements Listener {
             case WARPS_MENU -> module.getWarpsGUI().handleClick(player, holder, slot);
             case UPGRADES_MENU -> module.getUpgradesGUI().handleClick(player, holder, slot);
             case TOP_MENU -> module.getTopGUI().handleClick(player, holder, slot);
+            case QUESTS_MENU -> module.getQuestGUI().handleClick(player, holder, slot);
         }
     }
 

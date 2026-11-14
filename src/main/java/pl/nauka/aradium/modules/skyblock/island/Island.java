@@ -3,6 +3,7 @@ package pl.nauka.aradium.modules.skyblock.island;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import pl.nauka.aradium.modules.skyblock.quests.QuestProgress;
 import pl.nauka.aradium.modules.skyblock.upgrades.IslandUpgradeType;
 
 import java.util.Collections;
@@ -49,6 +50,7 @@ public class Island {
     private final EnumMap<IslandRole, EnumMap<IslandPermission, Boolean>> rolePermissions = new EnumMap<>(IslandRole.class);
     private final EnumMap<IslandUpgradeType, Integer> upgradeTiers = new EnumMap<>(IslandUpgradeType.class);
     private final Map<String, IslandWarp> warps = new LinkedHashMap<>();
+    private final Map<String, QuestProgress> quests = new ConcurrentHashMap<>();
 
     public Island(
             UUID islandId,
@@ -416,5 +418,27 @@ public class Island {
 
     public synchronized Map<String, IslandWarp> getWarpsSnapshot() {
         return Collections.unmodifiableMap(new LinkedHashMap<>(warps));
+    }
+
+    public QuestProgress getQuestProgress(String questId) {
+        if (questId == null) {
+            return null;
+        }
+        return quests.get(questId);
+    }
+
+    public QuestProgress getOrCreateQuestProgress(String questId, int stageNumber) {
+        Objects.requireNonNull(questId, "questId");
+        return quests.computeIfAbsent(questId, id -> new QuestProgress(id, stageNumber));
+    }
+
+    public void putQuestProgress(QuestProgress progress) {
+        if (progress != null) {
+            quests.put(progress.getQuestId(), progress);
+        }
+    }
+
+    public Map<String, QuestProgress> getQuestsSnapshot() {
+        return Collections.unmodifiableMap(new LinkedHashMap<>(quests));
     }
 }

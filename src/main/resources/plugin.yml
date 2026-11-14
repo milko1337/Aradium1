@@ -44,7 +44,7 @@ commands:
     permission: aradium.admin
   island:
     description: Zarzadzanie wyspa SkyBlock
-    usage: /is [create|home|sethome|panel|level|top|upgrades|roles|privacy|border|warp|setwarp|delwarp|invite|join|kick|leave|trust|untrust|transfer|delete]
+    usage: /is [create|home|sethome|panel|level|top|upgrades|quests|roles|privacy|border|warp|setwarp|delwarp|invite|join|kick|leave|trust|untrust|transfer|delete]
     permission: aradium.player
     aliases: [is, wyspa]
 permissions:

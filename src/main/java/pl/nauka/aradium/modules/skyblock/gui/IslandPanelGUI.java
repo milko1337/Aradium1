@@ -33,6 +33,7 @@ public class IslandPanelGUI {
     private static final int SLOT_ROLES = 14;
     private static final int SLOT_WARPS = 15;
     private static final int SLOT_INFO = 16;
+    private static final int SLOT_QUESTS = 19;
     private static final int SLOT_LEVEL = 21;
     private static final int SLOT_TOP = 23;
 
@@ -144,6 +145,20 @@ public class IslandPanelGUI {
                 )
         ));
 
+        int activeStage = module.getQuestManager() != null
+                ? module.getQuestManager().getHighestUnlockedStage(island)
+                : 1;
+        inventory.setItem(SLOT_QUESTS, createSimpleItem(
+                Material.WRITABLE_BOOK,
+                "&e&lMisje Wyspy",
+                List.of(
+                        "&8» &7Aktualny etap: &6Etap " + activeStage + "&7/5",
+                        "&8» &7Współdzielone zadania całej wyspy.",
+                        "",
+                        "&eKliknij, aby otworzyć misje!"
+                )
+        ));
+
         inventory.setItem(SLOT_LEVEL, createSimpleItem(
                 Material.DIAMOND_BLOCK,
                 "&b&lOblicz Poziom Wyspy",
@@ -245,6 +260,9 @@ public class IslandPanelGUI {
             );
             case SLOT_WARPS -> plugin.getServer().getScheduler().runTask(
                     plugin, () -> module.getWarpsGUI().open(player)
+            );
+            case SLOT_QUESTS -> plugin.getServer().getScheduler().runTask(
+                    plugin, () -> module.getQuestGUI().open(player, island)
             );
             case SLOT_LEVEL -> {
                 player.closeInventory();

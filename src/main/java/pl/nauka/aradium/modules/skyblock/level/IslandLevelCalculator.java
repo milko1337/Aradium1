@@ -9,6 +9,7 @@ import pl.nauka.aradium.AradiumPlugin;
 import pl.nauka.aradium.modules.skyblock.gui.IslandTopGUI;
 import pl.nauka.aradium.modules.skyblock.island.Island;
 import pl.nauka.aradium.modules.skyblock.island.IslandManager;
+import pl.nauka.aradium.modules.skyblock.quests.QuestManager;
 import pl.nauka.aradium.utils.ChatUtils;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class IslandLevelCalculator {
     private final BlockValueManager blockValueManager;
     private final IslandTopCache topCache;
     private final Map<UUID, Long> lastScanMillis = new ConcurrentHashMap<>();
+    private QuestManager questManager;
 
     public IslandLevelCalculator(
             AradiumPlugin plugin,
@@ -44,6 +46,10 @@ public class IslandLevelCalculator {
         this.islandManager = Objects.requireNonNull(islandManager, "islandManager");
         this.blockValueManager = Objects.requireNonNull(blockValueManager, "blockValueManager");
         this.topCache = Objects.requireNonNull(topCache, "topCache");
+    }
+
+    public void setQuestManager(QuestManager questManager) {
+        this.questManager = questManager;
     }
 
     public static double computeLevelFromCounts(
@@ -176,6 +182,10 @@ public class IslandLevelCalculator {
                 island.setPlacedSpawnersCount(result.spawnerCount());
                 islandManager.saveIsland(island);
                 topCache.refresh(islandManager.getAllIslands());
+                if (questManager != null) {
+                    Player owner = Bukkit.getPlayer(island.getOwnerUuid());
+                    questManager.syncDynamicQuests(owner, island);
+                }
                 if (callback != null) {
                     callback.accept(result);
                 }
@@ -207,6 +217,9 @@ public class IslandLevelCalculator {
         recalculateIslandAsync(island, result -> {
             if (!player.isOnline()) {
                 return;
+            }
+            if (questManager != null) {
+                questManager.syncDynamicQuests(player, island);
             }
             player.sendMessage(ChatUtils.getMessage(
                             plugin.getConfig(),

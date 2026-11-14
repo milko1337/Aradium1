@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import pl.nauka.aradium.AradiumPlugin;
 import pl.nauka.aradium.core.database.DatabaseManager;
+import pl.nauka.aradium.modules.skyblock.quests.QuestProgress;
 import pl.nauka.aradium.modules.skyblock.upgrades.IslandUpgradeManager;
 import pl.nauka.aradium.modules.skyblock.upgrades.IslandUpgradeType;
 
@@ -25,6 +26,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -635,6 +637,26 @@ public class IslandManager {
                 }
             }
 
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery("SELECT island_id, stage, quest_id, progress_json, completed, completed_at FROM skyblock_quests")) {
+                while (rs.next()) {
+                    try {
+                        UUID islandId = UUID.fromString(rs.getString("island_id"));
+                        Island island = islandsById.get(islandId);
+                        if (island != null) {
+                            int stage = rs.getInt("stage");
+                            String questId = rs.getString("quest_id");
+                            Map<String, Integer> amounts = QuestProgress.fromJson(rs.getString("progress_json"));
+                            boolean completed = rs.getBoolean("completed");
+                            long completedAt = rs.getLong("completed_at");
+                            island.putQuestProgress(new QuestProgress(questId, stage, amounts, completed, completedAt));
+                        }
+                    } catch (IllegalArgumentException ignored) {
+                        // Pomijamy niepoprawny rekord misji.
+                    }
+                }
+            }
+
             if (upgradeManager != null) {
                 for (Island island : islandsById.values()) {
                     upgradeManager.applyUpgradesToIsland(island);
@@ -744,6 +766,24 @@ public class IslandManager {
                         insUpgrade.addBatch();
                     }
                     insUpgrade.executeBatch();
+                }
+
+                try (PreparedStatement delQuests = conn.prepareStatement("DELETE FROM skyblock_quests WHERE island_id = ?")) {
+                    delQuests.setString(1, islandIdStr);
+                    delQuests.executeUpdate();
+                }
+                try (PreparedStatement insQuest = conn.prepareStatement(
+                        "INSERT INTO skyblock_quests (island_id, stage, quest_id, progress_json, completed, completed_at) VALUES (?, ?, ?, ?, ?, ?)")) {
+                    for (QuestProgress qp : island.getQuestsSnapshot().values()) {
+                        insQuest.setString(1, islandIdStr);
+                        insQuest.setInt(2, qp.getStageNumber());
+                        insQuest.setString(3, qp.getQuestId());
+                        insQuest.setString(4, qp.toJson());
+                        insQuest.setBoolean(5, qp.isCompleted());
+                        insQuest.setLong(6, qp.getCompletedAt());
+                        insQuest.addBatch();
+                    }
+                    insQuest.executeBatch();
                 }
 
                 conn.commit();
@@ -861,6 +901,27 @@ public class IslandManager {
                     }
                 }
 
+                ConfigurationSection questsSec = sec.getConfigurationSection("quests");
+                if (questsSec != null) {
+                    for (String questId : questsSec.getKeys(false)) {
+                        ConfigurationSection qSec = questsSec.getConfigurationSection(questId);
+                        if (qSec == null) {
+                            continue;
+                        }
+                        int stage = qSec.getInt("stage", 1);
+                        boolean completed = qSec.getBoolean("completed", false);
+                        long completedAt = qSec.getLong("completed_at", 0L);
+                        Map<String, Integer> amounts = new LinkedHashMap<>();
+                        ConfigurationSection progSec = qSec.getConfigurationSection("progress");
+                        if (progSec != null) {
+                            for (String objKey : progSec.getKeys(false)) {
+                                amounts.put(objKey, Math.max(0, progSec.getInt(objKey, 0)));
+                            }
+                        }
+                        island.putQuestProgress(new QuestProgress(questId, stage, amounts, completed, completedAt));
+                    }
+                }
+
                 registerIslandInMemory(island);
             } catch (IllegalArgumentException ignored) {
                 // Pomijamy niepoprawny rekord wyspy.
@@ -913,6 +974,16 @@ public class IslandManager {
 
             for (Map.Entry<IslandUpgradeType, Integer> up : island.getUpgradeTiersSnapshot().entrySet()) {
                 yaml.set(base + ".upgrades." + up.getKey().name(), up.getValue());
+            }
+
+            for (QuestProgress qp : island.getQuestsSnapshot().values()) {
+                String qBase = base + ".quests." + qp.getQuestId();
+                yaml.set(qBase + ".stage", qp.getStageNumber());
+                yaml.set(qBase + ".completed", qp.isCompleted());
+                yaml.set(qBase + ".completed_at", qp.getCompletedAt());
+                for (Map.Entry<String, Integer> obj : qp.getProgressSnapshot().entrySet()) {
+                    yaml.set(qBase + ".progress." + obj.getKey(), obj.getValue());
+                }
             }
         }
 

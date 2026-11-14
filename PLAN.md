@@ -1,208 +1,215 @@
-# Plan architektury i wdrożenia Aradium Core (Ekonomia, Sklepy, Spawnery, SkyBlock Core)
+# Plan dalszego rozwoju Aradium (Backlog)
 
-> **Status dokumentu:** Fazy 1, 2, 3, 4 i 5 wdrożone (`DatabaseManager` + Ekonomia + Sklep GUI `/shop` + Zaawansowane Spawnery GUI/Silk Touch `/spawner` + SkyBlock Core `/is` z poziomami, rankingiem `/is top` i ulepszeniami `/is upgrades`).  
-> **Docelowa platforma:** Paper `26.3.build.251-stable` (`api-version: '26.3'`), Java `25`, architektura modularna oparta o `AbstractModule` i `ModuleManager`.
-
----
-
-## 1. Struktura pakietów projektu Core (`pl.nauka.aradium`)
-
-```text
-pl.nauka.aradium
-├── AradiumPlugin.java                  # Klasa główna rejestrująca moduły w ModuleManager
-├── core
-│   ├── PluginModule.java               # Kontrakt cyklu życia modułu (enable/disable/reload)
-│   ├── AbstractModule.java             # Bazowa klasa z automatycznym czyszczeniem listenerów
-│   ├── ModuleManager.java              # Zarządzanie flagami modules.<id> w config.yml
-│   ├── AradiumCommand.java             # Komenda administracyjna /aradium <reload|modules>
-│   └── database
-│       └── DatabaseManager.java        # Połączenie JDBC (SQLite WAL / MySQL), schemat tabel i migracje
-├── utils
-│   └── ChatUtils.java                  # Narzędzia Adventure Component / LegacySerializer
-└── modules
-    ├── economy                         # MODUŁ 1A: Autorska Ekonomia
-    │   ├── EconomyModule.java          # Cykl życia modułu ekonomii i auto-zapis (write-behind)
-    │   ├── EconomyManager.java         # Cache ConcurrentHashMap<UUID, Double> + SQLite/YAML
-    │   ├── MoneyCommand.java           # /money [gracz]
-    │   ├── PayCommand.java             # /pay <gracz> <kwota>
-    │   └── EcoAdminCommand.java        # /eco <give|take|set> <gracz> <kwota>
-    ├── shop                            # MODUŁ 1B: Sklepy GUI (UltimateShop Clone)
-    │   ├── ShopModule.java             # Ładowanie shops/*.yml, zamykanie GUI przy disable
-    │   ├── ShopManager.java            # Rejestr kategorii (main, blocks, farming, mobdrops)
-    │   ├── ShopCategory.java           # Definicja kategorii GUI, formatu lore i mapy slotów
-    │   ├── ShopItem.java               # Definicja pozycji (slot, materiał, buyPrice, sellPrice)
-    │   ├── ShopInventoryHolder.java    # Dedykowany InventoryHolder (Anti-Dupe)
-    │   ├── ShopGUI.java                # Generator GUI + automatyczne lore instrukcji kliknięć
-    │   ├── ShopListener.java           # Blokada wkładania/przenoszenia itemów, LPM/Shift+LPM/PPM/ŚPM
-    │   └── ShopCommand.java            # /shop [kategoria]
-    ├── spawners                        # MODUŁ 2: Zaawansowane Spawnery
-    │   ├── SpawnerModule.java          # Ładowanie spawners.yml i rejestracja GUI/listenerów
-    │   ├── SpawnerTierDefinition.java  # Rekord tieru (opóźnienia, spawnCount, maxNearby, koszty)
-    │   ├── SpawnerDataManager.java     # Operacje PersistentDataContainer (blok <-> ItemStack)
-    │   ├── SpawnerUpgradeHolder.java   # InventoryHolder przypisany bezpośrednio do współrzędnych bloku
-    │   ├── SpawnerGUI.java             # GUI ulepszeń (Shift + PPM na spawner)
-    │   ├── SpawnerListener.java        # Obsługa Silk Touch, stawiania, kliknięcia i ochrony GUI
-    │   └── SpawnerCommand.java         # /spawner give <gracz> <mob> [tier]
-    ├── skyblock                        # MODUŁY 3–5: Kompletny Silnik SkyBlocka
-    │   ├── SkyBlockModule.java         # Koordynator podsystemów wysp, poziomów, ulepszeń i misji
-    │   ├── island
-    │   │   ├── Island.java             # Model wyspy (ID, właściciel, lokalizacja, spawn, warpy, granica)
-    │   │   ├── IslandManager.java      # Cache gridu wysp, przydział współrzędnych, tworzenie ze schematów
-    │   │   ├── IslandRole.java         # Role: VISITOR, TRUSTED (tymczasowa do wylogowania), MEMBER, CO_OWNER, OWNER
-    │   │   ├── IslandPermission.java   # Granularne flagi (BREAK, PLACE, CONTAINERS, INTERACT, INVITE, WARP)
-    │   │   └── BorderColor.java        # Kolor granicy WorldBorder (BLUE, GREEN, RED)
-    │   ├── level
-    │   │   ├── BlockValueManager.java  # Ładowanie punktacji bloków z blocks-value.yml
-    │   │   ├── IslandLevelCalculator.java # Asynchroniczne skanowanie przez ChunkSnapshot (zero lagów ticku)
-    │   │   └── IslandTopCache.java     # Ranking TOP 10 na żywo dla /is top
-    │   ├── upgrades
-    │   │   ├── IslandUpgradeType.java  # WORLD_BORDER, SPAWNER_LIMIT, CROP_GROWTH, MEMBER_LIMIT
-    │   │   └── IslandUpgradeManager.java # Koszty poziomów + modyfikatory WorldBorder i randomTick
-    │   ├── quests
-    │   │   ├── QuestStage.java         # Etapy 1–5 (po 7 misji w każdym)
-    │   │   ├── QuestDefinition.java    # Wymagania (typ, cel, ilość, nagrody) z quests.yml
-    │   │   ├── QuestProgress.java      # Współdzielony stan zadań wyspy (mapa celów + flaga ukończenia)
-    │   │   └── QuestManager.java       # Ładowanie quests.yml, inkrementacja i odbiór nagród
-    │   ├── gui
-    │   │   ├── IslandPanelGUI.java     # Główne menu wyspy, ustawienia prywatności i koloru WorldBorder
-    │   │   ├── IslandRolesGUI.java     # Menu uprawnień ról (zielona/czerwona szyba statusu)
-    │   │   ├── IslandWarpsGUI.java     # Publiczne warpy graczy
-    │   │   ├── IslandUpgradesGUI.java  # Ulepszenia wyspy za walutę EconomyManager
-    │   │   └── QuestGUI.java           # Menu misji (zielona/żółta z progressbarem/czerwona szyba)
-    │   ├── listeners
-    │   │   ├── IslandProtectionListener.java # Ochrona bloków, skrzyń, granicy WorldBorder, wyczyszczenie TRUSTED przy wyjściu
-    │   │   ├── SpawnerLimitListener.java     # Egzekwowanie limitu spawnerów na wyspie i prędkości wzrostu roślin
-    │   │   └── QuestProgressListener.java    # Zoptymalizowane zliczanie (BlockBreak, EntityDeath, Fish, Craft, Trade, Brew)
-    │   └── commands
-    │       └── IslandCommand.java      # /is <create|home|sethome|warp|setwarp|invite|trust|kick|top|panel|delete|transfer>
-    ├── magicitems                      # (Istniejący moduł: magiczne przedmioty + zdolność duch)
-    ├── armor                           # (Istniejący moduł: zestawy Górnik/Handlarz/Wojownik + Buty lotnika)
-    └── oreregions                      # (Istniejący moduł: odnawialne regiony rud)
-```
+> **Aktualny status:** Wszystkie 6 faz **Aradium Core** (`DatabaseManager`, Ekonomia,
+> Sklepy GUI, Spawnery oraz silnik SkyBlock z poziomami, ulepszeniami i 5 etapami misji)
+> zostały **zakończone i wdrożone**.
+>
+> Dokumentacja techniczna gotowych modułów znajduje się w [`AUDIT.md`](AUDIT.md).
 
 ---
 
-## 2. Schemat bazy danych (SQLite WAL / MySQL)
+## Zadania pozostałe do wykonania
 
-Wszystkie tabele używają standardowego SQL zgodnego zarówno z SQLite (z trybem `PRAGMA journal_mode = WAL` dla równoległego odczytu/zapisu bez blokowania głównego wątku), jak i MySQL (`InnoDB`, `utf8mb4`).
+### 1. Rozbudowa kategorii Sklepu GUI (`shops/`)
 
-```sql
--- 1. Konta ekonomii graczy (Moduł 1)
-CREATE TABLE IF NOT EXISTS economy_accounts (
-    uuid       VARCHAR(36) PRIMARY KEY,
-    balance    DOUBLE      NOT NULL DEFAULT 0.0,
-    updated_at BIGINT      NOT NULL
-);
+- [ ] Utworzyć dodatkowe kategorie: `shops/farming.yml`, `shops/mobdrops.yml`
+  oraz `shops/ores.yml`.
 
--- 2. Wyspy SkyBlock (Moduły 3 i 4)
-CREATE TABLE IF NOT EXISTS skyblock_islands (
-    island_id      VARCHAR(36) PRIMARY KEY,
-    owner_uuid     VARCHAR(36) NOT NULL,
-    world_name     VARCHAR(64) NOT NULL,
-    center_x       INT         NOT NULL,
-    center_z       INT         NOT NULL,
-    home_x         DOUBLE      NOT NULL,
-    home_y         DOUBLE      NOT NULL,
-    home_z         DOUBLE      NOT NULL,
-    home_yaw       FLOAT       NOT NULL DEFAULT 0.0,
-    home_pitch     FLOAT       NOT NULL DEFAULT 0.0,
-    is_public      BOOLEAN     NOT NULL DEFAULT FALSE,
-    border_color   VARCHAR(16) NOT NULL DEFAULT 'BLUE',
-    island_level   DOUBLE      NOT NULL DEFAULT 0.0,
-    bank_balance   DOUBLE      NOT NULL DEFAULT 0.0,
-    created_at     BIGINT      NOT NULL
-);
-
--- 3. Stałe członkostwa wysp (Member / Co-Owner; TRUSTED trzymane wyłącznie w pamięci RAM do wylogowania)
-CREATE TABLE IF NOT EXISTS skyblock_members (
-    island_id  VARCHAR(36) NOT NULL,
-    player_uuid VARCHAR(36) NOT NULL,
-    role       VARCHAR(16) NOT NULL,
-    joined_at  BIGINT      NOT NULL,
-    PRIMARY KEY (island_id, player_uuid),
-    FOREIGN KEY (island_id) REFERENCES skyblock_islands(island_id) ON DELETE CASCADE
-);
-
--- 4. Uprawnienia ról per wyspa (Moduł 3 - Role GUI)
-CREATE TABLE IF NOT EXISTS skyblock_role_permissions (
-    island_id   VARCHAR(36) NOT NULL,
-    role        VARCHAR(16) NOT NULL,
-    permission  VARCHAR(32) NOT NULL,
-    allowed     BOOLEAN     NOT NULL,
-    PRIMARY KEY (island_id, role, permission),
-    FOREIGN KEY (island_id) REFERENCES skyblock_islands(island_id) ON DELETE CASCADE
-);
-
--- 5. Poziomy ulepszeń wyspy (Moduł 4)
-CREATE TABLE IF NOT EXISTS skyblock_upgrades (
-    island_id     VARCHAR(36) NOT NULL,
-    upgrade_type  VARCHAR(32) NOT NULL,
-    tier          INT         NOT NULL DEFAULT 1,
-    PRIMARY KEY (island_id, upgrade_type),
-    FOREIGN KEY (island_id) REFERENCES skyblock_islands(island_id) ON DELETE CASCADE
-);
-
--- 6. Publiczne warpy wysp (Moduł 3)
-CREATE TABLE IF NOT EXISTS skyblock_warps (
-    island_id  VARCHAR(36) NOT NULL,
-    warp_name  VARCHAR(32) NOT NULL,
-    world_name VARCHAR(64) NOT NULL,
-    x          DOUBLE      NOT NULL,
-    y          DOUBLE      NOT NULL,
-    z          DOUBLE      NOT NULL,
-    yaw        FLOAT       NOT NULL DEFAULT 0.0,
-    pitch      FLOAT       NOT NULL DEFAULT 0.0,
-    icon       VARCHAR(48) NOT NULL DEFAULT 'ENDER_PEARL',
-    PRIMARY KEY (island_id, warp_name),
-    FOREIGN KEY (island_id) REFERENCES skyblock_islands(island_id) ON DELETE CASCADE
-);
-
--- 7. Postęp współdzielonych misji wyspy (Moduł 5)
-CREATE TABLE IF NOT EXISTS skyblock_quests (
-    island_id     VARCHAR(36) NOT NULL,
-    stage         INT         NOT NULL,
-    quest_id      VARCHAR(48) NOT NULL,
-    progress_json TEXT        NOT NULL,
-    completed     BOOLEAN     NOT NULL DEFAULT FALSE,
-    completed_at  BIGINT      NOT NULL DEFAULT 0,
-    PRIMARY KEY (island_id, quest_id),
-    FOREIGN KEY (island_id) REFERENCES skyblock_islands(island_id) ON DELETE CASCADE
-);
-```
+- [ ] Podpiąć nowe kategorie w `shops/main.yml` i zrównoważyć ceny
+  z ekonomią SkyBlocka oraz nagrodami z misji.
 
 ---
 
-## 3. Rekomendowana kolejność wdrożenia (6 faz)
+### 2. Poprawa gui związanych z wyspą (`/is`)
 
-| Faza | Zakres | Uzasadnienie zależności | Status |
-| :--- | :--- | :--- | :--- |
-| **Faza 1: Fundament Danych i PDC** | `DatabaseManager`, `EconomyManager`, `spawners.yml`, `quests.yml`, `shops/blocks.yml`, `SpawnerDataManager`, `PLAN.md` | Wspólna warstwa persystencji i ekonomia są wymagane przez sklepy, ulepszenia spawnerów, ulepszenia wyspy i nagrody misji. | **Wdrożona [x]** |
-| **Faza 2: Komendy Ekonomii i Sklep GUI** | `DatabaseManager` w `AradiumPlugin`, `EconomyModule`, `/money`, `/pay`, `/eco`, `ShopManager`, `ShopCategory`, `ShopGUI`, `ShopListener`, `/shop` | Daje graczom pełną pętlę zarabiania i wydawania waluty jeszcze przed uruchomieniem SkyBlocka. | **Wdrożona [x]** |
-| **Faza 3: Ulepszane Spawnery GUI + Silk Touch** | `SpawnerModule`, `SpawnerUpgradeHolder`, `SpawnerGUI`, `SpawnerListener`, `/spawner` | Korzysta z `EconomyManager` i gotowego `SpawnerDataManager` (PDC). | **Wdrożona [x]** |
-| **Faza 4: SkyBlock Core — Wyspy, Role i WorldBorder** | `SkyBlockModule`, `IslandManager`, `IslandSchematicGUI`, `IslandPanelGUI`, `IslandRolesGUI`, `IslandWarpsGUI`, `IslandProtectionListener`, `IslandCommand` (`/is`), schematy wysp, warpy, prywatność i kolory `WorldBorder`, sesyjne `TRUSTED` | Rdzeń świata wysp, na którym opierają się limity spawnerów, poziomy i misje. | **Wdrożona [x]** |
-| **Faza 5: Poziomy Wyspy i Ulepszenia** | `blocks-value.yml`, `BlockValueManager`, `IslandLevelCalculator` (async `ChunkSnapshot`), `IslandTopCache`, `/is level`, `/is top` (`IslandTopGUI`), `IslandUpgradeManager`, `IslandUpgradesGUI`, `SpawnerLimitListener` (limity spawnerów i wzrost roślin) | Rozszerza już istniejący obiekt `Island` o przeliczanie wartości bloków i modyfikatory rozgrywki. | **Wdrożona [x]** |
-| **Faza 6: System Misji Wysp (5 Etapów x 7 Zadań)** | Pełne `quests.yml` (Etapy 1–5), `QuestManager`, `QuestGUI` (zielona/żółta/czerwona szyba + progressbar), zoptymalizowane listenery | Integruje wszystkie wcześniejsze moduły: wykopki, zbiory, moby, ekonomię i poziom wyspy. | Następna (Oczekuje) |
+- [ ] Poprawić formatowanie oraz wygląd poszczególnych gui.
 
 ---
 
-## 4. Propozycje rozwiązań architektonicznych i optymalizacyjnych (dla setek graczy)
+### 3. Integracja PlaceholderAPI / Tablista i Scoreboard
 
-1. **Ekonomia typu Write-Behind (zero zapytań SQL na głównym wątku):**
-   - Wszystkie operacje `getMoney`, `hasMoney`, `addMoney`, `takeMoney` wykonują się na `ConcurrentHashMap<UUID, Double>` w czasie $O(1)$.
-   - Zmodyfikowane UUID trafiają do zbioru `dirtyAccounts`, który okresowy task asynchroniczny zrzuca wsadowo (`PreparedStatement#executeBatch`) do SQLite WAL (lub opcjonalnego YAML). Przy zamykaniu serwera (`onDisable`) następuje synchroniczne `flushDirtyAccounts()` gwarantujące brak utraty sald.
-2. **Bezpieczne GUI bez duplikowania przedmiotów (Anti-Dupe):**
-   - Każde GUI posiada własną klasę implementującą `InventoryHolder` (`ShopInventoryHolder`, `SpawnerUpgradeHolder`, `QuestInventoryHolder`, `IslandPanelHolder`).
-   - W `InventoryClickEvent` oraz `InventoryDragEvent`: jeśli `event.getView().getTopInventory().getHolder()` jest jedną z naszych klas, anulujemy zdarzenie natychmiastowo na samym początku (`event.setCancelled(true)`), blokując m.in. Shift-Click z dolnego ekwipunku, klawisze `1–9`, podwójne kliknięcie (`COLLECT_TO_CURSOR`) i przeciąganie.
-   - `SpawnerUpgradeHolder` przechowuje referencję do współrzędnych `(world, x, y, z)` i zamyka GUI, jeśli blok spawnera zostanie w międzyczasie zniszczony (ochrona przed wyścigiem dwóch graczy lub zniszczeniem spawnera z otwartym menu).
-3. **Bezpieczna aktualizacja `CreatureSpawner` (kolejność `min/max delay`):**
-   - Paper/Spigot wyrzuca `IllegalArgumentException`, jeśli ustawisz `minSpawnDelay` większy od aktualnego `maxSpawnDelay` lub `maxSpawnDelay` mniejszy od aktualnego `minSpawnDelay`.
-   - Rozwiązanie w `SpawnerDataManager`: jeśli nowy `minSpawnDelay > obecny maxSpawnDelay`, najpierw podnosimy `maxSpawnDelay`, a potem ustawiamy `minSpawnDelay`; w przeciwnym razie najpierw ustawiamy `minSpawnDelay`, a potem `maxSpawnDelay`.
-4. **Asynchroniczne liczenie poziomu wyspy (`ChunkSnapshot`):**
-   - Na głównym wątku pobieramy wyłącznie lekkie migawki chunków (`chunk.getChunkSnapshot(false, false, false)`) leżących w obrębie aktualnego `WorldBorder` wyspy.
-   - Całe iterowanie po współrzędnych `(x, y, z)` i sumowanie wartości z `blocks-value.yml` wykonuje się w puli wątków roboczych (`CompletableFuture.supplyAsync(...)`). Wynik wraca na główny wątek i odświeża cache `/is top`.
-5. **Optymalizacja spawnerów i wzrostu roślin (Moduł 4):**
-   - Zamiast ciężkich skanów wyspy co tick, wzrost roślin przyspieszamy zdarzeniowo w `BlockGrowEvent` (losowa szansa dodatkowego postępu `Ageable#setAge` proporcjonalna do poziomu ulepszenia wyspy) oraz opcjonalnie `StructureGrowEvent`.
-   - Limit spawnerów weryfikujemy w czasie $O(1)$ w `BlockPlaceEvent` / `BlockBreakEvent` (przechowując licznik postawionych spawnerów w metadanych obiektu `Island`, korygowany przy przeliczeniu `IslandLevel`).
-6. **Współdzielone misje (`QuestProgress`) z filtrowaniem zdarzeń:**
-   - W `QuestProgressListener` pierwszym warunkiem przed jakimkolwiek dostępem do bazy czy wyspy jest szybkie sprawdzenie typu zdarzenia/materiału przeciwko aktywnemu zbiorowi celów bieżącego etapu wyspy (early return przy `BlockBreakEvent` bloków niebędących celem żadnego zadania).
-   - Tymczasowe nadania roli `TRUSTED` trzymamy wyłącznie w pamięci (`Map<UUID, Set<UUID>>`), czyszczonej automatycznie przy `PlayerQuitEvent`.
+- [ ] Dodać opcjonalną ekspansję `PlaceholderAPI`: `%aradium_money%`,
+  `%aradium_island_level%`, `%aradium_island_rank%`, `%aradium_island_stage%`.
+
+- [ ] Ustawić miękką zależność `softdepend: [PlaceholderAPI]` w `plugin.yml`,
+  aby plugin uruchamiał się poprawnie także bez `PlaceholderAPI`.
+
+---
+
+### 4. Testy integracyjne Paper/Bukkit (MockBukkit)
+
+- [ ] Dodać testy zdarzeń `InventoryClickEvent` (Anti-Dupe GUI), `BlockBreakEvent`,
+  `PlayerArmorChangeEvent`, `BrewEvent` oraz `PlayerFishEvent`.
+
+- [ ] Przetestować cykl życia `ModuleManager` (kolejność uruchamiania,
+  `reload` oraz zamykanie GUI przy wyłączaniu pluginu).
+
+---
+
+### 5. Wersjonowanie i publikacja na GitHub
+
+- [ ] Wykonać `git commit` oraz `git push` aktualnego stanu projektu na GitHub
+  po zakończeniu prac nad Fazami 1–6 Core.
+
+- [ ] Stosować regułę z `AUDIT.md`: po każdej większej zmianie testy,
+  aktualizacja dokumentacji, commit oraz push na GitHub.
+
+### 6. Rozbudowa misji oraz ulepszen wysp
+
+- [ ] Dodać nowe misje oraz ulepszenia wysp.
+- [ ] Zrównoważyć nagrody z misji oraz ulepszeń wysp z ekonomią SkyBlocka.
+
+### 7. Optymalizacja pluginu
+
+- [ ] Optymalizacja wydajności pluginu.
+- [ ] Optymalizacja kodu pluginu.
+- [ ] Optymalizacja zasobów pluginu.
+
+
+### 8. Dodatkowe funkcje
+
+- [ ] Dodać nowe itemy do pluginu. - specjalne itemy jak generatory cobla, zróżnicowane generatory cobla itp, ochodnia wyłączająca resp mobów obszarowo itp.
+- [ ] Zrównoważyć funkcje z ekonomią SkyBlocka. - po rozbudowie sklepu zrównoważyć ceny itemów z misjami i ulepszeniami wysp.
+- [ ] Dodać nowe mechaniki do pluginu. - dodatkowe mechaniki jak craftingi przedmiotów , specjalne ulepszenia do broni,narzędzi, zbroi
+
+### 9. Moderacja czatu 
+
+- [ ] Dodać moderację czatu do pluginu - komendy mute/ban/kick
+- [ ] Dodać system rang i uprawnień do pluginu - uprawnienia dla rang, prefixy, suffixy itp.
+- [ ] Dodać czyszczenie czatu
+
+---
+
+## Plan wdrożenia (Etapy 1–9)
+
+> Weryfikacja techniczna względem Paper `26.3.build.251-stable` i Javy `25`:
+> wszystkie 9 planów jest spójnych z `AbstractModule` i `DatabaseManager`.
+> Do testów zdarzeń (Etap 9) rekomendowane jest `mockito-junit-jupiter` zamiast
+> `MockBukkit` (pełna zgodność z najnowszym API Paper `26.3` i Javą `25`).
+
+---
+
+### Etap 1 (Punkt 5): Punkt kontrolny Git / GitHub (`GitHub Baseline`)
+
+- **Cel:** Zabezpieczenie ukończonych Faz 1–6 Core w repozytorium przed kolejnymi zmianami.
+
+- **Zadania:**
+  - Sprawdzić `.gitignore` (`target/`, `.idea/`, `*.iml`, `*.db`, `*.db-wal`, `*.db-shm`).
+  - Wykonać commit kontrolny i `git push` obecnego stanu (`73` klasy, `15/15` testów).
+  - Powtarzać commit i `git push` po zamknięciu każdego kolejnego etapu.
+
+---
+
+### Etap 2 (Punkt 1): Rozbudowa kategorii Sklepu GUI (`shops/`)
+
+- **Cel:** Rozszerzenie sklepu `/shop` o pełny asortyment SkyBlocka.
+
+- **Zadania:**
+  - Utworzyć `shops/farming.yml` (nasiona, sadzonki, pszenica, ziemniaki, marchew,
+    melon, dynia, trzcina, kaktus, brodawki, jajka, wieprzowina).
+  - Utworzyć `shops/mobdrops.yml` (kości, nici, proch, perły Endu, płomienne różdżki,
+    łzy Ghasta, pryzmaryn).
+  - Utworzyć `shops/ores.yml` (węgiel, żelazo, złoto, diament, szmaragd, obsydian,
+    kwarc, sztabki netheritu).
+  - Podpiąć kategorie w `shops/main.yml` i aktualizować kopiowanie zasobów w `ShopModule`.
+
+---
+
+### Etap 3 (Punkt 7): Optymalizacja pluginu (Wydajność, Kod, Zasoby)
+
+- **Cel:** Odchudzenie głównego wątku serwera (`TPS`) oraz kodu klas GUI przed rozbudową.
+
+- **Zadania:**
+  - **Wydajność (`O(1)` i async DB):**
+    - Dodać w `QuestManager` indeks aktywnych celów (`EnumMap<QuestType, Set<String>>`),
+      aby `QuestProgressListener` pomijał nieśledzone akcje bez szukania wyspy.
+    - Wprowadzić asynchroniczny zapis wsadowy `dirtyIslands` (`write-behind`)
+      w `IslandManager` na wzór `EconomyManager`.
+  - **Optymalizacja kodu:**
+    - Wydzielić wspólną klasę `utils/GuiItemBuilder.java` dla wszystkich menu GUI.
+  - **Optymalizacja zasobów i SQL:**
+    - Dodać indeksy SQL w `DatabaseManager` (`idx_skyblock_members_player`,
+      `idx_skyblock_quests_island`) i ograniczyć powtarzalne odczyty konfiguracji.
+
+---
+
+### Etap 4 (Punkt 2): Poprawa wyglądu i ergonomii GUI wyspy (`/is`)
+
+- **Cel:** Nowoczesny, jednolity wygląd wszystkich 7 menu w `modules/skyblock/gui/`.
+
+- **Zadania:**
+  - Przeprojektować `IslandPanelGUI` (dwukolorowa ramka ze szkła, główka `PLAYER_HEAD`
+    z poziomem wyspy, miejscem w `/is top`, saldem i aktywnym etapem misji).
+  - Ujednolicić lore, znaczniki statusu (`✔`, `⌛`, `✖`), paski postępu i przyciski
+    nawigacji we wszystkich oknach `/is` (`Schematic`, `Roles`, `Warps`, `Upgrades`,
+    `Top`, `QuestGUI`).
+
+---
+
+### Etap 5 (Punkt 8): Dodatkowe funkcje (Generatory, Pochodnia Anty-Mob, Crafting)
+
+- **Cel:** Nowe przedmioty techniczne, receptury i rozwój ekwipunku gracza.
+
+- **Zadania:**
+  - **Zróżnicowane generatory:** blok generatora bruku oraz generatorów rud (`T1–T3`)
+    z losowaniem surowców wg wag z konfiguracji i podnoszeniem bez utraty danych PDC.
+  - **Pochodnia Anty-Mob:** blok PDC blokujący naturalny spawn potworów
+    (`SpawnReason.NATURAL`) w konfigurowalnym zasięgu bez blokowania spawnerów.
+  - **Crafting i ulepszenia sprzętu:** receptury `ShapedRecipe` na generatory/zbroje T1
+    oraz przedmioty ulepszające (podnoszenie tieru zbroi + runy broni i narzędzi).
+
+---
+
+### Etap 6 (Punkt 6): Rozbudowa misji, ulepszeń wysp i pełny balans ekonomii
+
+- **Cel:** Rozszerzenie końcowej gry (`endgame`) i wyrównanie całej ekonomii SkyBlocka.
+
+- **Zadania:**
+  - Dodać nowe typy ulepszeń wyspy w `IslandUpgradeType`: `GENERATOR_TIER`
+    (lepsze rudy z generatorów) oraz `MOB_DROP_BONUS` (bonus dropu/XP na wyspie).
+  - Rozszerzyć `quests.yml` i `QuestGUI` o **Etap VI i VII** (wraz z przewijaniem etapów).
+  - Zbalansować ceny kupna/sprzedaży w `shops/*.yml` względem nagród z etapów 1–7,
+    ulepszeń wysp oraz kosztów spawnerów.
+
+---
+
+### Etap 7 (Punkt 9): Moderacja czatu oraz System Rang i Uprawnień
+
+- **Cel:** Własny system kar i rang uprawnień niezależny od zewnętrznych pluginów.
+
+- **Zadania:**
+  - **Moduł Moderacji (`modules/moderation/`):**
+    - Tabela `moderation_punishments` w `DatabaseManager` (bany i wyciszenia).
+    - Komendy `/ban`, `/tempban`, `/unban`, `/mute`, `/tempmute`, `/unmute`, `/kick`
+      oraz `/clearchat` (`/cc`).
+    - Egzekwowanie blokad w `AsyncPlayerPreLoginEvent` i `AsyncChatEvent`.
+  - **Moduł Rang i Uprawnień (`modules/ranks/`):**
+    - Konfiguracja `ranks.yml` (`prefix`, `suffix`, kolor czatu, waga, dziedziczenie
+      uprawnień), tabela `player_ranks` i `PermissionAttachment`.
+    - Komenda `/rank <set|info|list|reload>` oraz formatowanie czatu.
+
+---
+
+### Etap 8 (Punkt 3): Integracja `PlaceholderAPI`
+
+- **Cel:** Udostępnienie statystyk ekonomii, wyspy i rang na tabliście i scoreboardzie.
+
+- **Zadania:**
+  - Dodać zależność `me.clip:placeholderapi` (`provided`) w `pom.xml` oraz
+    `softdepend: [PlaceholderAPI]` w `plugin.yml`.
+  - Utworzyć `AradiumPlaceholderExpansion` z obsługą placeholderów:
+    `%aradium_money%`, `%aradium_money_formatted%`, `%aradium_island_level%`,
+    `%aradium_island_rank%`, `%aradium_island_stage%`, `%aradium_island_members%`,
+    `%aradium_rank%`, `%aradium_prefix%`, `%aradium_suffix%`.
+
+---
+
+### Etap 9 (Punkt 4): Testy integracyjne zdarzeń Paper/Bukkit
+
+- **Cel:** Pokrycie testami zdarzeń gry, zabezpieczeń Anti-Dupe i cyklu życia modułów.
+
+- **Zadania:**
+  - Dodać zależność `mockito-junit-jupiter` (`test`) w `pom.xml`.
+  - Rozbudować `AradiumAuditTest.java` o testy `InventoryClickEvent` (Anti-Dupe GUI),
+    `BlockBreakEvent`, `PlayerArmorChangeEvent`, `BrewEvent`, `PlayerFishEvent`,
+    kar czatu oraz pełnego cyklu `ModuleManager` (`enable` -> `reload` -> `disable`).
