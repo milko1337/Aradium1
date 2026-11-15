@@ -3,14 +3,15 @@ package pl.nauka.aradium.modules.spawners;
 import org.bukkit.Material;
 
 /**
- * Cztery niezależne ścieżki ulepszeń spawnera zapisywane w PDC oraz spawners.yml.
+ * Pięć niezależnych ścieżek ulepszeń spawnera zapisywanych w PDC oraz spawners.yml.
  */
 public enum SpawnerUpgradeTrack {
 
     DELAY("delay", "&eCzas respu", Material.CLOCK, 19, 1),
     AMOUNT("amount", "&aIlość mobów", Material.SPAWNER, 20, 1),
     RANGE("range", "&bZasięg gracza", Material.SPYGLASS, 21, 1),
-    LIGHT_IMMUNITY("light-immunity", "&dIgnorowanie światła", Material.SOUL_LANTERN, 22, 0);
+    LIGHT_IMMUNITY("light-immunity", "&dIgnorowanie światła", Material.SOUL_LANTERN, 22, 0),
+    GROUND_IMMUNITY("ground-immunity", "&3Spawn w powietrzu", Material.FEATHER, 23, 0);
 
     private final String configKey;
     private final String displayName;

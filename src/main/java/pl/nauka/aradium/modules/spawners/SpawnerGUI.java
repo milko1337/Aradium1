@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * GUI panelu ulepszeń spawnera (4 niezależne ścieżki + sklep mobów) otwierane przez Shift + PPM.
+ * GUI panelu ulepszeń spawnera (5 niezależnych ścieżek + sklep mobów) otwierane przez Shift + PPM.
  */
 public class SpawnerGUI {
 
@@ -43,6 +43,7 @@ public class SpawnerGUI {
     public static final int MAIN_SLOT_AMOUNT = 20;
     public static final int MAIN_SLOT_RANGE = 21;
     public static final int MAIN_SLOT_LIGHT = 22;
+    public static final int MAIN_SLOT_GROUND = 23;
     public static final int MAIN_SLOT_MOB_SHOP = 25;
     public static final int MAIN_SLOT_CLOSE = 31;
 
@@ -564,9 +565,11 @@ public class SpawnerGUI {
     ) {
         List<String> lore = new ArrayList<>();
         int currentLevel = currentDef != null ? currentDef.level() : track.defaultLevel();
-        String statusText = track == SpawnerUpgradeTrack.LIGHT_IMMUNITY
-                ? (currentLevel >= 1 ? "&aOdblokowane (0-15)" : "&cWyłączone")
-                : "&ePoziom " + currentLevel + "&8/&7" + maxLevel;
+        String statusText = switch (track) {
+            case LIGHT_IMMUNITY -> currentLevel >= 1 ? "&aOdblokowane (0-15)" : "&cWyłączone";
+            case GROUND_IMMUNITY -> currentLevel >= 1 ? "&aOdblokowany (w powietrzu)" : "&cWyłączony";
+            default -> "&ePoziom " + currentLevel + "&8/&7" + maxLevel;
+        };
 
         lore.add("&8» &7Obecnie: " + statusText);
         if (currentDef != null) {
@@ -579,10 +582,10 @@ public class SpawnerGUI {
             return lore;
         }
 
+        boolean binaryTrack = track == SpawnerUpgradeTrack.LIGHT_IMMUNITY
+                || track == SpawnerUpgradeTrack.GROUND_IMMUNITY;
         lore.add("");
-        lore.add("&8» &7Następny poziom: &a" + (track == SpawnerUpgradeTrack.LIGHT_IMMUNITY
-                ? "Odblokowanie"
-                : "Poziom " + nextDef.level()));
+        lore.add("&8» &7Następny poziom: &a" + (binaryTrack ? "Odblokowanie" : "Poziom " + nextDef.level()));
         lore.add("&8» &7Nowy efekt: &a" + describeTrackValue(track, nextDef));
         lore.add("");
         lore.add("&8» &7Koszt waluty: &e" + EconomyManager.formatMoney(nextDef.upgradeCost()));
@@ -605,6 +608,7 @@ public class SpawnerGUI {
             case AMOUNT -> def.spawnCount() + " mobów (limit w pobliżu: " + def.maxNearbyEntities() + ")";
             case RANGE -> def.requiredPlayerRange() + " kratek";
             case LIGHT_IMMUNITY -> def.ignoreLight() ? "Spawn przy każdym świetle (0-15)" : "Wymaga naturalnego światła";
+            case GROUND_IMMUNITY -> def.ignoreGround() ? "Respi moby nawet w powietrzu" : "Wymaga bloków podłoża";
         };
     }
 
@@ -638,7 +642,9 @@ public class SpawnerGUI {
                     ChatUtils.itemComponent("&8» &7Zasięg gracza (&bPoz. " + state.rangeLevel() + "/" + maxRangeLvl + "&7): &f"
                             + playerRange + " kratek"),
                     ChatUtils.itemComponent("&8» &7Ignorowanie światła: "
-                            + (state.isLightImmune() ? "&aOdblokowane (0-15)" : "&cWyłączone"))
+                            + (state.isLightImmune() ? "&aOdblokowane (0-15)" : "&cWyłączone")),
+                    ChatUtils.itemComponent("&8» &7Spawn w powietrzu: "
+                            + (state.isGroundImmune() ? "&aOdblokowany (bez podłoża)" : "&cWyłączony"))
             ));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             item.setItemMeta(meta);

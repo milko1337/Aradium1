@@ -149,24 +149,31 @@
 ### 1.4. Moduł 2: Zaawansowane Spawnery (`spawners`)
 
 - **`SpawnerModule.java`, `SpawnerUpgradeTrack.java`, `SpawnerTrackLevelDefinition.java`, `SpawnerMobDefinition.java`, `SpawnerState.java` i `SpawnerTierDefinition.java`**
-  - Ładowanie `spawners.yml` (`4` ścieżki ulepszeń: `DELAY`, `AMOUNT`, `RANGE`, `LIGHT_IMMUNITY`),
-    katalog `85` mobów z wykluczeniem bossów (`FORBIDDEN_BOSS_ENTITIES`: `WITHER`, `ENDER_DRAGON`, `WARDEN`)
-    oraz kompatybilność wsteczna starszych tierów `1–3`.
+  - Ładowanie `spawners.yml` (`5` ścieżek ulepszeń: `DELAY`, `AMOUNT`, `RANGE`, `LIGHT_IMMUNITY`,
+    `GROUND_IMMUNITY`), katalog `85` mobów z wykluczeniem bossów (`FORBIDDEN_BOSS_ENTITIES`:
+    `WITHER`, `ENDER_DRAGON`, `WARDEN`) oraz kompatybilność wsteczna starszych tierów `1–3`.
 
 - **`SpawnerDataManager.java`**
   - Zapis/odczyt stanu `SpawnerState` (`spawner_entity`, `spawner_unlocked_mobs`, `spawner_delay_lvl`,
-    `spawner_amount_lvl`, `spawner_range_lvl`, `spawner_light_lvl`) w PDC bloku `CreatureSpawner`
-    oraz przedmiotu (Silk Touch), domyślny mob `EntityType.PIG`, bezpieczna kolejność ustawiania
-    `minSpawnDelay` / `maxSpawnDelay` oraz reguła `SpawnRule(0, 15, 0, 15)` przez `SpawnerEntry`.
+    `spawner_amount_lvl`, `spawner_range_lvl`, `spawner_light_lvl`, `spawner_ground_lvl`) w PDC bloku
+    `CreatureSpawner` oraz przedmiotu (Silk Touch), domyślny mob `EntityType.PIG`, bezpieczna kolejność
+    ustawiania `minSpawnDelay` / `maxSpawnDelay` oraz reguła `SpawnRule(0, 15, 0, 15)` przez `SpawnerEntry`.
+
+- **`SpawnerAirSpawnTask.java`**
+  - Task cykliczny (co `20` ticków) śledzący załadowane spawnery z wykupionym `GROUND_IMMUNITY`
+    ("Spawn w powietrzu"), omijający restrykcje `SpawnPlacements` (trawa, grzybnia, woda, lawa,
+    pełne podłoże) i respiący dowolnego z `85` mobów w powietrzu z poszanowaniem `requiredPlayerRange`,
+    `maxNearbyEntities` i warunków światła (gdy `LIGHT_IMMUNITY` nie jest odblokowane).
 
 - **`SpawnerUpgradeHolder.java` i `SpawnerGUI.java`**
-  - Dwuekranowe GUI spawnera (`MAIN_MENU` `36` slotów z 4 ścieżkami ulepszeń oraz `MOB_SHOP`
+  - Dwuekranowe GUI spawnera (`MAIN_MENU` `36` slotów z 5 ścieżkami ulepszeń oraz `MOB_SHOP`
     `54` slotów na 4 stronach do zakupu i przełączania `85` mobów) powiązane ze współrzędnymi
     konkretnego bloku (Anti-Dupe), pobierające walutę z `EconomyManager` i czyste itemy z ekwipunku.
 
 - **`SpawnerListener.java` i `SpawnerCommand.java`**
   - Otwieranie menu przez `Shift + PPM`, wydobycie Silk Touch z zachowaniem wszystkich ulepszeń
-    i odblokowanych mobów, start z bazową świnią, ochrona przed wybuchami oraz `/spawner give`.
+    i odblokowanych mobów, start z bazową świnią, synchronizacja spawnerów przy `ChunkLoadEvent` /
+    `ChunkUnloadEvent` / `SpawnerSpawnEvent`, ochrona przed wybuchami oraz `/spawner give`.
 
 ---
 
@@ -263,8 +270,9 @@
     `shops/*.yml`, materiałów Paper `26.3`, powiązań `parent-shop`/`target-shop`, indeksowania
     najlepszych cen sprzedaży oraz automatycznego stronicowania.
 
-17. `spawnerFourUpgradeTracksAndAllNonBossMobsWorkCorrectly` — walidacja `4` ścieżek ulepszeń
-    w `spawners.yml`, kompletu `85` mobów z wykluczeniem bossów (`WITHER`, `ENDER_DRAGON`, `WARDEN`),
+17. `spawnerFourUpgradeTracksAndAllNonBossMobsWorkCorrectly` — walidacja `5` ścieżek ulepszeń
+    (`DELAY`, `AMOUNT`, `RANGE`, `LIGHT_IMMUNITY`, `GROUND_IMMUNITY`) w `spawners.yml`,
+    kompletu `85` mobów z wykluczeniem bossów (`WITHER`, `ENDER_DRAGON`, `WARDEN`),
     domyślnego stanu `PIG`, serializacji PDC, reguły światła `SpawnRule(0, 15, 0, 15)` i lore GUI.
 
 ---
@@ -320,24 +328,25 @@ Aktualna lista zadań pozostałych do realizacji znajduje się w pliku [`PLAN.md
 
 ## 4. Historia zmian (Changelog)
 
-### 2026-11-15 — Etap 3 (Punkt 10): Zaawansowane ulepszenia spawnerów i sklep 85 mobów (`2.0.0-SNAPSHOT`)
+### 2026-11-15 — Etap 3 (Punkt 10): Zaawansowane ulepszenia spawnerów (`5` ścieżek + spawn w powietrzu + 85 mobów) (`2.0.0-SNAPSHOT`)
 
 - Dodano klasy modelu i stanu dla modułu `spawners`: `SpawnerUpgradeTrack`,
-  `SpawnerTrackLevelDefinition`, `SpawnerMobDefinition` oraz `SpawnerState` z domyślną
-  świnią (`EntityType.PIG`) oraz twardą blokadą bossów (`FORBIDDEN_BOSS_ENTITIES`:
-  `WITHER`, `ENDER_DRAGON`, `WARDEN`).
+  `SpawnerTrackLevelDefinition`, `SpawnerMobDefinition`, `SpawnerState` (z domyślną świnią
+  `EntityType.PIG` i twardą blokadą bossów `FORBIDDEN_BOSS_ENTITIES`: `WITHER`, `ENDER_DRAGON`,
+  `WARDEN`) oraz `SpawnerAirSpawnTask` do spawnowania w powietrzu.
 
 - Przebudowano `spawners.yml`, `SpawnerModule` oraz `SpawnerDataManager`: wprowadzono
-  `4` niezależne ścieżki ulepszeń (`DELAY` `1–5`, `AMOUNT` `1–5`, `RANGE` `1–4`,
-  `LIGHT_IMMUNITY` `0–1` ustawiające `SpawnRule(0, 15, 0, 15)` przez `SpawnerEntry`),
+  `5` niezależnych ścieżek ulepszeń (`DELAY` `1–5`, `AMOUNT` `1–5`, `RANGE` `1–4`,
+  `LIGHT_IMMUNITY` `0–1` ustawiające `SpawnRule(0, 15, 0, 15)` przez `SpawnerEntry`
+  oraz `GROUND_IMMUNITY` `0–1` omijające wymagania podłoża `SpawnPlacements`),
   pełny katalog `85` mobów z Minecrafta oraz pełne przenoszenie stanu PDC przy `Silk Touch`.
 
 - Wdrożono dwuekranowe GUI spawnera w `SpawnerGUI`, `SpawnerUpgradeHolder` i `SpawnerListener`
-  (`36`-slotowy panel główny + `54`-slotowy wielostronicowy sklep mobów na 4 stronach
-  z Anti-Dupe), zaktualizowano `/spawner give` i komunikaty w `config.yml`.
+  (`36`-slotowy panel główny z 5 ścieżkami + `54`-slotowy wielostronicowy sklep mobów na 4 stronach
+  z Anti-Dupe, synchronizacja chunków/vanilla spawnu), zaktualizowano `/spawner give` i `config.yml`.
 
-- Dodano test JUnit 5 #17 (`spawnerFourUpgradeTracksAndAllNonBossMobsWorkCorrectly`),
-  uzyskując `79` klas głównych bez ostrzeżeń kompilacji oraz `17/17` zaliczonych testów
+- Zaktualizowano test JUnit 5 #17 (`spawnerFourUpgradeTracksAndAllNonBossMobsWorkCorrectly`),
+  uzyskując `80` klas głównych bez ostrzeżeń kompilacji oraz `17/17` zaliczonych testów
   i wdrożono zmiany na serwer testowy.
 
 ### 2026-11-15 — Etap 2 (Punkt 1): Rozbudowa Sklepu GUI wzorowana na EconomyShopGUI (`2.0.0-SNAPSHOT`)

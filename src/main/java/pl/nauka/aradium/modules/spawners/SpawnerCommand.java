@@ -94,13 +94,16 @@ public class SpawnerCommand implements TabExecutor {
 
         int maxAmount = Math.max(1, module.getMaxTrackLevel(SpawnerUpgradeTrack.AMOUNT));
         int maxRange = Math.max(1, module.getMaxTrackLevel(SpawnerUpgradeTrack.RANGE));
+        int lightLvl = level >= 3 ? Math.min(1, module.getMaxTrackLevel(SpawnerUpgradeTrack.LIGHT_IMMUNITY)) : 0;
+        int groundLvl = level >= 4 ? Math.min(1, module.getMaxTrackLevel(SpawnerUpgradeTrack.GROUND_IMMUNITY)) : 0;
         SpawnerState state = new SpawnerState(
                 entityType,
                 Set.of(EntityType.PIG, entityType),
                 level,
                 Math.min(level, maxAmount),
                 Math.min(level, maxRange),
-                level >= 3 ? Math.min(1, module.getMaxTrackLevel(SpawnerUpgradeTrack.LIGHT_IMMUNITY)) : 0
+                lightLvl,
+                groundLvl
         );
 
         ItemStack spawnerItem = module.getDataManager().createSpawnerItem(state, module);

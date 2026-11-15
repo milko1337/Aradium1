@@ -94,6 +94,7 @@
 - [x] Ulepszenie na ilość mobów respu 
 - [x] Ulepszenie na zasięg gracza w pobliżu 
 - [x] Ulepszenie na nie reagownaie na światło resp mobów
+- [x] Ulepszenie na ignorowanie podłoża i spawn mobów w powietrzu (`GROUND_IMMUNITY`)
 - [x] Moduł do zakupu moba jaki ma się respić (bazowo zawsze świnia, wszystkie 85 mobów poza bossami: Wither, Ender Dragon, Warden)
 
 ### 11. rozbudowa upgrade wysp 
@@ -116,7 +117,7 @@
 | :--- | :--- | :--- |
 | **Etap 1** | **Punkt 5** | Wersjonowanie i publikacja na GitHub (`GitHub Baseline`) |
 | **Etap 2** | **Punkt 1** | Rozbudowa kategorii Sklepu GUI (`shops/`) |
-| **Etap 3** | **Punkt 10** | Rozbudowa ulepszeń spawnerów (4 ścieżki + zakup moba) |
+| **Etap 3** | **Punkt 10** | Rozbudowa ulepszeń spawnerów (5 ścieżek + spawn w powietrzu + 85 mobów) |
 | **Etap 4** | **Punkt 11** | Rozbudowa ulepszeń wysp (podstawowy generator cobla z lawy i wody) |
 | **Etap 5** | **Punkt 6** | Rozbudowa misji oraz ulepszeń wysp (podwójny drop z roślin i balans) |
 | **Etap 6** | **Punkt 8** | Dodatkowe funkcje (nowe itemy, mechaniki, balans sklepu, wyłączanie modułów z `config.yml`) |
@@ -159,18 +160,20 @@
 
 ### Etap 3 (Punkt 10): Rozbudowa ulepszeń spawnerów (`modules/spawners/`) — ✅ UKOŃCZONY
 
-- **Cel:** Kompleksowy system rozwoju spawnerów z bazową świnią, 4 ścieżkami ulepszeń oraz wyborem moba.
+- **Cel:** Kompleksowy system rozwoju spawnerów z bazową świnią, 5 ścieżkami ulepszeń (w tym spawnem w powietrzu) oraz wyborem moba.
 
 - **Zadania:**
   - [x] **Domyślny mob spawnera:** każdy nowo postawiony lub zakupiony spawner startuje bazowo
     ze Świnią (`EntityType.PIG`).
-  - [x] **4 niezależne ścieżki ulepszeń** zapisywane w `PersistentDataContainer` bloku i przedmiotu
+  - [x] **5 niezależnych ścieżek ulepszeń** zapisywane w `PersistentDataContainer` bloku i przedmiotu
     (z pełnym przenoszeniem przy wykopaniu kilofem z `Silk Touch`):
     - **Ulepszenie na czas respu** (`DELAY`: poziomy `1–5`, `200–600t` -> `50–140t`).
     - **Ulepszenie na ilość mobów respu** (`AMOUNT`: poziomy `1–5`, `2–12` mobów / limit `6–24`).
     - **Ulepszenie na zasięg gracza w pobliżu** (`RANGE`: poziomy `1–4`, `16–48` kratek).
     - **Ulepszenie na niereagowanie na światło podczas respu mobów** (`LIGHT_IMMUNITY`: poziom `0–1`,
       `SpawnRule(0, 15, 0, 15)` w `SpawnerEntry` API Paper `26.3`).
+    - **Ulepszenie na ignorowanie podłoża i spawn w powietrzu** (`GROUND_IMMUNITY`: poziom `0–1`,
+      `SpawnerAirSpawnTask` omijający wymóg trawy/wody/lawy/podłoża dla wszystkich `85` mobów).
   - [x] **Moduł zakupu moba w `SpawnerGUI`:** wielostronicowe podmenu (`54` sloty, 4 strony)
     umożliwiające wykupienie i przełączanie wszystkich `85` mobów z Minecrafta (poza bossami:
     `WITHER`, `ENDER_DRAGON`, `WARDEN`) za walutę z `EconomyManager` (`17/17` testów).

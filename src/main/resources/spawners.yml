@@ -301,6 +301,25 @@ upgrades:
       lore:
         - "&8» &7Status: &aDziała przy dowolnym świetle (0-15)"
 
+  # 5. SPAWN W POWIETRZU / IGNOROWANIE PODŁOŻA (GROUND IMMUNITY: Poziomy 0 - 1)
+  ground-immunity:
+    "0":
+      name: "&3Spawn w Powietrzu &8[&cWyłączony&8]"
+      upgrade-cost: 0.0
+      required-items: {}
+      ignore-ground: false
+      lore:
+        - "&8» &7Status: &cWymaga bloków podłoża do respu"
+    "1":
+      name: "&3Spawn w Powietrzu &8[&aOdblokowany&8]"
+      upgrade-cost: 18000.0
+      required-items:
+        FEATHER: 32
+        PHANTOM_MEMBRANE: 8
+      ignore-ground: true
+      lore:
+        - "&8» &7Status: &aRespi moby nawet w powietrzu (bez podłoża)"
+
 # Wszystkie 85 mobów z Minecrafta (poza bossami: Wither, Ender Dragon, Warden)
 mobs:
   PIG:

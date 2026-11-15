@@ -2,11 +2,13 @@ package pl.nauka.aradium.modules.spawners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 import pl.nauka.aradium.AradiumPlugin;
 import pl.nauka.aradium.core.AbstractModule;
 
@@ -25,7 +27,7 @@ import java.util.logging.Logger;
 
 /**
  * Moduł Zaawansowanych Spawnerów zarządzający konfiguracją spawners.yml,
- * 4 niezależnymi ścieżkami ulepszeń, sklepem mobów oraz obsługą PDC / Silk Touch.
+ * 5 niezależnymi ścieżkami ulepszeń, spawnem w powietrzu, sklepem mobów oraz obsługą PDC / Silk Touch.
  */
 public class SpawnerModule extends AbstractModule {
 
@@ -37,6 +39,8 @@ public class SpawnerModule extends AbstractModule {
 
     private SpawnerDataManager dataManager;
     private SpawnerGUI spawnerGUI;
+    private SpawnerAirSpawnTask airSpawnTask;
+    private BukkitTask airSpawnBukkitTask;
 
     private String guiTitle = "&8» &6Panel Spawnera &8(&e%entity%&8)";
     private String mobGuiTitle = "&8» &6Wybór Moba &8(&e%page%&8/&e%pages%&8)";
@@ -61,13 +65,30 @@ public class SpawnerModule extends AbstractModule {
 
         this.dataManager = new SpawnerDataManager(plugin);
         this.spawnerGUI = new SpawnerGUI(plugin, this);
+        this.airSpawnTask = new SpawnerAirSpawnTask(this);
 
         registerCommand("spawner", new SpawnerCommand(plugin, this));
         registerListener(new SpawnerListener(plugin, this));
+
+        this.airSpawnTask.scanLoadedChunks(dataManager);
+        this.airSpawnBukkitTask = Bukkit.getScheduler().runTaskTimer(
+                plugin,
+                airSpawnTask,
+                SpawnerAirSpawnTask.TICK_INTERVAL,
+                SpawnerAirSpawnTask.TICK_INTERVAL
+        );
     }
 
     @Override
     protected void onDisable() {
+        if (airSpawnBukkitTask != null) {
+            airSpawnBukkitTask.cancel();
+            airSpawnBukkitTask = null;
+        }
+        if (airSpawnTask != null) {
+            airSpawnTask.clear();
+            airSpawnTask = null;
+        }
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getOpenInventory().getTopInventory().getHolder() instanceof SpawnerUpgradeHolder) {
                 player.closeInventory();
@@ -172,6 +193,7 @@ public class SpawnerModule extends AbstractModule {
                 int maxNearby = Math.max(1, sec.getInt("max-nearby-entities", 6));
                 int playerRange = Math.max(1, sec.getInt("required-player-range", 16));
                 boolean ignoreLight = sec.getBoolean("ignore-light", track == SpawnerUpgradeTrack.LIGHT_IMMUNITY && levelNumber >= 1);
+                boolean ignoreGround = sec.getBoolean("ignore-ground", track == SpawnerUpgradeTrack.GROUND_IMMUNITY && levelNumber >= 1);
                 List<String> lore = sec.getStringList("lore");
                 Map<Material, Integer> requiredItems = parseRequiredItems(
                         sec.getConfigurationSection("required-items"),
@@ -191,6 +213,7 @@ public class SpawnerModule extends AbstractModule {
                         maxNearby,
                         playerRange,
                         ignoreLight,
+                        ignoreGround,
                         lore
                 ));
             }
@@ -341,6 +364,16 @@ public class SpawnerModule extends AbstractModule {
 
     public SpawnerGUI getSpawnerGUI() {
         return spawnerGUI;
+    }
+
+    public SpawnerAirSpawnTask getAirSpawnTask() {
+        return airSpawnTask;
+    }
+
+    public void syncAirSpawnerTracking(CreatureSpawner spawner, SpawnerState state) {
+        if (airSpawnTask != null) {
+            airSpawnTask.trackSpawner(spawner, state);
+        }
     }
 
     public String getGuiTitle() {

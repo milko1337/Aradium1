@@ -15,8 +15,20 @@ public record SpawnerState(
         int delayLevel,
         int amountLevel,
         int rangeLevel,
-        int lightLevel
+        int lightLevel,
+        int groundLevel
 ) {
+    public SpawnerState(
+            EntityType activeEntity,
+            Set<EntityType> unlockedEntities,
+            int delayLevel,
+            int amountLevel,
+            int rangeLevel,
+            int lightLevel
+    ) {
+        this(activeEntity, unlockedEntities, delayLevel, amountLevel, rangeLevel, lightLevel, 0);
+    }
+
     public SpawnerState {
         if (activeEntity == null || SpawnerModule.FORBIDDEN_BOSS_ENTITIES.contains(activeEntity)) {
             activeEntity = EntityType.PIG;
@@ -36,10 +48,11 @@ public record SpawnerState(
         amountLevel = Math.max(1, amountLevel);
         rangeLevel = Math.max(1, rangeLevel);
         lightLevel = Math.max(0, lightLevel);
+        groundLevel = Math.max(0, groundLevel);
     }
 
     public static SpawnerState defaultPig() {
-        return new SpawnerState(EntityType.PIG, Set.of(EntityType.PIG), 1, 1, 1, 0);
+        return new SpawnerState(EntityType.PIG, Set.of(EntityType.PIG), 1, 1, 1, 0, 0);
     }
 
     public int getLevel(SpawnerUpgradeTrack track) {
@@ -48,15 +61,17 @@ public record SpawnerState(
             case AMOUNT -> amountLevel;
             case RANGE -> rangeLevel;
             case LIGHT_IMMUNITY -> lightLevel;
+            case GROUND_IMMUNITY -> groundLevel;
         };
     }
 
     public SpawnerState withTrackLevel(SpawnerUpgradeTrack track, int newLevel) {
         return switch (track) {
-            case DELAY -> new SpawnerState(activeEntity, unlockedEntities, newLevel, amountLevel, rangeLevel, lightLevel);
-            case AMOUNT -> new SpawnerState(activeEntity, unlockedEntities, delayLevel, newLevel, rangeLevel, lightLevel);
-            case RANGE -> new SpawnerState(activeEntity, unlockedEntities, delayLevel, amountLevel, newLevel, lightLevel);
-            case LIGHT_IMMUNITY -> new SpawnerState(activeEntity, unlockedEntities, delayLevel, amountLevel, rangeLevel, newLevel);
+            case DELAY -> new SpawnerState(activeEntity, unlockedEntities, newLevel, amountLevel, rangeLevel, lightLevel, groundLevel);
+            case AMOUNT -> new SpawnerState(activeEntity, unlockedEntities, delayLevel, newLevel, rangeLevel, lightLevel, groundLevel);
+            case RANGE -> new SpawnerState(activeEntity, unlockedEntities, delayLevel, amountLevel, newLevel, lightLevel, groundLevel);
+            case LIGHT_IMMUNITY -> new SpawnerState(activeEntity, unlockedEntities, delayLevel, amountLevel, rangeLevel, newLevel, groundLevel);
+            case GROUND_IMMUNITY -> new SpawnerState(activeEntity, unlockedEntities, delayLevel, amountLevel, rangeLevel, lightLevel, newLevel);
         };
     }
 
@@ -66,7 +81,7 @@ public record SpawnerState(
                 : newEntity;
         Set<EntityType> updated = new LinkedHashSet<>(unlockedEntities);
         updated.add(resolved);
-        return new SpawnerState(resolved, updated, delayLevel, amountLevel, rangeLevel, lightLevel);
+        return new SpawnerState(resolved, updated, delayLevel, amountLevel, rangeLevel, lightLevel, groundLevel);
     }
 
     public boolean isUnlocked(EntityType entityType) {
@@ -75,6 +90,10 @@ public record SpawnerState(
 
     public boolean isLightImmune() {
         return lightLevel >= 1;
+    }
+
+    public boolean isGroundImmune() {
+        return groundLevel >= 1;
     }
 
     public int legacyOverallTier() {

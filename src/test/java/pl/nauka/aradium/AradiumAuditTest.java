@@ -622,10 +622,12 @@ class AradiumAuditTest {
 
                 assertTrue(warnings.isEmpty(), "Ostrzeżenia podczas parsowania spawners.yml: " + warnings);
 
+                assertEquals(5, SpawnerUpgradeTrack.values().length);
                 assertEquals(5, tracks.get(SpawnerUpgradeTrack.DELAY).size());
                 assertEquals(5, tracks.get(SpawnerUpgradeTrack.AMOUNT).size());
                 assertEquals(4, tracks.get(SpawnerUpgradeTrack.RANGE).size());
                 assertEquals(2, tracks.get(SpawnerUpgradeTrack.LIGHT_IMMUNITY).size());
+                assertEquals(2, tracks.get(SpawnerUpgradeTrack.GROUND_IMMUNITY).size());
 
                 assertEquals(50, tracks.get(SpawnerUpgradeTrack.DELAY).get(5).minSpawnDelay());
                 assertEquals(140, tracks.get(SpawnerUpgradeTrack.DELAY).get(5).maxSpawnDelay());
@@ -634,6 +636,8 @@ class AradiumAuditTest {
                 assertEquals(48, tracks.get(SpawnerUpgradeTrack.RANGE).get(4).requiredPlayerRange());
                 assertFalse(tracks.get(SpawnerUpgradeTrack.LIGHT_IMMUNITY).get(0).ignoreLight());
                 assertTrue(tracks.get(SpawnerUpgradeTrack.LIGHT_IMMUNITY).get(1).ignoreLight());
+                assertFalse(tracks.get(SpawnerUpgradeTrack.GROUND_IMMUNITY).get(0).ignoreGround());
+                assertTrue(tracks.get(SpawnerUpgradeTrack.GROUND_IMMUNITY).get(1).ignoreGround());
 
                 assertEquals(85, mobs.size());
                 assertEquals(0.0, mobs.get(EntityType.PIG).unlockCost(), 0.001);
@@ -663,6 +667,15 @@ class AradiumAuditTest {
                 );
                 assertTrue(lightMaxLore.stream().anyMatch(line -> line.contains("Odblokowane")));
                 assertTrue(lightMaxLore.stream().anyMatch(line -> line.contains("maksymalny poziom")));
+
+                List<String> groundLore = SpawnerGUI.buildTrackUpgradeLore(
+                        SpawnerUpgradeTrack.GROUND_IMMUNITY,
+                        tracks.get(SpawnerUpgradeTrack.GROUND_IMMUNITY).get(0),
+                        tracks.get(SpawnerUpgradeTrack.GROUND_IMMUNITY).get(1),
+                        1
+                );
+                assertTrue(groundLore.stream().anyMatch(line -> line.contains("18,000.00$")));
+                assertTrue(groundLore.stream().anyMatch(line -> line.contains("Phantom Membrane")));
             } finally {
                 strictLogger.removeHandler(capture);
             }
@@ -674,14 +687,19 @@ class AradiumAuditTest {
         assertEquals(1, initial.amountLevel());
         assertEquals(1, initial.rangeLevel());
         assertEquals(0, initial.lightLevel());
+        assertEquals(0, initial.groundLevel());
         assertFalse(initial.isLightImmune());
+        assertFalse(initial.isGroundImmune());
         assertTrue(initial.isUnlocked(EntityType.PIG));
 
-        SpawnerState switched = initial.withActiveEntity(EntityType.BLAZE).withTrackLevel(SpawnerUpgradeTrack.LIGHT_IMMUNITY, 1);
+        SpawnerState switched = initial.withActiveEntity(EntityType.BLAZE)
+                .withTrackLevel(SpawnerUpgradeTrack.LIGHT_IMMUNITY, 1)
+                .withTrackLevel(SpawnerUpgradeTrack.GROUND_IMMUNITY, 1);
         assertEquals(EntityType.BLAZE, switched.activeEntity());
         assertTrue(switched.isUnlocked(EntityType.PIG));
         assertTrue(switched.isUnlocked(EntityType.BLAZE));
         assertTrue(switched.isLightImmune());
+        assertTrue(switched.isGroundImmune());
 
         // Próba ustawienia zablokowanego bossa wraca bezpiecznie do Świni
         SpawnerState rejectedBoss = initial.withActiveEntity(EntityType.WITHER);

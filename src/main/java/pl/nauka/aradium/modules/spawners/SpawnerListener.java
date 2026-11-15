@@ -15,9 +15,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -76,6 +79,9 @@ public class SpawnerListener implements Listener {
         }
 
         module.getSpawnerGUI().closeViewersForBlock(block);
+        if (module.getAirSpawnTask() != null) {
+            module.getAirSpawnTask().untrackSpawner(block);
+        }
 
         Player player = event.getPlayer();
         if (player.getGameMode() == GameMode.CREATIVE) {
@@ -137,6 +143,32 @@ public class SpawnerListener implements Listener {
                 )
                 .replace("%entity%", module.formatMobDisplayName(applied.activeEntity()))
                 .replace("%tier%", String.valueOf(applied.legacyOverallTier())));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onSpawnerSpawn(SpawnerSpawnEvent event) {
+        if (!module.isEnabled() || module.getAirSpawnTask() == null) {
+            return;
+        }
+        CreatureSpawner spawner = event.getSpawner();
+        if (spawner != null) {
+            module.getAirSpawnTask().resetCooldownOnVanillaSpawn(spawner);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onChunkLoad(ChunkLoadEvent event) {
+        if (!module.isEnabled() || module.getAirSpawnTask() == null) {
+            return;
+        }
+        module.getAirSpawnTask().scanChunk(event.getChunk(), module.getDataManager());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onChunkUnload(ChunkUnloadEvent event) {
+        if (module.getAirSpawnTask() != null) {
+            module.getAirSpawnTask().untrackChunk(event.getChunk());
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

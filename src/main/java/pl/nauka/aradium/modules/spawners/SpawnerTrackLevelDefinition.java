@@ -21,8 +21,28 @@ public record SpawnerTrackLevelDefinition(
         int maxNearbyEntities,
         int requiredPlayerRange,
         boolean ignoreLight,
+        boolean ignoreGround,
         List<String> lore
 ) {
+    public SpawnerTrackLevelDefinition(
+            SpawnerUpgradeTrack track,
+            int level,
+            String displayName,
+            double upgradeCost,
+            Map<Material, Integer> requiredItems,
+            int minSpawnDelay,
+            int maxSpawnDelay,
+            int spawnCount,
+            int maxNearbyEntities,
+            int requiredPlayerRange,
+            boolean ignoreLight,
+            List<String> lore
+    ) {
+        this(track, level, displayName, upgradeCost, requiredItems,
+                minSpawnDelay, maxSpawnDelay, spawnCount, maxNearbyEntities,
+                requiredPlayerRange, ignoreLight, false, lore);
+    }
+
     public SpawnerTrackLevelDefinition {
         Objects.requireNonNull(track, "track");
         requiredItems = requiredItems != null ? Map.copyOf(requiredItems) : Map.of();

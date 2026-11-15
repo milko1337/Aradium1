@@ -26,7 +26,7 @@ import java.util.Set;
 
 /**
  * Menadżer operacji PersistentDataContainer (NBT) dla ulepszanych spawnerów,
- * obsługujący 4 niezależne ścieżki ulepszeń, listę odblokowanych mobów
+ * obsługujący 5 niezależnych ścieżek ulepszeń, listę odblokowanych mobów
  * oraz bezpieczny transfer metadanych pomiędzy blokiem CreatureSpawner a ItemStackiem (Silk Touch).
  */
 public class SpawnerDataManager {
@@ -41,6 +41,7 @@ public class SpawnerDataManager {
     private final NamespacedKey amountLevelKey;
     private final NamespacedKey rangeLevelKey;
     private final NamespacedKey lightLevelKey;
+    private final NamespacedKey groundLevelKey;
 
     public SpawnerDataManager(Plugin plugin) {
         Objects.requireNonNull(plugin, "plugin");
@@ -51,6 +52,11 @@ public class SpawnerDataManager {
         this.amountLevelKey = new NamespacedKey(plugin, "spawner_amount_lvl");
         this.rangeLevelKey = new NamespacedKey(plugin, "spawner_range_lvl");
         this.lightLevelKey = new NamespacedKey(plugin, "spawner_light_lvl");
+        this.groundLevelKey = new NamespacedKey(plugin, "spawner_ground_lvl");
+    }
+
+    public NamespacedKey getGroundLevelKey() {
+        return groundLevelKey;
     }
 
     public boolean hasInitializedState(CreatureSpawner spawner) {
@@ -136,18 +142,20 @@ public class SpawnerDataManager {
         Integer amountRaw = pdc.get(amountLevelKey, PersistentDataType.INTEGER);
         Integer rangeRaw = pdc.get(rangeLevelKey, PersistentDataType.INTEGER);
         Integer lightRaw = pdc.get(lightLevelKey, PersistentDataType.INTEGER);
+        Integer groundRaw = pdc.get(groundLevelKey, PersistentDataType.INTEGER);
 
         int delayLevel = delayRaw != null ? Math.max(1, delayRaw) : legacyTier;
         int amountLevel = amountRaw != null ? Math.max(1, amountRaw) : legacyTier;
         int rangeLevel = rangeRaw != null ? Math.max(1, rangeRaw) : legacyTier;
         int lightLevel = lightRaw != null ? Math.max(0, lightRaw) : 0;
+        int groundLevel = groundRaw != null ? Math.max(0, groundRaw) : 0;
 
         Set<EntityType> unlocked = deserializeUnlockedEntities(
                 pdc.get(unlockedMobsKey, PersistentDataType.STRING),
                 activeEntity
         );
 
-        return new SpawnerState(activeEntity, unlocked, delayLevel, amountLevel, rangeLevel, lightLevel);
+        return new SpawnerState(activeEntity, unlocked, delayLevel, amountLevel, rangeLevel, lightLevel, groundLevel);
     }
 
     private void writeStateToContainer(PersistentDataContainer pdc, SpawnerState state) {
@@ -158,10 +166,11 @@ public class SpawnerDataManager {
         pdc.set(amountLevelKey, PersistentDataType.INTEGER, state.amountLevel());
         pdc.set(rangeLevelKey, PersistentDataType.INTEGER, state.rangeLevel());
         pdc.set(lightLevelKey, PersistentDataType.INTEGER, state.lightLevel());
+        pdc.set(groundLevelKey, PersistentDataType.INTEGER, state.groundLevel());
     }
 
     /**
-     * Aplikuje pełny stan 4 ścieżek ulepszeń, aktywnego moba oraz regułę światła (0..15) na blok spawnera.
+     * Aplikuje pełny stan 5 ścieżek ulepszeń, aktywnego moba oraz regułę światła (0..15) na blok spawnera.
      */
     public void applyStateToBlock(CreatureSpawner spawner, SpawnerState state, SpawnerModule module) {
         if (spawner == null) {
@@ -197,6 +206,10 @@ public class SpawnerDataManager {
         spawner.setMaxNearbyEntities(Math.max(1, maxNearby));
         spawner.setRequiredPlayerRange(Math.max(1, playerRange));
         spawner.update(true, false);
+
+        if (module != null) {
+            module.syncAirSpawnerTracking(spawner, normalizedState);
+        }
     }
 
     private void applyEntityAndLightRule(CreatureSpawner spawner, EntityType entityType, boolean ignoreLight) {
@@ -251,7 +264,8 @@ public class SpawnerDataManager {
                 lvl,
                 lvl,
                 Math.min(lvl, 4),
-                current.lightLevel()
+                current.lightLevel(),
+                current.groundLevel()
         );
         writeStateToContainer(spawner.getPersistentDataContainer(), updated);
         spawner.getPersistentDataContainer().set(tierKey, PersistentDataType.INTEGER, lvl);
@@ -288,7 +302,7 @@ public class SpawnerDataManager {
     }
 
     /**
-     * Tworzy przedmiot SPAWNER z pełnym stanem 4 ścieżek ulepszeń, aktywnym mobem i listą odblokowanych mobów.
+     * Tworzy przedmiot SPAWNER z pełnym stanem 5 ścieżek ulepszeń, aktywnym mobem i listą odblokowanych mobów.
      */
     public ItemStack createSpawnerItem(SpawnerState state, SpawnerModule module) {
         SpawnerState safeState = state != null ? state : SpawnerState.defaultPig();
@@ -331,6 +345,8 @@ public class SpawnerDataManager {
         lore.add(ChatUtils.itemComponent("&8» &7Zasięg gracza: &fPoziom " + normalized.rangeLevel() + "/" + maxRange));
         lore.add(ChatUtils.itemComponent("&8» &7Ignorowanie światła: "
                 + (normalized.isLightImmune() ? "&aOdblokowane" : "&cWyłączone")));
+        lore.add(ChatUtils.itemComponent("&8» &7Spawn w powietrzu: "
+                + (normalized.isGroundImmune() ? "&aOdblokowany" : "&cWyłączony")));
         lore.add(ChatUtils.itemComponent("&8» &7Odblokowane moby: &e" + normalized.unlockedEntities().size() + "&8/&7" + totalMobs));
         lore.add(Component.empty());
         lore.add(ChatUtils.itemComponent("&7Postaw i kliknij &eShift + PPM&7, aby otworzyć panel spawnera."));
@@ -352,7 +368,8 @@ public class SpawnerDataManager {
                 lvl,
                 lvl,
                 Math.min(lvl, 4),
-                lvl >= 3 ? 1 : 0
+                lvl >= 3 ? 1 : 0,
+                lvl >= 4 ? 1 : 0
         );
         return createSpawnerItem(state, null);
     }
