@@ -89,12 +89,12 @@
 - [ ] Dodać system rang i uprawnień do pluginu - uprawnienia dla rang, prefixy, suffixy itp.
 - [ ] Dodać czyszczenie czatu
 
-### 10. rozbudowa upgrade spawnerów 
-- [ ] Ulepszenie na czas respu
-- [ ] Ulepszenie na ilość mobów respu 
-- [ ] Ulepszenie na zasięg gracza w pobliżu 
-- [ ] Ulepszenie na nie reagownaie na światło resp mobów
-- [ ] Moduł do zakupu moba jaki ma się respić (bazowo zawsze świnia)
+### 10. rozbudowa upgrade spawnerów — ✅ UKOŃCZONO (Etap 3)
+- [x] Ulepszenie na czas respu
+- [x] Ulepszenie na ilość mobów respu 
+- [x] Ulepszenie na zasięg gracza w pobliżu 
+- [x] Ulepszenie na nie reagownaie na światło resp mobów
+- [x] Moduł do zakupu moba jaki ma się respić (bazowo zawsze świnia, wszystkie 85 mobów poza bossami: Wither, Ender Dragon, Warden)
 
 ### 11. rozbudowa upgrade wysp 
 - [ ] Ulepszenie na ilość itemów respu na generatorze cobla - nie jako generator specjalny z plan wcześniej lecz podstawowy generator z lavy i wody na początek rozgrywki. Gracz będzie mógł kupić ulepszenia do generatora cobla podnoszące ilość produkowanego surowca.
@@ -157,23 +157,23 @@
 
 ---
 
-### Etap 3 (Punkt 10): Rozbudowa ulepszeń spawnerów (`modules/spawners/`)
+### Etap 3 (Punkt 10): Rozbudowa ulepszeń spawnerów (`modules/spawners/`) — ✅ UKOŃCZONY
 
 - **Cel:** Kompleksowy system rozwoju spawnerów z bazową świnią, 4 ścieżkami ulepszeń oraz wyborem moba.
 
 - **Zadania:**
-  - **Domyślny mob spawnera:** każdy nowo postawiony lub zakupiony spawner startuje bazowo
+  - [x] **Domyślny mob spawnera:** każdy nowo postawiony lub zakupiony spawner startuje bazowo
     ze Świnią (`EntityType.PIG`).
-  - **4 niezależne ścieżki ulepszeń** zapisywane w `PersistentDataContainer` bloku i przedmiotu
+  - [x] **4 niezależne ścieżki ulepszeń** zapisywane w `PersistentDataContainer` bloku i przedmiotu
     (z pełnym przenoszeniem przy wykopaniu kilofem z `Silk Touch`):
-    - **Ulepszenie na czas respu** (`minSpawnDelay` / `maxSpawnDelay` — szybsze pojawianie się mobów).
-    - **Ulepszenie na ilość mobów respu** (`spawnCount` oraz `maxNearbyEntities`).
-    - **Ulepszenie na zasięg gracza w pobliżu** (`requiredPlayerRange` — aktywacja z większej odległości).
-    - **Ulepszenie na niereagowanie na światło podczas respu mobów** (`SpawnRule(0, 15, 0, 15)`
-      w `SpawnerEntry` API Paper `26.3`, pozwalające na spawn przy dowolnym poziomie światła).
-  - **Moduł zakupu moba w `SpawnerGUI`:** podmenu umożliwiające wykupienie i zmianę moba,
-    jaki ma się respić (np. Krowa, Owca, Kurczak, Zombie, Szkielet, Pająk, Creeper, Enderman,
-    Blaze, Iron Golem), za walutę z `EconomyManager`.
+    - **Ulepszenie na czas respu** (`DELAY`: poziomy `1–5`, `200–600t` -> `50–140t`).
+    - **Ulepszenie na ilość mobów respu** (`AMOUNT`: poziomy `1–5`, `2–12` mobów / limit `6–24`).
+    - **Ulepszenie na zasięg gracza w pobliżu** (`RANGE`: poziomy `1–4`, `16–48` kratek).
+    - **Ulepszenie na niereagowanie na światło podczas respu mobów** (`LIGHT_IMMUNITY`: poziom `0–1`,
+      `SpawnRule(0, 15, 0, 15)` w `SpawnerEntry` API Paper `26.3`).
+  - [x] **Moduł zakupu moba w `SpawnerGUI`:** wielostronicowe podmenu (`54` sloty, 4 strony)
+    umożliwiające wykupienie i przełączanie wszystkich `85` mobów z Minecrafta (poza bossami:
+    `WITHER`, `ENDER_DRAGON`, `WARDEN`) za walutę z `EconomyManager` (`17/17` testów).
 
 ---
 

@@ -13,9 +13,11 @@ import pl.nauka.aradium.utils.ChatUtils;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.IntStream;
 
 /**
- * Komenda administracyjna /spawner give <gracz> <mob> [tier].
+ * Komenda administracyjna /spawner give <gracz> <mob> [poziom].
  */
 public class SpawnerCommand implements TabExecutor {
 
@@ -40,7 +42,7 @@ public class SpawnerCommand implements TabExecutor {
         }
 
         if (args.length < 3 || !"give".equalsIgnoreCase(args[0])) {
-            sender.sendMessage(ChatUtils.getMessage(plugin.getConfig(), "messages.spawner_usage", "&cUżycie: /spawner give <gracz> <mob> [tier]"));
+            sender.sendMessage(ChatUtils.getMessage(plugin.getConfig(), "messages.spawner_usage", "&cUżycie: /spawner give <gracz> <mob> [poziom]"));
             return true;
         }
 
@@ -64,33 +66,44 @@ public class SpawnerCommand implements TabExecutor {
             return true;
         }
 
-        int tier = 1;
+        int maxLevel = Math.max(1, module.getMaxTrackLevel(SpawnerUpgradeTrack.DELAY));
+        int level = 1;
         if (args.length >= 4) {
             try {
-                tier = Integer.parseInt(args[3]);
+                level = Integer.parseInt(args[3]);
             } catch (NumberFormatException e) {
                 sender.sendMessage(ChatUtils.getMessage(
                                 plugin.getConfig(),
                                 "messages.spawner_invalid_tier",
-                                "&cTaki tier spawnera nie istnieje w spawners.yml: &f%tier%&c!"
+                                "&cNieprawidłowy poziom spawnera (1-" + maxLevel + "): &f%tier%&c!"
                         )
                         .replace("%tier%", args[3]));
                 return true;
             }
         }
 
-        SpawnerTierDefinition tierDef = module.getTierDefinition(tier);
-        if (tierDef == null) {
+        if (level < 1 || level > maxLevel) {
             sender.sendMessage(ChatUtils.getMessage(
                             plugin.getConfig(),
                             "messages.spawner_invalid_tier",
-                            "&cTaki tier spawnera nie istnieje w spawners.yml: &f%tier%&c!"
+                            "&cNieprawidłowy poziom spawnera (1-" + maxLevel + "): &f%tier%&c!"
                     )
-                    .replace("%tier%", String.valueOf(tier)));
+                    .replace("%tier%", String.valueOf(level)));
             return true;
         }
 
-        ItemStack spawnerItem = module.getDataManager().createSpawnerItem(entityType, tierDef);
+        int maxAmount = Math.max(1, module.getMaxTrackLevel(SpawnerUpgradeTrack.AMOUNT));
+        int maxRange = Math.max(1, module.getMaxTrackLevel(SpawnerUpgradeTrack.RANGE));
+        SpawnerState state = new SpawnerState(
+                entityType,
+                Set.of(EntityType.PIG, entityType),
+                level,
+                Math.min(level, maxAmount),
+                Math.min(level, maxRange),
+                level >= 3 ? Math.min(1, module.getMaxTrackLevel(SpawnerUpgradeTrack.LIGHT_IMMUNITY)) : 0
+        );
+
+        ItemStack spawnerItem = module.getDataManager().createSpawnerItem(state, module);
         Map<Integer, ItemStack> overflow = target.getInventory().addItem(spawnerItem);
         if (!overflow.isEmpty()) {
             for (ItemStack leftover : overflow.values()) {
@@ -103,22 +116,22 @@ public class SpawnerCommand implements TabExecutor {
             ));
         }
 
-        String entityDisplay = SpawnerDataManager.formatEntityName(entityType);
+        String entityDisplay = module.formatMobDisplayName(entityType);
         target.sendMessage(ChatUtils.getMessage(
                         plugin.getConfig(),
                         "messages.spawner_given",
-                        "&aOtrzymałeś spawner: &e%entity% &8(&fTier %tier%&8)&a!"
+                        "&aOtrzymałeś spawner: &e%entity% &8(&fPoziom %tier%&8)&a!"
                 )
                 .replace("%entity%", entityDisplay)
-                .replace("%tier%", String.valueOf(tier)));
+                .replace("%tier%", String.valueOf(level)));
 
         sender.sendMessage(ChatUtils.getMessage(
                         plugin.getConfig(),
                         "messages.spawner_given_sender",
-                        "&aNadano spawner &e%entity% (Tier %tier%) &agraczowi &f%player%&a."
+                        "&aNadano spawner &e%entity% (Poziom %tier%) &agraczowi &f%player%&a."
                 )
                 .replace("%entity%", entityDisplay)
-                .replace("%tier%", String.valueOf(tier))
+                .replace("%tier%", String.valueOf(level))
                 .replace("%player%", target.getName()));
         return true;
     }
@@ -128,6 +141,7 @@ public class SpawnerCommand implements TabExecutor {
         if (!sender.hasPermission("aradium.admin") || !module.isEnabled()) {
             return List.of();
         }
+        int maxLevel = Math.max(1, module.getMaxTrackLevel(SpawnerUpgradeTrack.DELAY));
         return switch (args.length) {
             case 1 -> "give".startsWith(args[0].toLowerCase(Locale.ROOT)) ? List.of("give") : List.of();
             case 2 -> {
@@ -146,8 +160,8 @@ public class SpawnerCommand implements TabExecutor {
             }
             case 4 -> {
                 String prefix = args[3];
-                yield module.getAvailableTiers().stream()
-                        .map(String::valueOf)
+                yield IntStream.rangeClosed(1, maxLevel)
+                        .mapToObj(String::valueOf)
                         .filter(t -> t.startsWith(prefix))
                         .toList();
             }

@@ -28,7 +28,7 @@ import java.util.Objects;
 
 /**
  * Listener obsługujący otwieranie GUI spawnerów (Shift + PPM), Silk Touch,
- * stawianie spawnerów z PDC oraz ochronę Anti-Dupe w GUI.
+ * stawianie spawnerów z pełnym stanem PDC oraz ochronę Anti-Dupe w obu oknach GUI.
  */
 public class SpawnerListener implements Listener {
 
@@ -59,6 +59,12 @@ public class SpawnerListener implements Listener {
         }
 
         event.setCancelled(true);
+
+        SpawnerDataManager dataManager = module.getDataManager();
+        if (!dataManager.hasInitializedState(spawner)) {
+            dataManager.applyStateToBlock(spawner, dataManager.getSpawnerState(spawner), module);
+        }
+
         module.getSpawnerGUI().openSpawnerGUI(player, spawner);
     }
 
@@ -92,26 +98,21 @@ public class SpawnerListener implements Listener {
         }
 
         SpawnerDataManager dataManager = module.getDataManager();
-        int tier = dataManager.getSpawnerTier(spawner);
-        EntityType entityType = dataManager.getSpawnerEntityType(spawner);
-        SpawnerTierDefinition tierDef = module.getTierDefinition(tier);
-        if (tierDef == null) {
-            tierDef = module.getTierDefinition(1);
-        }
+        SpawnerState state = dataManager.getSpawnerState(spawner);
 
         event.setExpToDrop(0);
         event.setDropItems(false);
 
-        ItemStack dropped = dataManager.transferBlockToItem(spawner, tierDef);
+        ItemStack dropped = dataManager.transferBlockToItem(spawner, module);
         block.getWorld().dropItemNaturally(block.getLocation(), dropped);
 
         player.sendMessage(ChatUtils.getMessage(
                         plugin.getConfig(),
                         "messages.spawner_mined_silk",
-                        "&aWydobyto spawner: &e%entity% &8(&fTier %tier%&8)&a!"
+                        "&aWydobyto spawner: &e%entity% &8(&fPoziom %tier%&8)&a!"
                 )
-                .replace("%entity%", SpawnerDataManager.formatEntityName(entityType))
-                .replace("%tier%", String.valueOf(tier)));
+                .replace("%entity%", module.formatMobDisplayName(state.activeEntity()))
+                .replace("%tier%", String.valueOf(state.legacyOverallTier())));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -126,24 +127,16 @@ public class SpawnerListener implements Listener {
         }
 
         SpawnerDataManager dataManager = module.getDataManager();
-        ItemStack itemInHand = event.getItemInHand();
-        int tier = dataManager.getItemTier(itemInHand);
-        SpawnerTierDefinition tierDef = module.getTierDefinition(tier);
-        if (tierDef == null) {
-            tierDef = module.getTierDefinition(1);
-        }
-
-        dataManager.transferItemToBlock(itemInHand, placedSpawner, tierDef);
-        EntityType entityType = dataManager.getSpawnerEntityType(placedSpawner);
-        int appliedTier = dataManager.getSpawnerTier(placedSpawner);
+        dataManager.transferItemToBlock(event.getItemInHand(), placedSpawner, module);
+        SpawnerState applied = dataManager.getSpawnerState(placedSpawner);
 
         event.getPlayer().sendMessage(ChatUtils.getMessage(
                         plugin.getConfig(),
                         "messages.spawner_placed",
-                        "&aPostawiono spawner: &e%entity% &8(&fTier %tier%&8)&a!"
+                        "&aPostawiono spawner: &e%entity% &8(&fPoziom %tier%&8)&a!"
                 )
-                .replace("%entity%", SpawnerDataManager.formatEntityName(entityType))
-                .replace("%tier%", String.valueOf(appliedTier)));
+                .replace("%entity%", module.formatMobDisplayName(applied.activeEntity()))
+                .replace("%tier%", String.valueOf(applied.legacyOverallTier())));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -178,9 +171,7 @@ public class SpawnerListener implements Listener {
             return;
         }
 
-        if (event.getSlot() == SpawnerGUI.SLOT_UPGRADE) {
-            module.getSpawnerGUI().handleUpgradeClick(player, holder);
-        }
+        module.getSpawnerGUI().handleInventoryClick(player, holder, event.getSlot());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

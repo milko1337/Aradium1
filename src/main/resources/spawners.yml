@@ -1,23 +1,105 @@
 # Konfiguracja ulepszanych spawnerów (Moduł 2: Zaawansowane Spawnery)
-# Tier spawnera jest zapisywany bezpośrednio na bloku i przedmiocie za pomocą PersistentDataContainer (NBT).
+# Wszystkie ścieżki ulepszeń, aktywny mob oraz odblokowane moby zapisywane są w PDC bloku i przedmiotu (Silk Touch).
 
 settings:
-  gui-title: "&8» &6Ulepszenie Spawnera &8(&eTier %tier%&8)"
-  gui-size: 27
+  gui-title: "&8» &6Panel Spawnera &8(&e%entity%&8)"
+  mob-gui-title: "&8» &6Wybór Moba &8(&e%page%&8/&e%pages%&8)"
+  gui-size: 36
+  mob-gui-size: 54
   require-silk-touch: true
+  default-entity: "PIG"
+  forbidden-entities:
+    - "WITHER"
+    - "ENDER_DRAGON"
+    - "WARDEN"
   allowed-entities:
-    - "ZOMBIE"
-    - "SKELETON"
-    - "SPIDER"
-    - "CREEPER"
-    - "COW"
     - "PIG"
-    - "SHEEP"
     - "CHICKEN"
-    - "IRON_GOLEM"
+    - "SHEEP"
+    - "COW"
+    - "RABBIT"
+    - "MOOSHROOM"
+    - "GOAT"
+    - "HORSE"
+    - "DONKEY"
+    - "MULE"
+    - "CAMEL"
+    - "LLAMA"
+    - "WOLF"
+    - "CAT"
+    - "OCELOT"
+    - "FOX"
+    - "PANDA"
+    - "PARROT"
+    - "BAT"
+    - "BEE"
+    - "POLAR_BEAR"
+    - "ARMADILLO"
+    - "SNIFFER"
+    - "ALLAY"
+    - "STRIDER"
+    - "HAPPY_GHAST"
+    - "VILLAGER"
+    - "WANDERING_TRADER"
+    - "TRADER_LLAMA"
+    - "SNOW_GOLEM"
+    - "COPPER_GOLEM"
+    - "SKELETON_HORSE"
+    - "ZOMBIE_HORSE"
+    - "COD"
+    - "SALMON"
+    - "TROPICAL_FISH"
+    - "PUFFERFISH"
+    - "SQUID"
+    - "GLOW_SQUID"
+    - "AXOLOTL"
+    - "TADPOLE"
+    - "FROG"
+    - "TURTLE"
+    - "DOLPHIN"
+    - "NAUTILUS"
+    - "ZOMBIE_NAUTILUS"
+    - "ZOMBIE"
+    - "ZOMBIE_VILLAGER"
+    - "HUSK"
+    - "DROWNED"
+    - "SPIDER"
+    - "CAVE_SPIDER"
+    - "SKELETON"
+    - "STRAY"
+    - "BOGGED"
+    - "PARCHED"
+    - "CAMEL_HUSK"
+    - "CREEPER"
+    - "SLIME"
+    - "SILVERFISH"
+    - "PHANTOM"
+    - "WITCH"
+    - "PILLAGER"
+    - "VINDICATOR"
+    - "EVOKER"
+    - "VEX"
+    - "RAVAGER"
+    - "CREAKING"
+    - "BREEZE"
+    - "GUARDIAN"
+    - "ELDER_GUARDIAN"
+    - "ZOMBIFIED_PIGLIN"
+    - "PIGLIN"
+    - "PIGLIN_BRUTE"
+    - "HOGLIN"
+    - "ZOGLIN"
+    - "MAGMA_CUBE"
+    - "SULFUR_CUBE"
+    - "GHAST"
+    - "WITHER_SKELETON"
     - "BLAZE"
+    - "ENDERMITE"
     - "ENDERMAN"
+    - "SHULKER"
+    - "IRON_GOLEM"
 
+# Zachowana sekcja kompatybilności wstecznej dla migracji starszych spawnerów i /spawner give [tier].
 tiers:
   "1":
     name: "&e&lSpawner &8[&7Tier 1&8]"
@@ -35,7 +117,7 @@ tiers:
       - "&8» &7Limit w pobliżu: &f6"
       - "&8» &7Zasięg gracza: &f16 kratek"
       - ""
-      - "&7Kliknij &eShift + PPM&7, aby ulepszyć spawner."
+      - "&7Kliknij &eShift + PPM&7, aby otworzyć panel spawnera."
   "2":
     name: "&6&lSpawner &8[&eTier 2&8]"
     upgrade-cost: 5000.0
@@ -54,7 +136,7 @@ tiers:
       - "&8» &7Limit w pobliżu: &f10"
       - "&8» &7Zasięg gracza: &f24 kratki"
       - ""
-      - "&7Kliknij &eShift + PPM&7, aby ulepszyć spawner."
+      - "&7Kliknij &eShift + PPM&7, aby otworzyć panel spawnera."
   "3":
     name: "&b&lSpawner &8[&aTier 3&8]"
     upgrade-cost: 20000.0
@@ -74,3 +156,490 @@ tiers:
       - "&8» &7Zasięg gracza: &f32 kratki"
       - ""
       - "&7Kliknij &eShift + PPM&7, aby zarządzać spawnerem."
+
+upgrades:
+  delay:
+    "1":
+      name: "&eCzas Respu &8[&7Poziom 1&8]"
+      upgrade-cost: 0.0
+      required-items: {}
+      min-spawn-delay: 200
+      max-spawn-delay: 600
+      lore:
+        - "&8» &7Przerwa między falami: &f10s - 30s"
+    "2":
+      name: "&eCzas Respu &8[&ePoziom 2&8]"
+      upgrade-cost: 3500.0
+      required-items:
+        IRON_BLOCK: 4
+      min-spawn-delay: 160
+      max-spawn-delay: 440
+      lore:
+        - "&8» &7Przerwa między falami: &f8s - 22s"
+    "3":
+      name: "&eCzas Respu &8[&6Poziom 3&8]"
+      upgrade-cost: 8000.0
+      required-items:
+        GOLD_BLOCK: 4
+      min-spawn-delay: 120
+      max-spawn-delay: 320
+      lore:
+        - "&8» &7Przerwa między falami: &f6s - 16s"
+    "4":
+      name: "&eCzas Respu &8[&bPoziom 4&8]"
+      upgrade-cost: 16000.0
+      required-items:
+        DIAMOND_BLOCK: 4
+      min-spawn-delay: 80
+      max-spawn-delay: 220
+      lore:
+        - "&8» &7Przerwa między falami: &f4s - 11s"
+    "5":
+      name: "&eCzas Respu &8[&aPoziom 5 - MAX&8]"
+      upgrade-cost: 30000.0
+      required-items:
+        NETHERITE_INGOT: 1
+      min-spawn-delay: 50
+      max-spawn-delay: 140
+      lore:
+        - "&8» &7Przerwa między falami: &a2.5s - 7s"
+
+  amount:
+    "1":
+      name: "&aIlość Mobów &8[&7Poziom 1&8]"
+      upgrade-cost: 0.0
+      required-items: {}
+      spawn-count: 2
+      max-nearby-entities: 6
+      lore:
+        - "&8» &7Mobów na cykl: &f2 &8| &7Limit w pobliżu: &f6"
+    "2":
+      name: "&aIlość Mobów &8[&ePoziom 2&8]"
+      upgrade-cost: 4000.0
+      required-items:
+        COAL_BLOCK: 8
+      spawn-count: 4
+      max-nearby-entities: 10
+      lore:
+        - "&8» &7Mobów na cykl: &f4 &8| &7Limit w pobliżu: &f10"
+    "3":
+      name: "&aIlość Mobów &8[&6Poziom 3&8]"
+      upgrade-cost: 9500.0
+      required-items:
+        EMERALD_BLOCK: 4
+      spawn-count: 6
+      max-nearby-entities: 14
+      lore:
+        - "&8» &7Mobów na cykl: &f6 &8| &7Limit w pobliżu: &f14"
+    "4":
+      name: "&aIlość Mobów &8[&bPoziom 4&8]"
+      upgrade-cost: 18000.0
+      required-items:
+        DIAMOND_BLOCK: 6
+      spawn-count: 8
+      max-nearby-entities: 18
+      lore:
+        - "&8» &7Mobów na cykl: &f8 &8| &7Limit w pobliżu: &f18"
+    "5":
+      name: "&aIlość Mobów &8[&aPoziom 5 - MAX&8]"
+      upgrade-cost: 35000.0
+      required-items:
+        NETHERITE_INGOT: 1
+      spawn-count: 12
+      max-nearby-entities: 24
+      lore:
+        - "&8» &7Mobów na cykl: &a12 &8| &7Limit w pobliżu: &a24"
+
+  range:
+    "1":
+      name: "&bZasięg Gracza &8[&7Poziom 1&8]"
+      upgrade-cost: 0.0
+      required-items: {}
+      required-player-range: 16
+      lore:
+        - "&8» &7Promień aktywacji: &f16 kratek"
+    "2":
+      name: "&bZasięg Gracza &8[&ePoziom 2&8]"
+      upgrade-cost: 3000.0
+      required-items:
+        REDSTONE_BLOCK: 16
+      required-player-range: 24
+      lore:
+        - "&8» &7Promień aktywacji: &f24 kratki"
+    "3":
+      name: "&bZasięg Gracza &8[&bPoziom 3&8]"
+      upgrade-cost: 7500.0
+      required-items:
+        ENDER_PEARL: 8
+      required-player-range: 36
+      lore:
+        - "&8» &7Promień aktywacji: &f36 kratek"
+    "4":
+      name: "&bZasięg Gracza &8[&aPoziom 4 - MAX&8]"
+      upgrade-cost: 15000.0
+      required-items:
+        ENDER_EYE: 4
+      required-player-range: 48
+      lore:
+        - "&8» &7Promień aktywacji: &a48 kratek"
+
+  light-immunity:
+    "0":
+      name: "&dIgnorowanie Światła &8[&cWyłączone&8]"
+      upgrade-cost: 0.0
+      required-items: {}
+      ignore-light: false
+      lore:
+        - "&8» &7Status: &cWymaga standardowego światła"
+    "1":
+      name: "&dIgnorowanie Światła &8[&aOdblokowane&8]"
+      upgrade-cost: 15000.0
+      required-items:
+        GLOWSTONE: 16
+        AMETHYST_BLOCK: 4
+      ignore-light: true
+      lore:
+        - "&8» &7Status: &aDziała przy dowolnym świetle (0-15)"
+
+# Wszystkie 85 mobów z Minecrafta (poza bossami: Wither, Ender Dragon, Warden)
+mobs:
+  PIG:
+    name: "&dŚwinia"
+    icon: "PIG_SPAWN_EGG"
+    cost: 0.0
+  CHICKEN:
+    name: "&fKurczak"
+    icon: "CHICKEN_SPAWN_EGG"
+    cost: 2500.0
+  SHEEP:
+    name: "&fOwca"
+    icon: "SHEEP_SPAWN_EGG"
+    cost: 3500.0
+  COW:
+    name: "&6Krowa"
+    icon: "COW_SPAWN_EGG"
+    cost: 5000.0
+  RABBIT:
+    name: "&eKrólik"
+    icon: "RABBIT_SPAWN_EGG"
+    cost: 4000.0
+  MOOSHROOM:
+    name: "&cGrzybowa Krowa"
+    icon: "MOOSHROOM_SPAWN_EGG"
+    cost: 14000.0
+  GOAT:
+    name: "&fKoza"
+    icon: "GOAT_SPAWN_EGG"
+    cost: 8500.0
+  HORSE:
+    name: "&6Koń"
+    icon: "HORSE_SPAWN_EGG"
+    cost: 9000.0
+  DONKEY:
+    name: "&7Osioł"
+    icon: "DONKEY_SPAWN_EGG"
+    cost: 9500.0
+  MULE:
+    name: "&6Muł"
+    icon: "MULE_SPAWN_EGG"
+    cost: 10000.0
+  CAMEL:
+    name: "&eWielbłąd"
+    icon: "CAMEL_SPAWN_EGG"
+    cost: 11000.0
+  LLAMA:
+    name: "&eLama"
+    icon: "LLAMA_SPAWN_EGG"
+    cost: 8500.0
+  WOLF:
+    name: "&fWilk"
+    icon: "WOLF_SPAWN_EGG"
+    cost: 9500.0
+  CAT:
+    name: "&6Kot"
+    icon: "CAT_SPAWN_EGG"
+    cost: 7000.0
+  OCELOT:
+    name: "&eOcelot"
+    icon: "OCELOT_SPAWN_EGG"
+    cost: 7500.0
+  FOX:
+    name: "&6Lis"
+    icon: "FOX_SPAWN_EGG"
+    cost: 9000.0
+  PANDA:
+    name: "&fPanda"
+    icon: "PANDA_SPAWN_EGG"
+    cost: 12000.0
+  PARROT:
+    name: "&aPapuga"
+    icon: "PARROT_SPAWN_EGG"
+    cost: 8000.0
+  BAT:
+    name: "&8Nietoperz"
+    icon: "BAT_SPAWN_EGG"
+    cost: 2000.0
+  BEE:
+    name: "&ePszczoła"
+    icon: "BEE_SPAWN_EGG"
+    cost: 10500.0
+  POLAR_BEAR:
+    name: "&fNiedźwiedź Polarny"
+    icon: "POLAR_BEAR_SPAWN_EGG"
+    cost: 11500.0
+  ARMADILLO:
+    name: "&6Pancernik"
+    icon: "ARMADILLO_SPAWN_EGG"
+    cost: 13000.0
+  SNIFFER:
+    name: "&cWęszyciel"
+    icon: "SNIFFER_SPAWN_EGG"
+    cost: 24000.0
+  ALLAY:
+    name: "&bOtuszek (Allay)"
+    icon: "ALLAY_SPAWN_EGG"
+    cost: 18000.0
+  STRIDER:
+    name: "&cMagmołaz"
+    icon: "STRIDER_SPAWN_EGG"
+    cost: 15000.0
+  HAPPY_GHAST:
+    name: "&fRadosny Ghast"
+    icon: "HAPPY_GHAST_SPAWN_EGG"
+    cost: 26000.0
+  VILLAGER:
+    name: "&6Osadnik"
+    icon: "VILLAGER_SPAWN_EGG"
+    cost: 32000.0
+  WANDERING_TRADER:
+    name: "&9Wędrowny Handlarz"
+    icon: "WANDERING_TRADER_SPAWN_EGG"
+    cost: 18000.0
+  TRADER_LLAMA:
+    name: "&9Lama Handlarza"
+    icon: "TRADER_LLAMA_SPAWN_EGG"
+    cost: 10000.0
+  SNOW_GOLEM:
+    name: "&fBałwan (Śnieżny Golem)"
+    icon: "SNOW_GOLEM_SPAWN_EGG"
+    cost: 12000.0
+  COPPER_GOLEM:
+    name: "&6Miedziany Golem"
+    icon: "COPPER_GOLEM_SPAWN_EGG"
+    cost: 22000.0
+  SKELETON_HORSE:
+    name: "&fKoń Szkielet"
+    icon: "SKELETON_HORSE_SPAWN_EGG"
+    cost: 19000.0
+  ZOMBIE_HORSE:
+    name: "&2Koń Zombie"
+    icon: "ZOMBIE_HORSE_SPAWN_EGG"
+    cost: 19000.0
+  COD:
+    name: "&bDorsz"
+    icon: "COD_SPAWN_EGG"
+    cost: 3000.0
+  SALMON:
+    name: "&cŁosoś"
+    icon: "SALMON_SPAWN_EGG"
+    cost: 3500.0
+  TROPICAL_FISH:
+    name: "&6Ryba Tropikalna"
+    icon: "TROPICAL_FISH_SPAWN_EGG"
+    cost: 6000.0
+  PUFFERFISH:
+    name: "&eRozdymka"
+    icon: "PUFFERFISH_SPAWN_EGG"
+    cost: 8500.0
+  SQUID:
+    name: "&9Kałamarnica"
+    icon: "SQUID_SPAWN_EGG"
+    cost: 5500.0
+  GLOW_SQUID:
+    name: "&bŚwiecąca Kałamarnica"
+    icon: "GLOW_SQUID_SPAWN_EGG"
+    cost: 11000.0
+  AXOLOTL:
+    name: "&dAksolotl"
+    icon: "AXOLOTL_SPAWN_EGG"
+    cost: 14000.0
+  TADPOLE:
+    name: "&8Kijanka"
+    icon: "TADPOLE_SPAWN_EGG"
+    cost: 4500.0
+  FROG:
+    name: "&6Żaba"
+    icon: "FROG_SPAWN_EGG"
+    cost: 9500.0
+  TURTLE:
+    name: "&2Żółw"
+    icon: "TURTLE_SPAWN_EGG"
+    cost: 15500.0
+  DOLPHIN:
+    name: "&bDelfin"
+    icon: "DOLPHIN_SPAWN_EGG"
+    cost: 12500.0
+  NAUTILUS:
+    name: "&fŁodzik (Nautilus)"
+    icon: "NAUTILUS_SPAWN_EGG"
+    cost: 21000.0
+  ZOMBIE_NAUTILUS:
+    name: "&2Zombie Łodzik"
+    icon: "ZOMBIE_NAUTILUS_SPAWN_EGG"
+    cost: 25000.0
+  ZOMBIE:
+    name: "&2Zombie"
+    icon: "ZOMBIE_SPAWN_EGG"
+    cost: 7500.0
+  ZOMBIE_VILLAGER:
+    name: "&2Osadnik Zombie"
+    icon: "ZOMBIE_VILLAGER_SPAWN_EGG"
+    cost: 12000.0
+  HUSK:
+    name: "&6Posuch (Husk)"
+    icon: "HUSK_SPAWN_EGG"
+    cost: 9500.0
+  DROWNED:
+    name: "&3Utopiec"
+    icon: "DROWNED_SPAWN_EGG"
+    cost: 14500.0
+  SPIDER:
+    name: "&8Pająk"
+    icon: "SPIDER_SPAWN_EGG"
+    cost: 9000.0
+  CAVE_SPIDER:
+    name: "&3Pająk Jaskiniowy"
+    icon: "CAVE_SPIDER_SPAWN_EGG"
+    cost: 11500.0
+  SKELETON:
+    name: "&fSzkielet"
+    icon: "SKELETON_SPAWN_EGG"
+    cost: 12000.0
+  STRAY:
+    name: "&bTułacz"
+    icon: "STRAY_SPAWN_EGG"
+    cost: 14000.0
+  BOGGED:
+    name: "&2Bagniak (Bogged)"
+    icon: "BOGGED_SPAWN_EGG"
+    cost: 16500.0
+  PARCHED:
+    name: "&eZeschły (Parched)"
+    icon: "PARCHED_SPAWN_EGG"
+    cost: 17500.0
+  CAMEL_HUSK:
+    name: "&6Wielbłąd Posuch"
+    icon: "CAMEL_HUSK_SPAWN_EGG"
+    cost: 16000.0
+  CREEPER:
+    name: "&aCreeper"
+    icon: "CREEPER_SPAWN_EGG"
+    cost: 16000.0
+  SLIME:
+    name: "&aSzlam"
+    icon: "SLIME_SPAWN_EGG"
+    cost: 20000.0
+  SILVERFISH:
+    name: "&7Rybik Cukrowy"
+    icon: "SILVERFISH_SPAWN_EGG"
+    cost: 10000.0
+  PHANTOM:
+    name: "&9Fantom"
+    icon: "PHANTOM_SPAWN_EGG"
+    cost: 22000.0
+  WITCH:
+    name: "&5Wiedźma"
+    icon: "WITCH_SPAWN_EGG"
+    cost: 24000.0
+  PILLAGER:
+    name: "&7Rozbójnik (Pillager)"
+    icon: "PILLAGER_SPAWN_EGG"
+    cost: 21000.0
+  VINDICATOR:
+    name: "&8Obrońca (Vindicator)"
+    icon: "VINDICATOR_SPAWN_EGG"
+    cost: 29000.0
+  EVOKER:
+    name: "&5Przywoływacz (Evoker)"
+    icon: "EVOKER_SPAWN_EGG"
+    cost: 45000.0
+  VEX:
+    name: "&bDręczyciel (Vex)"
+    icon: "VEX_SPAWN_EGG"
+    cost: 18000.0
+  RAVAGER:
+    name: "&4Niszczyciel (Ravager)"
+    icon: "RAVAGER_SPAWN_EGG"
+    cost: 48000.0
+  CREAKING:
+    name: "&6Skrzyp (Creaking)"
+    icon: "CREAKING_SPAWN_EGG"
+    cost: 34000.0
+  BREEZE:
+    name: "&bBryza (Breeze)"
+    icon: "BREEZE_SPAWN_EGG"
+    cost: 36000.0
+  GUARDIAN:
+    name: "&3Strażnik"
+    icon: "GUARDIAN_SPAWN_EGG"
+    cost: 26000.0
+  ELDER_GUARDIAN:
+    name: "&bPrastrażnik"
+    icon: "ELDER_GUARDIAN_SPAWN_EGG"
+    cost: 55000.0
+  ZOMBIFIED_PIGLIN:
+    name: "&dZzombifikowany Piglin"
+    icon: "ZOMBIFIED_PIGLIN_SPAWN_EGG"
+    cost: 24000.0
+  PIGLIN:
+    name: "&6Piglin"
+    icon: "PIGLIN_SPAWN_EGG"
+    cost: 27000.0
+  PIGLIN_BRUTE:
+    name: "&4Okrutny Piglin"
+    icon: "PIGLIN_BRUTE_SPAWN_EGG"
+    cost: 42000.0
+  HOGLIN:
+    name: "&cHoglin"
+    icon: "HOGLIN_SPAWN_EGG"
+    cost: 26000.0
+  ZOGLIN:
+    name: "&2Zoglin"
+    icon: "ZOGLIN_SPAWN_EGG"
+    cost: 29000.0
+  MAGMA_CUBE:
+    name: "&6Kostka Magmy"
+    icon: "MAGMA_CUBE_SPAWN_EGG"
+    cost: 25000.0
+  SULFUR_CUBE:
+    name: "&eKostka Siarki"
+    icon: "SULFUR_CUBE_SPAWN_EGG"
+    cost: 27000.0
+  GHAST:
+    name: "&fGhast"
+    icon: "GHAST_SPAWN_EGG"
+    cost: 38000.0
+  WITHER_SKELETON:
+    name: "&8Mroczny Szkielet"
+    icon: "WITHER_SKELETON_SPAWN_EGG"
+    cost: 46000.0
+  BLAZE:
+    name: "&6Płomyk (Blaze)"
+    icon: "BLAZE_SPAWN_EGG"
+    cost: 40000.0
+  ENDERMITE:
+    name: "&5Endermit"
+    icon: "ENDERMITE_SPAWN_EGG"
+    cost: 15000.0
+  ENDERMAN:
+    name: "&5Enderman"
+    icon: "ENDERMAN_SPAWN_EGG"
+    cost: 28000.0
+  SHULKER:
+    name: "&dShulker"
+    icon: "SHULKER_SPAWN_EGG"
+    cost: 58000.0
+  IRON_GOLEM:
+    name: "&fŻelazny Golem"
+    icon: "IRON_GOLEM_SPAWN_EGG"
+    cost: 75000.0

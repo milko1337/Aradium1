@@ -5,6 +5,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.block.spawner.SpawnRule;
+import org.bukkit.block.spawner.SpawnerEntry;
+import org.bukkit.entity.EntitySnapshot;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
@@ -15,13 +18,16 @@ import org.bukkit.plugin.Plugin;
 import pl.nauka.aradium.utils.ChatUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 
 /**
- * Menadżer operacji PersistentDataContainer (NBT) dla ulepszanych spawnerów
- * oraz bezpiecznego transferu metadanych pomiędzy blokiem CreatureSpawner a ItemStackiem (Silk Touch).
+ * Menadżer operacji PersistentDataContainer (NBT) dla ulepszanych spawnerów,
+ * obsługujący 4 niezależne ścieżki ulepszeń, listę odblokowanych mobów
+ * oraz bezpieczny transfer metadanych pomiędzy blokiem CreatureSpawner a ItemStackiem (Silk Touch).
  */
 public class SpawnerDataManager {
 
@@ -30,11 +36,29 @@ public class SpawnerDataManager {
 
     private final NamespacedKey tierKey;
     private final NamespacedKey entityKey;
+    private final NamespacedKey unlockedMobsKey;
+    private final NamespacedKey delayLevelKey;
+    private final NamespacedKey amountLevelKey;
+    private final NamespacedKey rangeLevelKey;
+    private final NamespacedKey lightLevelKey;
 
     public SpawnerDataManager(Plugin plugin) {
         Objects.requireNonNull(plugin, "plugin");
         this.tierKey = new NamespacedKey(plugin, "spawner_tier");
         this.entityKey = new NamespacedKey(plugin, "spawner_entity");
+        this.unlockedMobsKey = new NamespacedKey(plugin, "spawner_unlocked_mobs");
+        this.delayLevelKey = new NamespacedKey(plugin, "spawner_delay_lvl");
+        this.amountLevelKey = new NamespacedKey(plugin, "spawner_amount_lvl");
+        this.rangeLevelKey = new NamespacedKey(plugin, "spawner_range_lvl");
+        this.lightLevelKey = new NamespacedKey(plugin, "spawner_light_lvl");
+    }
+
+    public boolean hasInitializedState(CreatureSpawner spawner) {
+        if (spawner == null) {
+            return false;
+        }
+        PersistentDataContainer pdc = spawner.getPersistentDataContainer();
+        return pdc.has(entityKey, PersistentDataType.STRING) || pdc.has(delayLevelKey, PersistentDataType.INTEGER);
     }
 
     public int getSpawnerTier(CreatureSpawner spawner) {
@@ -60,25 +84,177 @@ public class SpawnerDataManager {
         }
         String storedEntity = spawner.getPersistentDataContainer().get(entityKey, PersistentDataType.STRING);
         EntityType parsed = parseEntityType(storedEntity);
-        if (parsed != null) {
+        if (parsed != null && !SpawnerModule.FORBIDDEN_BOSS_ENTITIES.contains(parsed)) {
             return parsed;
         }
-        EntityType spawned = spawner.getSpawnedType();
-        return spawned != null ? spawned : DEFAULT_ENTITY_TYPE;
+        return DEFAULT_ENTITY_TYPE;
+    }
+
+    public SpawnerState getSpawnerState(CreatureSpawner spawner) {
+        if (spawner == null) {
+            return SpawnerState.defaultPig();
+        }
+        return readStateFromContainer(spawner.getPersistentDataContainer(), DEFAULT_ENTITY_TYPE);
+    }
+
+    public SpawnerState getItemState(ItemStack item) {
+        if (item == null || item.getType() != Material.SPAWNER || !item.hasItemMeta()) {
+            return SpawnerState.defaultPig();
+        }
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return SpawnerState.defaultPig();
+        }
+        PersistentDataContainer itemPdc = meta.getPersistentDataContainer();
+        if (hasAnySpawnerKey(itemPdc)) {
+            return readStateFromContainer(itemPdc, DEFAULT_ENTITY_TYPE);
+        }
+        if (meta instanceof BlockStateMeta blockStateMeta
+                && blockStateMeta.getBlockState() instanceof CreatureSpawner itemSpawner
+                && hasAnySpawnerKey(itemSpawner.getPersistentDataContainer())) {
+            return readStateFromContainer(itemSpawner.getPersistentDataContainer(), DEFAULT_ENTITY_TYPE);
+        }
+        return SpawnerState.defaultPig();
+    }
+
+    private boolean hasAnySpawnerKey(PersistentDataContainer pdc) {
+        return pdc.has(entityKey, PersistentDataType.STRING)
+                || pdc.has(delayLevelKey, PersistentDataType.INTEGER)
+                || pdc.has(tierKey, PersistentDataType.INTEGER);
+    }
+
+    private SpawnerState readStateFromContainer(PersistentDataContainer pdc, EntityType fallbackEntity) {
+        EntityType storedEntity = parseEntityType(pdc.get(entityKey, PersistentDataType.STRING));
+        EntityType activeEntity = (storedEntity != null && !SpawnerModule.FORBIDDEN_BOSS_ENTITIES.contains(storedEntity))
+                ? storedEntity
+                : fallbackEntity;
+
+        Integer legacyTierRaw = pdc.get(tierKey, PersistentDataType.INTEGER);
+        int legacyTier = legacyTierRaw != null && legacyTierRaw >= 1 ? legacyTierRaw : 1;
+
+        Integer delayRaw = pdc.get(delayLevelKey, PersistentDataType.INTEGER);
+        Integer amountRaw = pdc.get(amountLevelKey, PersistentDataType.INTEGER);
+        Integer rangeRaw = pdc.get(rangeLevelKey, PersistentDataType.INTEGER);
+        Integer lightRaw = pdc.get(lightLevelKey, PersistentDataType.INTEGER);
+
+        int delayLevel = delayRaw != null ? Math.max(1, delayRaw) : legacyTier;
+        int amountLevel = amountRaw != null ? Math.max(1, amountRaw) : legacyTier;
+        int rangeLevel = rangeRaw != null ? Math.max(1, rangeRaw) : legacyTier;
+        int lightLevel = lightRaw != null ? Math.max(0, lightRaw) : 0;
+
+        Set<EntityType> unlocked = deserializeUnlockedEntities(
+                pdc.get(unlockedMobsKey, PersistentDataType.STRING),
+                activeEntity
+        );
+
+        return new SpawnerState(activeEntity, unlocked, delayLevel, amountLevel, rangeLevel, lightLevel);
+    }
+
+    private void writeStateToContainer(PersistentDataContainer pdc, SpawnerState state) {
+        pdc.set(tierKey, PersistentDataType.INTEGER, Math.max(DEFAULT_TIER, state.legacyOverallTier()));
+        pdc.set(entityKey, PersistentDataType.STRING, state.activeEntity().name());
+        pdc.set(unlockedMobsKey, PersistentDataType.STRING, serializeUnlockedEntities(state.unlockedEntities()));
+        pdc.set(delayLevelKey, PersistentDataType.INTEGER, state.delayLevel());
+        pdc.set(amountLevelKey, PersistentDataType.INTEGER, state.amountLevel());
+        pdc.set(rangeLevelKey, PersistentDataType.INTEGER, state.rangeLevel());
+        pdc.set(lightLevelKey, PersistentDataType.INTEGER, state.lightLevel());
     }
 
     /**
-     * Aplikuje parametry i tagi PDC danego tieru bezpośrednio na blok CreatureSpawner.
+     * Aplikuje pełny stan 4 ścieżek ulepszeń, aktywnego moba oraz regułę światła (0..15) na blok spawnera.
+     */
+    public void applyStateToBlock(CreatureSpawner spawner, SpawnerState state, SpawnerModule module) {
+        if (spawner == null) {
+            return;
+        }
+        SpawnerState safeState = state != null ? state : SpawnerState.defaultPig();
+        EntityType resolvedEntity = resolveValidEntityType(safeState.activeEntity(), DEFAULT_ENTITY_TYPE);
+        SpawnerState normalizedState = resolvedEntity == safeState.activeEntity()
+                ? safeState
+                : safeState.withActiveEntity(resolvedEntity);
+
+        writeStateToContainer(spawner.getPersistentDataContainer(), normalizedState);
+
+        SpawnerTrackLevelDefinition delayDef = module != null
+                ? module.getTrackLevelDefinition(SpawnerUpgradeTrack.DELAY, normalizedState.delayLevel())
+                : null;
+        SpawnerTrackLevelDefinition amountDef = module != null
+                ? module.getTrackLevelDefinition(SpawnerUpgradeTrack.AMOUNT, normalizedState.amountLevel())
+                : null;
+        SpawnerTrackLevelDefinition rangeDef = module != null
+                ? module.getTrackLevelDefinition(SpawnerUpgradeTrack.RANGE, normalizedState.rangeLevel())
+                : null;
+
+        int minDelay = delayDef != null ? delayDef.minSpawnDelay() : 200;
+        int maxDelay = delayDef != null ? delayDef.maxSpawnDelay() : 600;
+        int spawnCount = amountDef != null ? amountDef.spawnCount() : 2;
+        int maxNearby = amountDef != null ? amountDef.maxNearbyEntities() : 6;
+        int playerRange = rangeDef != null ? rangeDef.requiredPlayerRange() : 16;
+
+        applyEntityAndLightRule(spawner, resolvedEntity, normalizedState.isLightImmune());
+        applySpawnDelaysSafely(spawner, minDelay, maxDelay);
+        spawner.setSpawnCount(Math.max(1, spawnCount));
+        spawner.setMaxNearbyEntities(Math.max(1, maxNearby));
+        spawner.setRequiredPlayerRange(Math.max(1, playerRange));
+        spawner.update(true, false);
+    }
+
+    private void applyEntityAndLightRule(CreatureSpawner spawner, EntityType entityType, boolean ignoreLight) {
+        if (isSpawnableEntity(entityType)) {
+            spawner.setSpawnedType(entityType);
+        }
+        if (ignoreLight) {
+            try {
+                EntitySnapshot snapshot = spawner.getSpawnedEntity();
+                if (snapshot != null) {
+                    SpawnerEntry entry = new SpawnerEntry(snapshot, 1, createIgnoreLightSpawnRule());
+                    spawner.setSpawnedEntity(entry);
+                    spawner.setPotentialSpawns(List.of(entry));
+                }
+            } catch (RuntimeException ignored) {
+                // W środowisku testowym lub bez pełnego świata fallback na sam SpawnedType
+            }
+        } else {
+            try {
+                if (!spawner.getPotentialSpawns().isEmpty()) {
+                    spawner.setPotentialSpawns(List.of());
+                    if (isSpawnableEntity(entityType)) {
+                        spawner.setSpawnedType(entityType);
+                    }
+                }
+            } catch (RuntimeException ignored) {
+            }
+        }
+    }
+
+    /**
+     * Reguła Paper 26.3 zezwalająca na spawn niezależnie od światła bloków i nieba (0-15).
+     */
+    public static SpawnRule createIgnoreLightSpawnRule() {
+        return new SpawnRule(0, 15, 0, 15);
+    }
+
+    /**
+     * Aplikuje parametry i tagi PDC danego tieru legacy bezpośrednio na blok CreatureSpawner.
      */
     public void applyTierToBlock(CreatureSpawner spawner, SpawnerTierDefinition tierDef, EntityType entityType) {
         if (spawner == null || tierDef == null) {
             return;
         }
 
-        EntityType resolvedEntity = resolveValidEntityType(entityType, spawner.getSpawnedType());
-        PersistentDataContainer pdc = spawner.getPersistentDataContainer();
-        pdc.set(tierKey, PersistentDataType.INTEGER, Math.max(DEFAULT_TIER, tierDef.tier()));
-        pdc.set(entityKey, PersistentDataType.STRING, resolvedEntity.name());
+        EntityType resolvedEntity = resolveValidEntityType(entityType, getSpawnerEntityType(spawner));
+        SpawnerState current = getSpawnerState(spawner);
+        int lvl = Math.max(DEFAULT_TIER, tierDef.tier());
+        SpawnerState updated = new SpawnerState(
+                resolvedEntity,
+                current.unlockedEntities(),
+                lvl,
+                lvl,
+                Math.min(lvl, 4),
+                current.lightLevel()
+        );
+        writeStateToContainer(spawner.getPersistentDataContainer(), updated);
+        spawner.getPersistentDataContainer().set(tierKey, PersistentDataType.INTEGER, lvl);
 
         if (isSpawnableEntity(resolvedEntity)) {
             spawner.setSpawnedType(resolvedEntity);
@@ -112,55 +288,80 @@ public class SpawnerDataManager {
     }
 
     /**
-     * Tworzy przedmiot SPAWNER z zapisanym w PDC typem moba oraz Tierem ulepszenia.
+     * Tworzy przedmiot SPAWNER z pełnym stanem 4 ścieżek ulepszeń, aktywnym mobem i listą odblokowanych mobów.
      */
-    public ItemStack createSpawnerItem(EntityType entityType, SpawnerTierDefinition tierDef) {
+    public ItemStack createSpawnerItem(SpawnerState state, SpawnerModule module) {
+        SpawnerState safeState = state != null ? state : SpawnerState.defaultPig();
         ItemStack item = new ItemStack(Material.SPAWNER);
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
             return item;
         }
 
-        EntityType resolvedEntity = resolveValidEntityType(entityType, DEFAULT_ENTITY_TYPE);
-        int safeTier = tierDef != null ? Math.max(DEFAULT_TIER, tierDef.tier()) : DEFAULT_TIER;
+        EntityType resolvedEntity = resolveValidEntityType(safeState.activeEntity(), DEFAULT_ENTITY_TYPE);
+        SpawnerState normalized = resolvedEntity == safeState.activeEntity()
+                ? safeState
+                : safeState.withActiveEntity(resolvedEntity);
 
         if (meta instanceof BlockStateMeta blockStateMeta
                 && blockStateMeta.getBlockState() instanceof CreatureSpawner itemSpawner) {
-            if (isSpawnableEntity(resolvedEntity)) {
-                itemSpawner.setSpawnedType(resolvedEntity);
-            }
-            itemSpawner.getPersistentDataContainer().set(tierKey, PersistentDataType.INTEGER, safeTier);
-            itemSpawner.getPersistentDataContainer().set(entityKey, PersistentDataType.STRING, resolvedEntity.name());
+            applyEntityAndLightRule(itemSpawner, resolvedEntity, normalized.isLightImmune());
+            writeStateToContainer(itemSpawner.getPersistentDataContainer(), normalized);
             blockStateMeta.setBlockState(itemSpawner);
         }
 
-        PersistentDataContainer itemPdc = meta.getPersistentDataContainer();
-        itemPdc.set(tierKey, PersistentDataType.INTEGER, safeTier);
-        itemPdc.set(entityKey, PersistentDataType.STRING, resolvedEntity.name());
+        writeStateToContainer(meta.getPersistentDataContainer(), normalized);
 
-        String entityDisplay = formatEntityName(resolvedEntity);
-        String baseName = tierDef != null ? tierDef.displayName() : "&e&lSpawner &8[&7Tier " + safeTier + "&8]";
-        meta.displayName(ChatUtils.itemComponent(baseName + " &8(&f" + entityDisplay + "&8)"));
+        String mobDisplay = module != null
+                ? module.formatMobDisplayName(resolvedEntity)
+                : formatEntityName(resolvedEntity);
+        meta.displayName(ChatUtils.itemComponent("&e&lSpawner &8(&f" + mobDisplay + "&8)"));
 
-        if (tierDef != null && !tierDef.lore().isEmpty()) {
-            List<Component> lore = new ArrayList<>(tierDef.lore().size() + 1);
-            lore.add(ChatUtils.itemComponent("&8» &7Mob: &e" + entityDisplay));
-            for (String line : tierDef.lore()) {
-                lore.add(ChatUtils.itemComponent(line));
-            }
-            meta.lore(lore);
-        }
+        int maxDelay = module != null ? module.getMaxTrackLevel(SpawnerUpgradeTrack.DELAY) : 5;
+        int maxAmount = module != null ? module.getMaxTrackLevel(SpawnerUpgradeTrack.AMOUNT) : 5;
+        int maxRange = module != null ? module.getMaxTrackLevel(SpawnerUpgradeTrack.RANGE) : 4;
+        int totalMobs = module != null && !module.getMobDefinitions().isEmpty()
+                ? module.getMobDefinitions().size()
+                : normalized.unlockedEntities().size();
+
+        List<Component> lore = new ArrayList<>();
+        lore.add(ChatUtils.itemComponent("&8» &7Aktywny mob: &e" + mobDisplay));
+        lore.add(ChatUtils.itemComponent("&8» &7Czas respu: &fPoziom " + normalized.delayLevel() + "/" + maxDelay));
+        lore.add(ChatUtils.itemComponent("&8» &7Ilość mobów: &fPoziom " + normalized.amountLevel() + "/" + maxAmount));
+        lore.add(ChatUtils.itemComponent("&8» &7Zasięg gracza: &fPoziom " + normalized.rangeLevel() + "/" + maxRange));
+        lore.add(ChatUtils.itemComponent("&8» &7Ignorowanie światła: "
+                + (normalized.isLightImmune() ? "&aOdblokowane" : "&cWyłączone")));
+        lore.add(ChatUtils.itemComponent("&8» &7Odblokowane moby: &e" + normalized.unlockedEntities().size() + "&8/&7" + totalMobs));
+        lore.add(Component.empty());
+        lore.add(ChatUtils.itemComponent("&7Postaw i kliknij &eShift + PPM&7, aby otworzyć panel spawnera."));
+        meta.lore(lore);
 
         item.setItemMeta(meta);
         return item;
+    }
+
+    /**
+     * Tworzy przedmiot SPAWNER z zapisanym w PDC typem moba oraz Tierem ulepszenia (kompatybilność wsteczna).
+     */
+    public ItemStack createSpawnerItem(EntityType entityType, SpawnerTierDefinition tierDef) {
+        int lvl = tierDef != null ? Math.max(DEFAULT_TIER, tierDef.tier()) : DEFAULT_TIER;
+        EntityType resolved = resolveValidEntityType(entityType, DEFAULT_ENTITY_TYPE);
+        SpawnerState state = new SpawnerState(
+                resolved,
+                Set.of(DEFAULT_ENTITY_TYPE, resolved),
+                lvl,
+                lvl,
+                Math.min(lvl, 4),
+                lvl >= 3 ? 1 : 0
+        );
+        return createSpawnerItem(state, null);
     }
 
     public boolean isCustomSpawnerItem(ItemStack item) {
         if (item == null || item.getType() != Material.SPAWNER || !item.hasItemMeta()) {
             return false;
         }
-        PersistentDataContainer pdc = item.getItemMeta().getPersistentDataContainer();
-        return pdc.has(tierKey, PersistentDataType.INTEGER) || pdc.has(entityKey, PersistentDataType.STRING);
+        return hasAnySpawnerKey(item.getItemMeta().getPersistentDataContainer());
     }
 
     public int getItemTier(ItemStack item) {
@@ -180,51 +381,83 @@ public class SpawnerDataManager {
     }
 
     public EntityType getItemEntityType(ItemStack item) {
-        if (item == null || item.getType() != Material.SPAWNER || !item.hasItemMeta()) {
-            return DEFAULT_ENTITY_TYPE;
-        }
-        ItemMeta meta = item.getItemMeta();
-        String stored = meta.getPersistentDataContainer().get(entityKey, PersistentDataType.STRING);
-        EntityType parsed = parseEntityType(stored);
-        if (parsed != null) {
-            return parsed;
-        }
-        if (meta instanceof BlockStateMeta blockStateMeta
-                && blockStateMeta.getBlockState() instanceof CreatureSpawner itemSpawner) {
-            return getSpawnerEntityType(itemSpawner);
-        }
-        return DEFAULT_ENTITY_TYPE;
+        return getItemState(item).activeEntity();
     }
 
     /**
-     * Przenosi typ moba oraz tier z niszczonego bloku (Silk Touch) na ItemStack.
+     * Przenosi pełny stan spawnera z niszczonego bloku (Silk Touch) na ItemStack.
+     */
+    public ItemStack transferBlockToItem(CreatureSpawner spawner, SpawnerModule module) {
+        SpawnerState state = getSpawnerState(spawner);
+        return createSpawnerItem(state, module);
+    }
+
+    /**
+     * Przenosi typ moba oraz tier z niszczonego bloku (Silk Touch) na ItemStack (kompatybilność wsteczna).
      */
     public ItemStack transferBlockToItem(CreatureSpawner spawner, SpawnerTierDefinition tierDef) {
-        EntityType entityType = getSpawnerEntityType(spawner);
-        return createSpawnerItem(entityType, tierDef);
+        SpawnerState state = getSpawnerState(spawner);
+        return createSpawnerItem(state, null);
     }
 
     /**
-     * Przenosi zapisany tier i typ moba z postawionego ItemStacka na nowy blok CreatureSpawner.
+     * Przenosi zapisany pełny stan spawnera z postawionego ItemStacka na blok CreatureSpawner.
+     * Czysty spawner bez PDC uruchamia się bazowo ze Świnią (EntityType.PIG) i poziomami 1/1/1/0.
+     */
+    public void transferItemToBlock(ItemStack itemInHand, CreatureSpawner placedSpawner, SpawnerModule module) {
+        if (placedSpawner == null) {
+            return;
+        }
+        SpawnerState state = getItemState(itemInHand);
+        applyStateToBlock(placedSpawner, state, module);
+    }
+
+    /**
+     * Przenosi zapisany tier i typ moba z postawionego ItemStacka na blok (kompatybilność wsteczna).
      */
     public void transferItemToBlock(ItemStack itemInHand, CreatureSpawner placedSpawner, SpawnerTierDefinition tierDef) {
         if (placedSpawner == null) {
             return;
         }
-        EntityType entityType = getItemEntityType(itemInHand);
-        if (tierDef != null) {
-            applyTierToBlock(placedSpawner, tierDef, entityType);
-            return;
+        SpawnerState state = getItemState(itemInHand);
+        if (tierDef != null && !isCustomSpawnerItem(itemInHand)) {
+            int lvl = Math.max(DEFAULT_TIER, tierDef.tier());
+            state = new SpawnerState(state.activeEntity(), state.unlockedEntities(), lvl, lvl, Math.min(lvl, 4), 0);
         }
+        applyStateToBlock(placedSpawner, state, null);
+    }
 
-        int fallbackTier = getItemTier(itemInHand);
-        PersistentDataContainer pdc = placedSpawner.getPersistentDataContainer();
-        pdc.set(tierKey, PersistentDataType.INTEGER, fallbackTier);
-        pdc.set(entityKey, PersistentDataType.STRING, entityType.name());
-        if (isSpawnableEntity(entityType)) {
-            placedSpawner.setSpawnedType(entityType);
+    public static String serializeUnlockedEntities(Set<EntityType> unlocked) {
+        if (unlocked == null || unlocked.isEmpty()) {
+            return DEFAULT_ENTITY_TYPE.name();
         }
-        placedSpawner.update(true, false);
+        List<String> names = new ArrayList<>(unlocked.size());
+        for (EntityType type : unlocked) {
+            if (type != null && !SpawnerModule.FORBIDDEN_BOSS_ENTITIES.contains(type)) {
+                names.add(type.name());
+            }
+        }
+        if (names.isEmpty()) {
+            return DEFAULT_ENTITY_TYPE.name();
+        }
+        return String.join(",", names);
+    }
+
+    public static Set<EntityType> deserializeUnlockedEntities(String serialized, EntityType activeEntity) {
+        Set<EntityType> result = new LinkedHashSet<>();
+        result.add(DEFAULT_ENTITY_TYPE);
+        if (serialized != null && !serialized.isBlank()) {
+            for (String token : serialized.split(",")) {
+                EntityType parsed = parseEntityType(token);
+                if (parsed != null && !SpawnerModule.FORBIDDEN_BOSS_ENTITIES.contains(parsed)) {
+                    result.add(parsed);
+                }
+            }
+        }
+        if (activeEntity != null && !SpawnerModule.FORBIDDEN_BOSS_ENTITIES.contains(activeEntity)) {
+            result.add(activeEntity);
+        }
+        return Set.copyOf(result);
     }
 
     public static boolean isSpawnableEntity(EntityType entityType) {
@@ -235,10 +468,10 @@ public class SpawnerDataManager {
     }
 
     private EntityType resolveValidEntityType(EntityType preferred, EntityType fallback) {
-        if (isSpawnableEntity(preferred)) {
+        if (isSpawnableEntity(preferred) && !SpawnerModule.FORBIDDEN_BOSS_ENTITIES.contains(preferred)) {
             return preferred;
         }
-        if (isSpawnableEntity(fallback)) {
+        if (isSpawnableEntity(fallback) && !SpawnerModule.FORBIDDEN_BOSS_ENTITIES.contains(fallback)) {
             return fallback;
         }
         return DEFAULT_ENTITY_TYPE;

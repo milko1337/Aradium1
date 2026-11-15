@@ -36,8 +36,13 @@ import pl.nauka.aradium.modules.skyblock.upgrades.IslandUpgradeManager;
 import pl.nauka.aradium.modules.skyblock.upgrades.IslandUpgradeType;
 import pl.nauka.aradium.modules.spawners.SpawnerDataManager;
 import pl.nauka.aradium.modules.spawners.SpawnerGUI;
+import pl.nauka.aradium.modules.spawners.SpawnerMobDefinition;
 import pl.nauka.aradium.modules.spawners.SpawnerModule;
+import pl.nauka.aradium.modules.spawners.SpawnerState;
 import pl.nauka.aradium.modules.spawners.SpawnerTierDefinition;
+import pl.nauka.aradium.modules.spawners.SpawnerTrackLevelDefinition;
+import pl.nauka.aradium.modules.spawners.SpawnerUpgradeTrack;
+import org.bukkit.block.spawner.SpawnRule;
 
 import java.io.File;
 import java.io.InputStream;
@@ -578,6 +583,122 @@ class AradiumAuditTest {
             List<String> maxLore = SpawnerGUI.buildUpgradeLore(tier3, null);
             assertTrue(maxLore.stream().anyMatch(line -> line.contains("maksymalny poziom")));
         }
+    }
+
+    @Test
+    void spawnerFourUpgradeTracksAndAllNonBossMobsWorkCorrectly() throws Exception {
+        try (InputStream stream = getClass().getClassLoader().getResourceAsStream("spawners.yml")) {
+            assertNotNull(stream);
+            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(stream, StandardCharsets.UTF_8)
+            );
+
+            List<String> warnings = new ArrayList<>();
+            Logger strictLogger = Logger.getLogger("SpawnerEtap3Strict");
+            strictLogger.setUseParentHandlers(false);
+            Handler capture = new Handler() {
+                @Override
+                public void publish(LogRecord record) {
+                    if (record.getLevel().intValue() >= Level.WARNING.intValue()) {
+                        warnings.add(record.getMessage());
+                    }
+                }
+
+                @Override
+                public void flush() {
+                }
+
+                @Override
+                public void close() {
+                }
+            };
+            strictLogger.addHandler(capture);
+
+            try {
+                Map<SpawnerUpgradeTrack, Map<Integer, SpawnerTrackLevelDefinition>> tracks =
+                        SpawnerModule.parseUpgradeTracks(yaml, strictLogger);
+                Map<EntityType, SpawnerMobDefinition> mobs =
+                        SpawnerModule.parseMobDefinitions(yaml, strictLogger);
+
+                assertTrue(warnings.isEmpty(), "Ostrzeżenia podczas parsowania spawners.yml: " + warnings);
+
+                assertEquals(5, tracks.get(SpawnerUpgradeTrack.DELAY).size());
+                assertEquals(5, tracks.get(SpawnerUpgradeTrack.AMOUNT).size());
+                assertEquals(4, tracks.get(SpawnerUpgradeTrack.RANGE).size());
+                assertEquals(2, tracks.get(SpawnerUpgradeTrack.LIGHT_IMMUNITY).size());
+
+                assertEquals(50, tracks.get(SpawnerUpgradeTrack.DELAY).get(5).minSpawnDelay());
+                assertEquals(140, tracks.get(SpawnerUpgradeTrack.DELAY).get(5).maxSpawnDelay());
+                assertEquals(12, tracks.get(SpawnerUpgradeTrack.AMOUNT).get(5).spawnCount());
+                assertEquals(24, tracks.get(SpawnerUpgradeTrack.AMOUNT).get(5).maxNearbyEntities());
+                assertEquals(48, tracks.get(SpawnerUpgradeTrack.RANGE).get(4).requiredPlayerRange());
+                assertFalse(tracks.get(SpawnerUpgradeTrack.LIGHT_IMMUNITY).get(0).ignoreLight());
+                assertTrue(tracks.get(SpawnerUpgradeTrack.LIGHT_IMMUNITY).get(1).ignoreLight());
+
+                assertEquals(85, mobs.size());
+                assertEquals(0.0, mobs.get(EntityType.PIG).unlockCost(), 0.001);
+                assertTrue(mobs.containsKey(EntityType.IRON_GOLEM));
+                assertFalse(mobs.containsKey(EntityType.WITHER));
+                assertFalse(mobs.containsKey(EntityType.ENDER_DRAGON));
+                assertFalse(mobs.containsKey(EntityType.WARDEN));
+                for (SpawnerMobDefinition mobDef : mobs.values()) {
+                    assertFalse(mobDef.icon().isLegacy());
+                    assertFalse(SpawnerModule.FORBIDDEN_BOSS_ENTITIES.contains(mobDef.entityType()));
+                }
+
+                List<String> delayLore = SpawnerGUI.buildTrackUpgradeLore(
+                        SpawnerUpgradeTrack.DELAY,
+                        tracks.get(SpawnerUpgradeTrack.DELAY).get(1),
+                        tracks.get(SpawnerUpgradeTrack.DELAY).get(2),
+                        5
+                );
+                assertTrue(delayLore.stream().anyMatch(line -> line.contains("3,500.00$")));
+                assertTrue(delayLore.stream().anyMatch(line -> line.contains("Iron Block")));
+
+                List<String> lightMaxLore = SpawnerGUI.buildTrackUpgradeLore(
+                        SpawnerUpgradeTrack.LIGHT_IMMUNITY,
+                        tracks.get(SpawnerUpgradeTrack.LIGHT_IMMUNITY).get(1),
+                        null,
+                        1
+                );
+                assertTrue(lightMaxLore.stream().anyMatch(line -> line.contains("Odblokowane")));
+                assertTrue(lightMaxLore.stream().anyMatch(line -> line.contains("maksymalny poziom")));
+            } finally {
+                strictLogger.removeHandler(capture);
+            }
+        }
+
+        SpawnerState initial = SpawnerState.defaultPig();
+        assertEquals(EntityType.PIG, initial.activeEntity());
+        assertEquals(1, initial.delayLevel());
+        assertEquals(1, initial.amountLevel());
+        assertEquals(1, initial.rangeLevel());
+        assertEquals(0, initial.lightLevel());
+        assertFalse(initial.isLightImmune());
+        assertTrue(initial.isUnlocked(EntityType.PIG));
+
+        SpawnerState switched = initial.withActiveEntity(EntityType.BLAZE).withTrackLevel(SpawnerUpgradeTrack.LIGHT_IMMUNITY, 1);
+        assertEquals(EntityType.BLAZE, switched.activeEntity());
+        assertTrue(switched.isUnlocked(EntityType.PIG));
+        assertTrue(switched.isUnlocked(EntityType.BLAZE));
+        assertTrue(switched.isLightImmune());
+
+        // Próba ustawienia zablokowanego bossa wraca bezpiecznie do Świni
+        SpawnerState rejectedBoss = initial.withActiveEntity(EntityType.WITHER);
+        assertEquals(EntityType.PIG, rejectedBoss.activeEntity());
+        assertFalse(rejectedBoss.isUnlocked(EntityType.WITHER));
+
+        String serialized = SpawnerDataManager.serializeUnlockedEntities(switched.unlockedEntities());
+        Set<EntityType> parsedBack = SpawnerDataManager.deserializeUnlockedEntities(serialized + ",WARDEN", EntityType.BLAZE);
+        assertTrue(parsedBack.contains(EntityType.PIG));
+        assertTrue(parsedBack.contains(EntityType.BLAZE));
+        assertFalse(parsedBack.contains(EntityType.WARDEN));
+
+        SpawnRule rule = SpawnerDataManager.createIgnoreLightSpawnRule();
+        assertEquals(0, rule.getMinBlockLight());
+        assertEquals(15, rule.getMaxBlockLight());
+        assertEquals(0, rule.getMinSkyLight());
+        assertEquals(15, rule.getMaxSkyLight());
     }
 
     @Test

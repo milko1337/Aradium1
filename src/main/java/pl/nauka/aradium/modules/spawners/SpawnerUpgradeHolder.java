@@ -5,9 +5,13 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -15,22 +19,64 @@ import java.util.Objects;
  */
 public class SpawnerUpgradeHolder implements InventoryHolder {
 
+    public enum ScreenType {
+        MAIN_MENU,
+        MOB_SHOP
+    }
+
     private final String worldName;
     private final int blockX;
     private final int blockY;
     private final int blockZ;
+    private final ScreenType screenType;
+    private final int page;
+    private final Map<Integer, EntityType> slotMobs;
     private Inventory inventory;
 
     public SpawnerUpgradeHolder(String worldName, int blockX, int blockY, int blockZ) {
+        this(worldName, blockX, blockY, blockZ, ScreenType.MAIN_MENU, 0, Map.of());
+    }
+
+    public SpawnerUpgradeHolder(
+            String worldName,
+            int blockX,
+            int blockY,
+            int blockZ,
+            ScreenType screenType,
+            int page,
+            Map<Integer, EntityType> slotMobs
+    ) {
         this.worldName = Objects.requireNonNull(worldName, "worldName");
         this.blockX = blockX;
         this.blockY = blockY;
         this.blockZ = blockZ;
+        this.screenType = screenType != null ? screenType : ScreenType.MAIN_MENU;
+        this.page = Math.max(0, page);
+        this.slotMobs = slotMobs != null && !slotMobs.isEmpty()
+                ? Collections.unmodifiableMap(new LinkedHashMap<>(slotMobs))
+                : Map.of();
     }
 
     public static SpawnerUpgradeHolder forBlock(Block block) {
+        return forBlock(block, ScreenType.MAIN_MENU, 0, Map.of());
+    }
+
+    public static SpawnerUpgradeHolder forBlock(
+            Block block,
+            ScreenType screenType,
+            int page,
+            Map<Integer, EntityType> slotMobs
+    ) {
         Objects.requireNonNull(block, "block");
-        return new SpawnerUpgradeHolder(block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+        return new SpawnerUpgradeHolder(
+                block.getWorld().getName(),
+                block.getX(),
+                block.getY(),
+                block.getZ(),
+                screenType,
+                page,
+                slotMobs
+        );
     }
 
     public boolean matchesBlock(Block block) {
@@ -74,6 +120,18 @@ public class SpawnerUpgradeHolder implements InventoryHolder {
 
     public int getBlockZ() {
         return blockZ;
+    }
+
+    public ScreenType getScreenType() {
+        return screenType;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public EntityType getMobAtSlot(int slot) {
+        return slotMobs.get(slot);
     }
 
     public void setInventory(Inventory inventory) {

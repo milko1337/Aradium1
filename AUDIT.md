@@ -33,10 +33,10 @@
 - **Architektura:** Modularna (`core` + moduły w `modules/*`), sterowana przez
   `ModuleManager` oraz sekcję `modules:` w `config.yml`
 
-- **Skala projektu:** `75` głównych klas Java w `src/main/java` (`0` ostrzeżeń `javac`)
+- **Skala projektu:** `79` głównych klas Java w `src/main/java` (`0` ostrzeżeń `javac`)
   oraz `24` pliki zasobów w `src/main/resources`
 
-- **Testy automatyczne:** `16/16` testów JUnit 5 (`org.junit.jupiter:junit-jupiter:5.11.4`)
+- **Testy automatyczne:** `17/17` testów JUnit 5 (`org.junit.jupiter:junit-jupiter:5.11.4`)
   w `src/test/java/pl/nauka/aradium/AradiumAuditTest.java`
 
 - **Artefakt wdrożeniowy:** `target/Aradium.jar` (kopiowany na serwer do
@@ -67,8 +67,10 @@
   - Specjalny element `special_armor.buty_lotnika` (niezniszczalne buty latania).
 
 - **`src/main/resources/spawners.yml`**
-  - Definicje 3 tierów ulepszeń spawnerów: koszty w `$` i przedmiotach,
-    `min/max-spawn-delay`, `spawn-count`, `max-nearby-entities`, `required-player-range`.
+  - Definicje `4` niezależnych ścieżek ulepszeń (`upgrades.delay` `1–5`, `upgrades.amount` `1–5`,
+    `upgrades.range` `1–4`, `upgrades.light-immunity` `0–1`), cennik wszystkich `85` mobów z MC
+    (`mobs:` poza bossami `WITHER`, `ENDER_DRAGON`, `WARDEN`) z bazową świnią (`PIG`) oraz
+    zachowana sekcja kompatybilności `tiers`.
 
 - **`src/main/resources/blocks-value.yml`**
   - Punktacja bloków używana przy asynchronicznym liczeniu poziomu wyspy (`/is level`).
@@ -146,20 +148,25 @@
 
 ### 1.4. Moduł 2: Zaawansowane Spawnery (`spawners`)
 
-- **`SpawnerModule.java` i `SpawnerTierDefinition.java`**
-  - Ładowanie `spawners.yml`, inicjalizacja GUI i rekordy parametrów tierów.
+- **`SpawnerModule.java`, `SpawnerUpgradeTrack.java`, `SpawnerTrackLevelDefinition.java`, `SpawnerMobDefinition.java`, `SpawnerState.java` i `SpawnerTierDefinition.java`**
+  - Ładowanie `spawners.yml` (`4` ścieżki ulepszeń: `DELAY`, `AMOUNT`, `RANGE`, `LIGHT_IMMUNITY`),
+    katalog `85` mobów z wykluczeniem bossów (`FORBIDDEN_BOSS_ENTITIES`: `WITHER`, `ENDER_DRAGON`, `WARDEN`)
+    oraz kompatybilność wsteczna starszych tierów `1–3`.
 
 - **`SpawnerDataManager.java`**
-  - Zapis/odczyt tieru i `EntityType` w PDC bloku `CreatureSpawner` i przedmiotu,
-    bezpieczna kolejność ustawiania `minSpawnDelay` / `maxSpawnDelay`.
+  - Zapis/odczyt stanu `SpawnerState` (`spawner_entity`, `spawner_unlocked_mobs`, `spawner_delay_lvl`,
+    `spawner_amount_lvl`, `spawner_range_lvl`, `spawner_light_lvl`) w PDC bloku `CreatureSpawner`
+    oraz przedmiotu (Silk Touch), domyślny mob `EntityType.PIG`, bezpieczna kolejność ustawiania
+    `minSpawnDelay` / `maxSpawnDelay` oraz reguła `SpawnRule(0, 15, 0, 15)` przez `SpawnerEntry`.
 
 - **`SpawnerUpgradeHolder.java` i `SpawnerGUI.java`**
-  - Menu ulepszeń powiązane ze współrzędnymi konkretnego spawnera (Anti-Dupe),
-    pobierające walutę z `EconomyManager` oraz czyste itemy z ekwipunku.
+  - Dwuekranowe GUI spawnera (`MAIN_MENU` `36` slotów z 4 ścieżkami ulepszeń oraz `MOB_SHOP`
+    `54` slotów na 4 stronach do zakupu i przełączania `85` mobów) powiązane ze współrzędnymi
+    konkretnego bloku (Anti-Dupe), pobierające walutę z `EconomyManager` i czyste itemy z ekwipunku.
 
 - **`SpawnerListener.java` i `SpawnerCommand.java`**
-  - Otwieranie menu przez `Shift + PPM`, wydobycie Silk Touch bez farmy XP,
-    zachowanie tieru po postawieniu, ochrona przed wybuchami oraz `/spawner give`.
+  - Otwieranie menu przez `Shift + PPM`, wydobycie Silk Touch z zachowaniem wszystkich ulepszeń
+    i odblokowanych mobów, start z bazową świnią, ochrona przed wybuchami oraz `/spawner give`.
 
 ---
 
@@ -219,7 +226,7 @@
 
 ---
 
-### 1.7. Testy automatyczne (`AradiumAuditTest.java` — 16/16 zaliczonych)
+### 1.7. Testy automatyczne (`AradiumAuditTest.java` — 17/17 zaliczonych)
 
 1. `cuboidRegionNormalizesMinMaxAndChecksBoundaries` — granice regionów rud.
 
@@ -255,6 +262,10 @@
 16. `allShopCategoriesLoadCleanlyWithValidMaterialsAndPagination` — walidacja wszystkich 17 plików
     `shops/*.yml`, materiałów Paper `26.3`, powiązań `parent-shop`/`target-shop`, indeksowania
     najlepszych cen sprzedaży oraz automatycznego stronicowania.
+
+17. `spawnerFourUpgradeTracksAndAllNonBossMobsWorkCorrectly` — walidacja `4` ścieżek ulepszeń
+    w `spawners.yml`, kompletu `85` mobów z wykluczeniem bossów (`WITHER`, `ENDER_DRAGON`, `WARDEN`),
+    domyślnego stanu `PIG`, serializacji PDC, reguły światła `SpawnRule(0, 15, 0, 15)` i lore GUI.
 
 ---
 
@@ -308,6 +319,26 @@ Aktualna lista zadań pozostałych do realizacji znajduje się w pliku [`PLAN.md
 ---
 
 ## 4. Historia zmian (Changelog)
+
+### 2026-11-15 — Etap 3 (Punkt 10): Zaawansowane ulepszenia spawnerów i sklep 85 mobów (`2.0.0-SNAPSHOT`)
+
+- Dodano klasy modelu i stanu dla modułu `spawners`: `SpawnerUpgradeTrack`,
+  `SpawnerTrackLevelDefinition`, `SpawnerMobDefinition` oraz `SpawnerState` z domyślną
+  świnią (`EntityType.PIG`) oraz twardą blokadą bossów (`FORBIDDEN_BOSS_ENTITIES`:
+  `WITHER`, `ENDER_DRAGON`, `WARDEN`).
+
+- Przebudowano `spawners.yml`, `SpawnerModule` oraz `SpawnerDataManager`: wprowadzono
+  `4` niezależne ścieżki ulepszeń (`DELAY` `1–5`, `AMOUNT` `1–5`, `RANGE` `1–4`,
+  `LIGHT_IMMUNITY` `0–1` ustawiające `SpawnRule(0, 15, 0, 15)` przez `SpawnerEntry`),
+  pełny katalog `85` mobów z Minecrafta oraz pełne przenoszenie stanu PDC przy `Silk Touch`.
+
+- Wdrożono dwuekranowe GUI spawnera w `SpawnerGUI`, `SpawnerUpgradeHolder` i `SpawnerListener`
+  (`36`-slotowy panel główny + `54`-slotowy wielostronicowy sklep mobów na 4 stronach
+  z Anti-Dupe), zaktualizowano `/spawner give` i komunikaty w `config.yml`.
+
+- Dodano test JUnit 5 #17 (`spawnerFourUpgradeTracksAndAllNonBossMobsWorkCorrectly`),
+  uzyskując `79` klas głównych bez ostrzeżeń kompilacji oraz `17/17` zaliczonych testów
+  i wdrożono zmiany na serwer testowy.
 
 ### 2026-11-15 — Etap 2 (Punkt 1): Rozbudowa Sklepu GUI wzorowana na EconomyShopGUI (`2.0.0-SNAPSHOT`)
 
