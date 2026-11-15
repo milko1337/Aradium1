@@ -16,14 +16,29 @@ public record ShopItem(
         List<String> lore,
         double buyPrice,
         double sellPrice,
-        String targetShop
+        String targetShop,
+        int defaultStackSize
 ) {
+    public ShopItem(
+            String id,
+            int slot,
+            Material material,
+            String name,
+            List<String> lore,
+            double buyPrice,
+            double sellPrice,
+            String targetShop
+    ) {
+        this(id, slot, material, name, lore, buyPrice, sellPrice, targetShop, 1);
+    }
+
     public ShopItem {
         Objects.requireNonNull(id, "id");
         Objects.requireNonNull(material, "material");
         name = name != null ? name : material.name();
         lore = lore != null ? List.copyOf(lore) : List.of();
         targetShop = (targetShop != null && !targetShop.isBlank()) ? targetShop : null;
+        defaultStackSize = Math.max(1, Math.min(64, defaultStackSize));
     }
 
     public boolean canBuy() {

@@ -1,20 +1,118 @@
-# Główne menu sklepu GUI (Moduł 1: UltimateShop Clone)
+# Główne menu sklepu GUI (wzorowane na EconomyShopGUI)
 
 shop:
   id: "main"
   title: "&8» &6&lSklep Serwerowy"
-  size: 27
+  size: 54
   back-button-slot: -1
 
 items:
-  category_blocks:
-    slot: 13
+  cat_building:
+    slot: 11
     material: "GRASS_BLOCK"
-    name: "&a&lBloki Budowlane"
-    target-shop: "blocks"
-    buy-price: -1.0
-    sell-price: -1.0
+    name: "&6&lBudowanie i Bloki"
+    target-shop: "building"
     lore:
-      - "&8» &7Podstawowe bloki do rozbudowy Twojej wyspy."
+      - "&8» &7Kamień, drewno, ziemia, szkło, wełna"
+      - "&8» &7oraz podstawowe bloki do budowy wyspy."
       - ""
-      - "&aKliknij, aby otworzyć kategorię!"
+      - "&eKliknij, aby otworzyć podkategorie!"
+
+  cat_ores:
+    slot: 13
+    material: "IRON_INGOT"
+    name: "&b&lSurowce i Rudy"
+    target-shop: "ores"
+    lore:
+      - "&8» &7Węgiel, żelazo, złoto, diamenty,"
+      - "&8» &7szmaragdy, kwarc i netherite."
+      - ""
+      - "&eKliknij, aby otworzyć kategorię!"
+
+  cat_farming:
+    slot: 15
+    material: "WHEAT"
+    name: "&a&lRolnictwo i Jedzenie"
+    target-shop: "farming"
+    lore:
+      - "&8» &7Uprawy, nasiona, sadzonki drzew"
+      - "&8» &7oraz pożywienie i wypieki."
+      - ""
+      - "&eKliknij, aby otworzyć kategorię!"
+
+  cat_combat:
+    slot: 20
+    material: "DIAMOND_SWORD"
+    name: "&c&lNarzędzia, Walka i Redstone"
+    target-shop: "combat"
+    lore:
+      - "&8» &7Zbroje, bronie, narzędzia górnicze"
+      - "&8» &7oraz mechanizmy Redstone."
+      - ""
+      - "&eKliknij, aby otworzyć kategorię!"
+
+  cat_magic:
+    slot: 22
+    material: "ENCHANTING_TABLE"
+    name: "&d&lZaklęcia i Alchemia"
+    target-shop: "magic"
+    lore:
+      - "&8» &7Stoły do zaklęć, butelki EXP,"
+      - "&8» &7statywy alchemiczne i składniki mikstur."
+      - ""
+      - "&eKliknij, aby otworzyć kategorię!"
+
+  cat_mobdrops:
+    slot: 24
+    material: "GUNPOWDER"
+    name: "&2&lŁupy z Mobów i Spawnery"
+    target-shop: "mobdrops"
+    lore:
+      - "&8» &7Sprzedaż dropów z mobów, rzadkie trofea"
+      - "&8» &7oraz zakup podstawowych spawnerów."
+      - ""
+      - "&eKliknij, aby otworzyć kategorię!"
+
+  cat_decoration:
+    slot: 29
+    material: "TUBE_CORAL"
+    name: "&9&lDekoracje i Barwniki"
+    target-shop: "decoration"
+    lore:
+      - "&8» &7Kwiaty, świece, koralowce, pnącza"
+      - "&8» &7oraz wszystkie kolory barwników."
+      - ""
+      - "&eKliknij, aby otworzyć kategorię!"
+
+  cat_music:
+    slot: 31
+    material: "JUKEBOX"
+    name: "&e&lMuzyka i Płyty"
+    target-shop: "music"
+    lore:
+      - "&8» &7Szafy grające, bloki dźwiękowe"
+      - "&8» &7oraz kolekcja płyt muzycznych."
+      - ""
+      - "&eKliknij, aby otworzyć kategorię!"
+
+  cat_storage:
+    slot: 33
+    material: "CHEST"
+    name: "&6&lPrzechowywanie i Sakwy"
+    target-shop: "storage"
+    lore:
+      - "&8» &7Skrzynie, beczki, skrzynie Endu,"
+      - "&8» &7sakwy i kolorowe Shulker Boxy."
+      - ""
+      - "&eKliknij, aby otworzyć kategorię!"
+
+  cat_misc:
+    slot: 40
+    material: "COMPASS"
+    name: "&e&lRóżności i Akcesoria"
+    target-shop: "misc"
+    lore:
+      - "&8» &7Wiadra wody i lawy, znaczniki, pochodnie,"
+      - "&8» &7kowadła, latarnie oraz rzadkie artefakty."
+      - ""
+      - "&eKliknij, aby otworzyć kategorię!"

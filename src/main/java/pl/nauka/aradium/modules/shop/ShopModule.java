@@ -2,6 +2,7 @@ package pl.nauka.aradium.modules.shop;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import pl.nauka.aradium.AradiumPlugin;
 import pl.nauka.aradium.core.AbstractModule;
 
@@ -9,13 +10,29 @@ import java.io.File;
 import java.util.List;
 
 /**
- * Moduł Sklepu GUI (UltimateShop Clone) zarządzający konfiguracjami shops/*.yml i otwartymi GUI.
+ * Moduł Sklepu GUI (EconomyShopGUI / UltimateShop Clone) zarządzający konfiguracjami shops/*.yml,
+ * ekranami wyboru ilości oraz komendami /shop, /sellall i /sellgui.
  */
 public class ShopModule extends AbstractModule {
 
     private static final List<String> DEFAULT_SHOP_RESOURCES = List.of(
             "shops/main.yml",
-            "shops/blocks.yml"
+            "shops/building.yml",
+            "shops/blocks.yml",
+            "shops/wood.yml",
+            "shops/natural.yml",
+            "shops/decorative_blocks.yml",
+            "shops/ores.yml",
+            "shops/farming.yml",
+            "shops/food.yml",
+            "shops/combat.yml",
+            "shops/redstone.yml",
+            "shops/magic.yml",
+            "shops/mobdrops.yml",
+            "shops/decoration.yml",
+            "shops/music.yml",
+            "shops/storage.yml",
+            "shops/misc.yml"
     );
 
     private ShopManager shopManager;
@@ -33,13 +50,19 @@ public class ShopModule extends AbstractModule {
         this.shopGUI = new ShopGUI(plugin, shopManager);
 
         registerCommand("shop", new ShopCommand(plugin, this));
+        registerCommand("sellall", new SellAllCommand(plugin, this));
+        registerCommand("sellgui", new SellGuiCommand(plugin, this));
         registerListener(new ShopListener(this));
     }
 
     @Override
     protected void onDisable() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.getOpenInventory().getTopInventory().getHolder() instanceof ShopInventoryHolder) {
+            Inventory topInventory = player.getOpenInventory().getTopInventory();
+            if (topInventory.getHolder() instanceof ShopInventoryHolder holder) {
+                if (holder.getScreenType() == ShopInventoryHolder.ScreenType.SELL_GUI && shopGUI != null) {
+                    shopGUI.processSellGuiClose(player, topInventory);
+                }
                 player.closeInventory();
             }
         }

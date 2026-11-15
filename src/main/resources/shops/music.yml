@@ -1,0 +1,127 @@
+# Kategoria Muzyka i Płyty (1 strona)
+
+shop:
+  id: "music"
+  title: "&8» &e&lMuzyka i Płyty"
+  size: 54
+  back-button-slot: 53
+  parent-shop: "main"
+
+pages:
+  page1:
+    items:
+      jukebox:
+        material: "JUKEBOX"
+        name: "&6Szafa Grająca"
+        buy-price: 340.0
+        sell-price: 80.0
+      note_block:
+        material: "NOTE_BLOCK"
+        name: "&6Blok Dźwiękowy"
+        buy-price: 48.0
+        sell-price: 10.0
+      goat_horn:
+        material: "GOAT_HORN"
+        name: "&fKozi Róg"
+        buy-price: 320.0
+        sell-price: 65.0
+      disc_fragment_5:
+        material: "DISC_FRAGMENT_5"
+        name: "&8Fragment Płyty (5)"
+        buy-price: 140.0
+        sell-price: 25.0
+      music_disc_13:
+        material: "MUSIC_DISC_13"
+        name: "&ePłyta Muzyczna: 13"
+        buy-price: 650.0
+        sell-price: 120.0
+      music_disc_cat:
+        material: "MUSIC_DISC_CAT"
+        name: "&aPłyta Muzyczna: Cat"
+        buy-price: 650.0
+        sell-price: 120.0
+      music_disc_blocks:
+        material: "MUSIC_DISC_BLOCKS"
+        name: "&cPłyta Muzyczna: Blocks"
+        buy-price: 650.0
+        sell-price: 120.0
+      music_disc_chirp:
+        material: "MUSIC_DISC_CHIRP"
+        name: "&4Płyta Muzyczna: Chirp"
+        buy-price: 650.0
+        sell-price: 120.0
+      music_disc_far:
+        material: "MUSIC_DISC_FAR"
+        name: "&aPłyta Muzyczna: Far"
+        buy-price: 650.0
+        sell-price: 120.0
+      music_disc_mall:
+        material: "MUSIC_DISC_MALL"
+        name: "&5Płyta Muzyczna: Mall"
+        buy-price: 650.0
+        sell-price: 120.0
+      music_disc_mellohi:
+        material: "MUSIC_DISC_MELLOHI"
+        name: "&dPłyta Muzyczna: Mellohi"
+        buy-price: 650.0
+        sell-price: 120.0
+      music_disc_stal:
+        material: "MUSIC_DISC_STAL"
+        name: "&8Płyta Muzyczna: Stal"
+        buy-price: 650.0
+        sell-price: 120.0
+      music_disc_strad:
+        material: "MUSIC_DISC_STRAD"
+        name: "&fPłyta Muzyczna: Strad"
+        buy-price: 650.0
+        sell-price: 120.0
+      music_disc_ward:
+        material: "MUSIC_DISC_WARD"
+        name: "&2Płyta Muzyczna: Ward"
+        buy-price: 650.0
+        sell-price: 120.0
+      music_disc_11:
+        material: "MUSIC_DISC_11"
+        name: "&8Płyta Muzyczna: 11"
+        buy-price: 650.0
+        sell-price: 120.0
+      music_disc_wait:
+        material: "MUSIC_DISC_WAIT"
+        name: "&bPłyta Muzyczna: Wait"
+        buy-price: 650.0
+        sell-price: 120.0
+      music_disc_otherside:
+        material: "MUSIC_DISC_OTHERSIDE"
+        name: "&bPłyta Muzyczna: Otherside"
+        buy-price: 1200.0
+        sell-price: 240.0
+      music_disc_5:
+        material: "MUSIC_DISC_5"
+        name: "&3Płyta Muzyczna: 5"
+        buy-price: 1300.0
+        sell-price: 250.0
+      music_disc_pigstep:
+        material: "MUSIC_DISC_PIGSTEP"
+        name: "&6Płyta Muzyczna: Pigstep"
+        buy-price: 1400.0
+        sell-price: 280.0
+      music_disc_relic:
+        material: "MUSIC_DISC_RELIC"
+        name: "&cPłyta Muzyczna: Relic"
+        buy-price: 1100.0
+        sell-price: 220.0
+      music_disc_creator:
+        material: "MUSIC_DISC_CREATOR"
+        name: "&bPłyta Muzyczna: Creator"
+        buy-price: 1600.0
+        sell-price: 320.0
+      music_disc_creator_music_box:
+        material: "MUSIC_DISC_CREATOR_MUSIC_BOX"
+        name: "&3Płyta Muzyczna: Creator (Music Box)"
+        buy-price: 1400.0
+        sell-price: 280.0
+      music_disc_precipice:
+        material: "MUSIC_DISC_PRECIPICE"
+        name: "&6Płyta Muzyczna: Precipice"
+        buy-price: 1500.0
+        sell-price: 300.0

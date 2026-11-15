@@ -1,0 +1,152 @@
+# Kategoria Łupy z Mobów i Spawnery (2 strony)
+
+shop:
+  id: "mobdrops"
+  title: "&8» &2&lŁupy z Mobów i Spawnery"
+  size: 54
+  back-button-slot: 53
+  parent-shop: "main"
+
+pages:
+  page1:
+    items:
+      rotten_flesh:
+        material: "ROTTEN_FLESH"
+        name: "&2Zgniłe Mięso"
+        buy-price: 12.0
+        sell-price: 2.0
+      bone:
+        material: "BONE"
+        name: "&fKość"
+        buy-price: 16.0
+        sell-price: 3.5
+      string:
+        material: "STRING"
+        name: "&fNić"
+        buy-price: 18.0
+        sell-price: 4.0
+      spider_eye:
+        material: "SPIDER_EYE"
+        name: "&cOko Pająka"
+        buy-price: 24.0
+        sell-price: 5.0
+      gunpowder:
+        material: "GUNPOWDER"
+        name: "&7Proch Strzelniczy"
+        buy-price: 32.0
+        sell-price: 7.0
+      ender_pearl:
+        material: "ENDER_PEARL"
+        name: "&3Perła Endu"
+        buy-price: 110.0
+        sell-price: 18.0
+      ender_eye:
+        material: "ENDER_EYE"
+        name: "&aOko Endu"
+        buy-price: 210.0
+        sell-price: 32.0
+      blaze_rod:
+        material: "BLAZE_ROD"
+        name: "&6Płomienna Różdżka"
+        buy-price: 170.0
+        sell-price: 34.0
+      slime_ball:
+        material: "SLIME_BALL"
+        name: "&aKula Szlamu"
+        buy-price: 48.0
+        sell-price: 10.0
+      slime_block:
+        material: "SLIME_BLOCK"
+        name: "&aBlok Szlamu"
+        buy-price: 432.0
+        sell-price: 90.0
+      ghast_tear:
+        material: "GHAST_TEAR"
+        name: "&fŁza Ghasta"
+        buy-price: 260.0
+        sell-price: 55.0
+      gold_nugget:
+        material: "GOLD_NUGGET"
+        name: "&eSamorodek Złota"
+        buy-price: 7.0
+        sell-price: 1.7
+      iron_nugget:
+        material: "IRON_NUGGET"
+        name: "&fSamorodek Żelaza"
+        buy-price: 5.0
+        sell-price: 1.1
+      shulker_shell:
+        material: "SHULKER_SHELL"
+        name: "&dSkorupa Shulkera"
+        buy-price: 650.0
+        sell-price: 140.0
+      nautilus_shell:
+        material: "NAUTILUS_SHELL"
+        name: "&fMuszla Łodzika"
+        buy-price: 320.0
+        sell-price: 65.0
+      fire_charge:
+        material: "FIRE_CHARGE"
+        name: "&6Ognista Kula"
+        buy-price: 70.0
+        sell-price: 14.0
+      magma_block:
+        material: "MAGMA_BLOCK"
+        name: "&6Blok Magmy"
+        buy-price: 220.0
+        sell-price: 45.0
+
+  page2:
+    items:
+      spawner:
+        material: "SPAWNER"
+        name: "&d&lSpawner Mobów"
+        buy-price: 15000.0
+        sell-price: -1.0
+        lore:
+          - "&7Podstawowy spawner do ulepszania na wyspie."
+      trial_key:
+        material: "TRIAL_KEY"
+        name: "&6Klucz Próby"
+        buy-price: 1200.0
+        sell-price: 250.0
+      ominous_trial_key:
+        material: "OMINOUS_TRIAL_KEY"
+        name: "&3Złowrogi Klucz Próby"
+        buy-price: 2800.0
+        sell-price: 600.0
+      wither_skeleton_skull:
+        material: "WITHER_SKELETON_SKULL"
+        name: "&8Czaszka Mrocznego Szkieleta"
+        buy-price: 4500.0
+        sell-price: 900.0
+      skeleton_skull:
+        material: "SKELETON_SKULL"
+        name: "&fCzaszka Szkieleta"
+        buy-price: 1800.0
+        sell-price: 350.0
+      zombie_head:
+        material: "ZOMBIE_HEAD"
+        name: "&2Głowa Zombie"
+        buy-price: 1800.0
+        sell-price: 350.0
+      creeper_head:
+        material: "CREEPER_HEAD"
+        name: "&aGłowa Creepera"
+        buy-price: 2200.0
+        sell-price: 420.0
+      piglin_head:
+        material: "PIGLIN_HEAD"
+        name: "&6Głowa Piglina"
+        buy-price: 2400.0
+        sell-price: 450.0
+      heart_of_the_sea:
+        material: "HEART_OF_THE_SEA"
+        name: "&bSerce Morza"
+        buy-price: 2400.0
+        sell-price: 500.0
+      end_crystal:
+        material: "END_CRYSTAL"
+        name: "&dKryształ Endu"
+        buy-price: 1600.0
+        sell-price: 320.0

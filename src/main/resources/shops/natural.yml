@@ -1,0 +1,235 @@
+# Podkategoria Budowanie: Bloki Naturalne (2 strony)
+
+shop:
+  id: "natural"
+  title: "&8» &2Budowanie: &aBloki Naturalne"
+  size: 54
+  back-button-slot: 53
+  parent-shop: "building"
+
+pages:
+  page1:
+    items:
+      dirt:
+        material: "DIRT"
+        name: "&6Ziemia"
+        buy-price: 8.0
+        sell-price: 2.0
+      coarse_dirt:
+        material: "COARSE_DIRT"
+        name: "&6Twarda Ziemia"
+        buy-price: 10.0
+        sell-price: 2.5
+      rooted_dirt:
+        material: "ROOTED_DIRT"
+        name: "&6Zakorzeniona Ziemia"
+        buy-price: 12.0
+        sell-price: 3.0
+      grass_block:
+        material: "GRASS_BLOCK"
+        name: "&aBlok Trawy"
+        buy-price: 28.0
+        sell-price: -1.0
+      podzol:
+        material: "PODZOL"
+        name: "&6Bielica (Podzol)"
+        buy-price: 32.0
+        sell-price: 8.0
+      mycelium:
+        material: "MYCELIUM"
+        name: "&dGrzybnia (Mycelium)"
+        buy-price: 35.0
+        sell-price: 9.0
+      moss_block:
+        material: "MOSS_BLOCK"
+        name: "&2Blok Mchu"
+        buy-price: 16.0
+        sell-price: 4.0
+      mud:
+        material: "MUD"
+        name: "&8Błoto"
+        buy-price: 10.0
+        sell-price: 2.5
+      sand:
+        material: "SAND"
+        name: "&ePiasek"
+        buy-price: 14.0
+        sell-price: 3.5
+      red_sand:
+        material: "RED_SAND"
+        name: "&6Czerwony Piasek"
+        buy-price: 18.0
+        sell-price: 4.5
+      gravel:
+        material: "GRAVEL"
+        name: "&7Żwir"
+        buy-price: 14.0
+        sell-price: 3.5
+      clay:
+        material: "CLAY"
+        name: "&7Glina (Blok)"
+        buy-price: 26.0
+        sell-price: 8.0
+      ice:
+        material: "ICE"
+        name: "&bLód"
+        buy-price: 35.0
+        sell-price: -1.0
+      packed_ice:
+        material: "PACKED_ICE"
+        name: "&bZbity Lód"
+        buy-price: 85.0
+        sell-price: 20.0
+      blue_ice:
+        material: "BLUE_ICE"
+        name: "&9Niebieski Lód"
+        buy-price: 220.0
+        sell-price: 55.0
+      snow_block:
+        material: "SNOW_BLOCK"
+        name: "&fBlok Śniegu"
+        buy-price: 16.0
+        sell-price: 4.0
+      netherrack:
+        material: "NETHERRACK"
+        name: "&4Netherrack"
+        buy-price: 5.0
+        sell-price: 1.0
+      soul_sand:
+        material: "SOUL_SAND"
+        name: "&8Piasek Dusz"
+        buy-price: 24.0
+        sell-price: 6.0
+      soul_soil:
+        material: "SOUL_SOIL"
+        name: "&8Gleba Dusz"
+        buy-price: 24.0
+        sell-price: 6.0
+      crimson_nylium:
+        material: "CRIMSON_NYLIUM"
+        name: "&cSzkarłatne Nylium"
+        buy-price: 28.0
+        sell-price: 7.0
+      warped_nylium:
+        material: "WARPED_NYLIUM"
+        name: "&3Spaczone Nylium"
+        buy-price: 28.0
+        sell-price: 7.0
+      obsidian:
+        material: "OBSIDIAN"
+        name: "&5Obsydian"
+        buy-price: 120.0
+        sell-price: 35.0
+      crying_obsidian:
+        material: "CRYING_OBSIDIAN"
+        name: "&5Płaczący Obsydian"
+        buy-price: 180.0
+        sell-price: 45.0
+      magma_block:
+        material: "MAGMA_BLOCK"
+        name: "&6Blok Magmy"
+        buy-price: 45.0
+        sell-price: 12.0
+      sponge:
+        material: "SPONGE"
+        name: "&eGąbka"
+        buy-price: 450.0
+        sell-price: 110.0
+      glowstone:
+        material: "GLOWSTONE"
+        name: "&eJasnogłaz (Glowstone)"
+        buy-price: 42.0
+        sell-price: 12.0
+      shroomlight:
+        material: "SHROOMLIGHT"
+        name: "&6Grzybolampa"
+        buy-price: 36.0
+        sell-price: 10.0
+      slime_block:
+        material: "SLIME_BLOCK"
+        name: "&aBlok Szlamu"
+        buy-price: 90.0
+        sell-price: 25.0
+
+  page2:
+    items:
+      oak_leaves:
+        material: "OAK_LEAVES"
+        name: "&2Liście Dębu"
+        buy-price: 6.0
+        sell-price: 1.5
+      spruce_leaves:
+        material: "SPRUCE_LEAVES"
+        name: "&2Liście Świerku"
+        buy-price: 6.0
+        sell-price: 1.5
+      birch_leaves:
+        material: "BIRCH_LEAVES"
+        name: "&aLiście Brzozy"
+        buy-price: 6.0
+        sell-price: 1.5
+      jungle_leaves:
+        material: "JUNGLE_LEAVES"
+        name: "&2Liście Dżunglowe"
+        buy-price: 6.0
+        sell-price: 1.5
+      acacia_leaves:
+        material: "ACACIA_LEAVES"
+        name: "&2Liście Akacji"
+        buy-price: 6.0
+        sell-price: 1.5
+      dark_oak_leaves:
+        material: "DARK_OAK_LEAVES"
+        name: "&2Liście Ciemnego Dębu"
+        buy-price: 6.0
+        sell-price: 1.5
+      mangrove_leaves:
+        material: "MANGROVE_LEAVES"
+        name: "&2Liście Namorzynowe"
+        buy-price: 7.0
+        sell-price: 1.8
+      cherry_leaves:
+        material: "CHERRY_LEAVES"
+        name: "&dLiście Wiśni"
+        buy-price: 8.0
+        sell-price: 2.0
+      azalea_leaves:
+        material: "AZALEA_LEAVES"
+        name: "&2Liście Azalii"
+        buy-price: 7.0
+        sell-price: 1.8
+      flowering_azalea_leaves:
+        material: "FLOWERING_AZALEA_LEAVES"
+        name: "&dKwitnące Liście Azalii"
+        buy-price: 9.0
+        sell-price: 2.2
+      honey_block:
+        material: "HONEY_BLOCK"
+        name: "&6Blok Miodu"
+        buy-price: 65.0
+        sell-price: 18.0
+      honeycomb_block:
+        material: "HONEYCOMB_BLOCK"
+        name: "&6Blok Plastra Miodu"
+        buy-price: 45.0
+        sell-price: 12.0
+      ochre_froglight:
+        material: "OCHRE_FROGLIGHT"
+        name: "&eŻółta Żabokula"
+        buy-price: 48.0
+        sell-price: 14.0
+      pearlescent_froglight:
+        material: "PEARLESCENT_FROGLIGHT"
+        name: "&dPerłowa Żabokula"
+        buy-price: 48.0
+        sell-price: 14.0
+      verdant_froglight:
+        material: "VERDANT_FROGLIGHT"
+        name: "&aZielona Żabokula"
+        buy-price: 48.0
+        sell-price: 14.0
+      bone_block:
+        material: "BONE_BLOCK"
+        name: "&fBlok Kości"
+        buy-price: 38.0
+        sell-price: 11.0

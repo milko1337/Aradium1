@@ -1,0 +1,275 @@
+# Kategoria Dekoracje i Barwniki (2 strony)
+
+shop:
+  id: "decoration"
+  title: "&8» &9&lDekoracje i Barwniki"
+  size: 54
+  back-button-slot: 53
+  parent-shop: "main"
+
+pages:
+  page1:
+    items:
+      dandelion:
+        material: "DANDELION"
+        name: "&eMlecz"
+        buy-price: 10.0
+        sell-price: 2.0
+      poppy:
+        material: "POPPY"
+        name: "&cMak"
+        buy-price: 10.0
+        sell-price: 2.0
+      blue_orchid:
+        material: "BLUE_ORCHID"
+        name: "&bNiebieska Orchidea"
+        buy-price: 14.0
+        sell-price: 3.0
+      allium:
+        material: "ALLIUM"
+        name: "&dCzosnek Ozdobny"
+        buy-price: 14.0
+        sell-price: 3.0
+      azure_bluet:
+        material: "AZURE_BLUET"
+        name: "&fHoustonia Błękitna"
+        buy-price: 10.0
+        sell-price: 2.0
+      red_tulip:
+        material: "RED_TULIP"
+        name: "&cCzerwony Tulipan"
+        buy-price: 12.0
+        sell-price: 2.5
+      orange_tulip:
+        material: "ORANGE_TULIP"
+        name: "&6Pomarańczowy Tulipan"
+        buy-price: 12.0
+        sell-price: 2.5
+      white_tulip:
+        material: "WHITE_TULIP"
+        name: "&fBiały Tulipan"
+        buy-price: 12.0
+        sell-price: 2.5
+      pink_tulip:
+        material: "PINK_TULIP"
+        name: "&dRóżowy Tulipan"
+        buy-price: 12.0
+        sell-price: 2.5
+      oxeye_daisy:
+        material: "OXEYE_DAISY"
+        name: "&fZłocień"
+        buy-price: 10.0
+        sell-price: 2.0
+      cornflower:
+        material: "CORNFLOWER"
+        name: "&9Chaber"
+        buy-price: 14.0
+        sell-price: 3.0
+      lily_of_the_valley:
+        material: "LILY_OF_THE_VALLEY"
+        name: "&fKonwalia"
+        buy-price: 16.0
+        sell-price: 3.5
+      wither_rose:
+        material: "WITHER_ROSE"
+        name: "&8Róża Withera"
+        buy-price: 220.0
+        sell-price: 45.0
+      sunflower:
+        material: "SUNFLOWER"
+        name: "&eSłonecznik"
+        buy-price: 18.0
+        sell-price: 3.5
+      lilac:
+        material: "LILAC"
+        name: "&dBez"
+        buy-price: 18.0
+        sell-price: 3.5
+      rose_bush:
+        material: "ROSE_BUSH"
+        name: "&cKrzew Różany"
+        buy-price: 18.0
+        sell-price: 3.5
+      peony:
+        material: "PEONY"
+        name: "&dPiwonia"
+        buy-price: 18.0
+        sell-price: 3.5
+      vine:
+        material: "VINE"
+        name: "&2Pnącza"
+        buy-price: 12.0
+        sell-price: 2.0
+      glow_lichen:
+        material: "GLOW_LICHEN"
+        name: "&aŚwiecący Porost"
+        buy-price: 18.0
+        sell-price: 3.5
+      lily_pad:
+        material: "LILY_PAD"
+        name: "&2Lilia Wodna"
+        buy-price: 14.0
+        sell-price: 3.0
+      sea_pickle:
+        material: "SEA_PICKLE"
+        name: "&aIskrzył"
+        buy-price: 24.0
+        sell-price: 5.0
+      spore_blossom:
+        material: "SPORE_BLOSSOM"
+        name: "&dKwiat Zarodnikowy"
+        buy-price: 90.0
+        sell-price: 18.0
+      pink_petals:
+        material: "PINK_PETALS"
+        name: "&dRóżowe Płatki"
+        buy-price: 16.0
+        sell-price: 3.0
+      candle:
+        material: "CANDLE"
+        name: "&eŚwieca"
+        buy-price: 22.0
+        sell-price: 4.5
+      tube_coral:
+        material: "TUBE_CORAL"
+        name: "&9Koralowiec Rurkowaty"
+        buy-price: 28.0
+        sell-price: 5.0
+      brain_coral:
+        material: "BRAIN_CORAL"
+        name: "&dKoralowiec Mózgowy"
+        buy-price: 28.0
+        sell-price: 5.0
+      bubble_coral:
+        material: "BUBBLE_CORAL"
+        name: "&5Koralowiec Bąbelkowy"
+        buy-price: 28.0
+        sell-price: 5.0
+      fire_coral:
+        material: "FIRE_CORAL"
+        name: "&cKoralowiec Ognisty"
+        buy-price: 28.0
+        sell-price: 5.0
+
+  page2:
+    items:
+      white_dye:
+        material: "WHITE_DYE"
+        name: "&fBiały Barwnik"
+        buy-price: 12.0
+        sell-price: 2.0
+      light_gray_dye:
+        material: "LIGHT_GRAY_DYE"
+        name: "&7Jasnoszary Barwnik"
+        buy-price: 12.0
+        sell-price: 2.0
+      gray_dye:
+        material: "GRAY_DYE"
+        name: "&8Szary Barwnik"
+        buy-price: 12.0
+        sell-price: 2.0
+      black_dye:
+        material: "BLACK_DYE"
+        name: "&8Czarny Barwnik"
+        buy-price: 16.0
+        sell-price: 3.0
+      brown_dye:
+        material: "BROWN_DYE"
+        name: "&6Brązowy Barwnik"
+        buy-price: 14.0
+        sell-price: 2.5
+      red_dye:
+        material: "RED_DYE"
+        name: "&cCzerwony Barwnik"
+        buy-price: 12.0
+        sell-price: 2.0
+      orange_dye:
+        material: "ORANGE_DYE"
+        name: "&6Pomarańczowy Barwnik"
+        buy-price: 12.0
+        sell-price: 2.0
+      yellow_dye:
+        material: "YELLOW_DYE"
+        name: "&eŻółty Barwnik"
+        buy-price: 12.0
+        sell-price: 2.0
+      lime_dye:
+        material: "LIME_DYE"
+        name: "&aJasnozielony Barwnik"
+        buy-price: 14.0
+        sell-price: 2.5
+      green_dye:
+        material: "GREEN_DYE"
+        name: "&2Zielony Barwnik"
+        buy-price: 14.0
+        sell-price: 2.5
+      cyan_dye:
+        material: "CYAN_DYE"
+        name: "&3Błękitnozielony Barwnik"
+        buy-price: 14.0
+        sell-price: 2.5
+      light_blue_dye:
+        material: "LIGHT_BLUE_DYE"
+        name: "&bJasnoniebieski Barwnik"
+        buy-price: 14.0
+        sell-price: 2.5
+      blue_dye:
+        material: "BLUE_DYE"
+        name: "&9Niebieski Barwnik"
+        buy-price: 16.0
+        sell-price: 3.0
+      purple_dye:
+        material: "PURPLE_DYE"
+        name: "&5Fioletowy Barwnik"
+        buy-price: 14.0
+        sell-price: 2.5
+      magenta_dye:
+        material: "MAGENTA_DYE"
+        name: "&dKarmazynowy Barwnik"
+        buy-price: 14.0
+        sell-price: 2.5
+      pink_dye:
+        material: "PINK_DYE"
+        name: "&dRóżowy Barwnik"
+        buy-price: 12.0
+        sell-price: 2.0
+      horn_coral:
+        material: "HORN_CORAL"
+        name: "&eKoralowiec Rogowy"
+        buy-price: 28.0
+        sell-price: 5.0
+      painting:
+        material: "PAINTING"
+        name: "&6Obraz"
+        buy-price: 45.0
+        sell-price: 9.0
+      item_frame:
+        material: "ITEM_FRAME"
+        name: "&6Ramka na Przedmiot"
+        buy-price: 40.0
+        sell-price: 8.0
+      glow_item_frame:
+        material: "GLOW_ITEM_FRAME"
+        name: "&bŚwiecąca Ramka na Przedmiot"
+        buy-price: 85.0
+        sell-price: 18.0
+      armor_stand:
+        material: "ARMOR_STAND"
+        name: "&6Stojak na Zbroję"
+        buy-price: 60.0
+        sell-price: 12.0
+      flower_pot:
+        material: "FLOWER_POT"
+        name: "&cDoniczka"
+        buy-price: 30.0
+        sell-price: 6.0
+      decorated_pot:
+        material: "DECORATED_POT"
+        name: "&cZdobiony Garnek"
+        buy-price: 45.0
+        sell-price: 9.0
+      bell:
+        material: "BELL"
+        name: "&eDzwon"
+        buy-price: 450.0
+        sell-price: 90.0

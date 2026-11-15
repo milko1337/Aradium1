@@ -1,99 +1,399 @@
-# Konfiguracja kategorii sklepu GUI: Bloki (Moduł 1: UltimateShop Clone)
-# buy-price: cena zakupu 1 sztuki (-1 wyłącza możliwość kupna)
-# sell-price: cena sprzedaży 1 sztuki (-1 wyłącza możliwość sprzedaży)
+# Podkategoria Budowanie: Kamień i Bloki Budowlane (3 strony)
 
 shop:
   id: "blocks"
-  title: "&8» &2Sklep: &aBloki Budowlane"
+  title: "&8» &7Budowanie: &fKamień i Bloki"
   size: 54
-  back-button-slot: 49
-  parent-shop: "main"
-  action-lore-format:
-    buy-enabled: "&aLPM &8- &7Kup 1 szt. za &e%buy_1%$"
-    buy-stack-enabled: "&aShift+LPM &8- &7Kup 64 szt. za &e%buy_64%$"
-    buy-disabled: "&cKupno tego przedmiotu jest wyłączone"
-    sell-enabled: "&ePPM &8- &7Sprzedaj 1 szt. za &a%sell_1%$"
-    sell-all-enabled: "&6ŚPM (Kółko) &8- &7Sprzedaj wszystko z ekwipunku"
-    sell-disabled: "&cSprzedaż tego przedmiotu jest wyłączona"
+  back-button-slot: 53
+  parent-shop: "building"
 
-items:
-  cobblestone:
-    slot: 10
-    material: "COBBLESTONE"
-    name: "&7&lBruk (Cobblestone)"
-    buy-price: 4.0
-    sell-price: 1.5
-    lore:
-      - "&8» &7Podstawowy materiał budowlany wyspy."
+pages:
+  page1:
+    items:
+      cobblestone:
+        slot: 10
+        material: "COBBLESTONE"
+        name: "&7Bruk (Cobblestone)"
+        buy-price: 4.0
+        sell-price: 1.5
+      stone:
+        material: "STONE"
+        name: "&7Kamień"
+        buy-price: 6.0
+        sell-price: 2.0
+      smooth_stone:
+        material: "SMOOTH_STONE"
+        name: "&7Gładki Kamień"
+        buy-price: 8.0
+        sell-price: 2.5
+      stone_bricks:
+        material: "STONE_BRICKS"
+        name: "&7Kamienne Cegły"
+        buy-price: 7.5
+        sell-price: 2.2
+      mossy_cobblestone:
+        material: "MOSSY_COBBLESTONE"
+        name: "&2Zamszony Bruk"
+        buy-price: 12.0
+        sell-price: 3.5
+      mossy_stone_bricks:
+        material: "MOSSY_STONE_BRICKS"
+        name: "&2Zamszone Kamienne Cegły"
+        buy-price: 14.0
+        sell-price: 4.0
+      cracked_stone_bricks:
+        material: "CRACKED_STONE_BRICKS"
+        name: "&7Popękane Kamienne Cegły"
+        buy-price: 8.5
+        sell-price: 2.5
+      chiseled_stone_bricks:
+        material: "CHISELED_STONE_BRICKS"
+        name: "&7Rzeźbione Kamienne Cegły"
+        buy-price: 9.0
+        sell-price: 2.5
+      andesite:
+        material: "ANDESITE"
+        name: "&7Andezyt"
+        buy-price: 5.0
+        sell-price: 1.5
+      polished_andesite:
+        material: "POLISHED_ANDESITE"
+        name: "&7Wypolerowany Andezyt"
+        buy-price: 6.0
+        sell-price: 1.8
+      diorite:
+        material: "DIORITE"
+        name: "&fDioryt"
+        buy-price: 5.0
+        sell-price: 1.5
+      polished_diorite:
+        material: "POLISHED_DIORITE"
+        name: "&fWypolerowany Dioryt"
+        buy-price: 6.0
+        sell-price: 1.8
+      granite:
+        material: "GRANITE"
+        name: "&cGranit"
+        buy-price: 5.0
+        sell-price: 1.5
+      polished_granite:
+        material: "POLISHED_GRANITE"
+        name: "&cWypolerowany Granit"
+        buy-price: 6.0
+        sell-price: 1.8
+      cobbled_deepslate:
+        material: "COBBLED_DEEPSLATE"
+        name: "&8Łupkowy Bruk"
+        buy-price: 5.5
+        sell-price: 1.8
+      deepslate:
+        material: "DEEPSLATE"
+        name: "&8Łupek (Deepslate)"
+        buy-price: 7.0
+        sell-price: 2.2
+      polished_deepslate:
+        material: "POLISHED_DEEPSLATE"
+        name: "&8Wypolerowany Łupek"
+        buy-price: 8.0
+        sell-price: 2.4
+      deepslate_bricks:
+        material: "DEEPSLATE_BRICKS"
+        name: "&8Łupkowe Cegły"
+        buy-price: 8.5
+        sell-price: 2.6
+      deepslate_tiles:
+        material: "DEEPSLATE_TILES"
+        name: "&8Łupkowe Kafelki"
+        buy-price: 9.0
+        sell-price: 2.8
+      chiseled_deepslate:
+        material: "CHISELED_DEEPSLATE"
+        name: "&8Rzeźbiony Łupek"
+        buy-price: 9.5
+        sell-price: 2.8
+      tuff:
+        material: "TUFF"
+        name: "&7Tuf"
+        buy-price: 6.0
+        sell-price: 1.8
+      polished_tuff:
+        material: "POLISHED_TUFF"
+        name: "&7Wypolerowany Tuf"
+        buy-price: 7.0
+        sell-price: 2.0
+      tuff_bricks:
+        material: "TUFF_BRICKS"
+        name: "&7Tufowe Cegły"
+        buy-price: 7.5
+        sell-price: 2.2
+      calcite:
+        material: "CALCITE"
+        name: "&fKalcyt"
+        buy-price: 8.0
+        sell-price: 2.5
+      basalt:
+        material: "BASALT"
+        name: "&8Bazalt"
+        buy-price: 6.0
+        sell-price: 1.8
+      polished_basalt:
+        material: "POLISHED_BASALT"
+        name: "&8Wypolerowany Bazalt"
+        buy-price: 7.5
+        sell-price: 2.2
+      smooth_basalt:
+        material: "SMOOTH_BASALT"
+        name: "&8Gładki Bazalt"
+        buy-price: 7.5
+        sell-price: 2.2
+      dripstone_block:
+        material: "DRIPSTONE_BLOCK"
+        name: "&6Blok Nacieku"
+        buy-price: 6.5
+        sell-price: 2.0
 
-  stone:
-    slot: 11
-    material: "STONE"
-    name: "&7&lKamień (Stone)"
-    buy-price: 8.0
-    sell-price: 2.5
-    lore:
-      - "&8» &7Gładki kamień do eleganckich konstrukcji."
+  page2:
+    items:
+      blackstone:
+        material: "BLACKSTONE"
+        name: "&8Czernit (Blackstone)"
+        buy-price: 8.0
+        sell-price: 2.4
+      polished_blackstone:
+        material: "POLISHED_BLACKSTONE"
+        name: "&8Wypolerowany Czernit"
+        buy-price: 9.0
+        sell-price: 2.6
+      polished_blackstone_bricks:
+        material: "POLISHED_BLACKSTONE_BRICKS"
+        name: "&8Czernitowe Cegły"
+        buy-price: 9.5
+        sell-price: 2.8
+      chiseled_polished_blackstone:
+        material: "CHISELED_POLISHED_BLACKSTONE"
+        name: "&8Rzeźbiony Czernit"
+        buy-price: 10.0
+        sell-price: 3.0
+      gilded_blackstone:
+        material: "GILDED_BLACKSTONE"
+        name: "&6Złocony Czernit"
+        buy-price: 45.0
+        sell-price: 12.0
+      nether_bricks:
+        material: "NETHER_BRICKS"
+        name: "&4Netherowe Cegły"
+        buy-price: 10.0
+        sell-price: 3.0
+      cracked_nether_bricks:
+        material: "CRACKED_NETHER_BRICKS"
+        name: "&4Popękane Netherowe Cegły"
+        buy-price: 11.0
+        sell-price: 3.2
+      chiseled_nether_bricks:
+        material: "CHISELED_NETHER_BRICKS"
+        name: "&4Rzeźbione Netherowe Cegły"
+        buy-price: 11.0
+        sell-price: 3.2
+      red_nether_bricks:
+        material: "RED_NETHER_BRICKS"
+        name: "&cCzerwone Netherowe Cegły"
+        buy-price: 16.0
+        sell-price: 4.5
+      end_stone:
+        material: "END_STONE"
+        name: "&eKamień Endu"
+        buy-price: 15.0
+        sell-price: 4.5
+      end_stone_bricks:
+        material: "END_STONE_BRICKS"
+        name: "&eCegły Kamienia Endu"
+        buy-price: 16.0
+        sell-price: 5.0
+      purpur_block:
+        material: "PURPUR_BLOCK"
+        name: "&dBlok Purpuru"
+        buy-price: 22.0
+        sell-price: 6.5
+      purpur_pillar:
+        material: "PURPUR_PILLAR"
+        name: "&dPurpurowy Filar"
+        buy-price: 24.0
+        sell-price: 7.0
+      bricks:
+        material: "BRICKS"
+        name: "&cCegły"
+        buy-price: 24.0
+        sell-price: 7.5
+      sandstone:
+        material: "SANDSTONE"
+        name: "&ePiaskowiec"
+        buy-price: 12.0
+        sell-price: 3.5
+      smooth_sandstone:
+        material: "SMOOTH_SANDSTONE"
+        name: "&eGładki Piaskowiec"
+        buy-price: 14.0
+        sell-price: 4.0
+      chiseled_sandstone:
+        material: "CHISELED_SANDSTONE"
+        name: "&eRzeźbiony Piaskowiec"
+        buy-price: 14.0
+        sell-price: 4.0
+      cut_sandstone:
+        material: "CUT_SANDSTONE"
+        name: "&eCięty Piaskowiec"
+        buy-price: 14.0
+        sell-price: 4.0
+      red_sandstone:
+        material: "RED_SANDSTONE"
+        name: "&6Czerwony Piaskowiec"
+        buy-price: 16.0
+        sell-price: 4.5
+      smooth_red_sandstone:
+        material: "SMOOTH_RED_SANDSTONE"
+        name: "&6Gładki Czerwony Piaskowiec"
+        buy-price: 18.0
+        sell-price: 5.0
+      quartz_block:
+        material: "QUARTZ_BLOCK"
+        name: "&fBlok Kwarcu"
+        buy-price: 65.0
+        sell-price: 20.0
+      quartz_bricks:
+        material: "QUARTZ_BRICKS"
+        name: "&fKwarcowe Cegły"
+        buy-price: 68.0
+        sell-price: 21.0
+      quartz_pillar:
+        material: "QUARTZ_PILLAR"
+        name: "&fKwarcowy Filar"
+        buy-price: 68.0
+        sell-price: 21.0
+      chiseled_quartz_block:
+        material: "CHISELED_QUARTZ_BLOCK"
+        name: "&fRzeźbiony Blok Kwarcu"
+        buy-price: 68.0
+        sell-price: 21.0
+      prismarine:
+        material: "PRISMARINE"
+        name: "&3Pryzmaryn"
+        buy-price: 32.0
+        sell-price: 9.0
+      prismarine_bricks:
+        material: "PRISMARINE_BRICKS"
+        name: "&3Pryzmarynowe Cegły"
+        buy-price: 55.0
+        sell-price: 16.0
+      dark_prismarine:
+        material: "DARK_PRISMARINE"
+        name: "&3Ciemny Pryzmaryn"
+        buy-price: 60.0
+        sell-price: 18.0
+      sea_lantern:
+        material: "SEA_LANTERN"
+        name: "&bLatarnia Morska"
+        buy-price: 85.0
+        sell-price: 25.0
 
-  oak_log:
-    slot: 12
-    material: "OAK_LOG"
-    name: "&6&lPień Dębu (Oak Log)"
-    buy-price: 15.0
-    sell-price: 5.0
-    lore:
-      - "&8» &7Naturalne drewno dębowe."
-
-  grass_block:
-    slot: 13
-    material: "GRASS_BLOCK"
-    name: "&a&lBlok Trawy (Grass Block)"
-    buy-price: 35.0
-    sell-price: -1.0
-    lore:
-      - "&8» &7Niezbędny do farm zwierząt i poszerzania wyspy."
-
-  dirt:
-    slot: 14
-    material: "DIRT"
-    name: "&6&lZiemia (Dirt)"
-    buy-price: 12.0
-    sell-price: 3.0
-    lore:
-      - "&8» &7Podłoże pod uprawy roślin."
-
-  sand:
-    slot: 15
-    material: "SAND"
-    name: "&e&lPiasek (Sand)"
-    buy-price: 18.0
-    sell-price: 4.0
-    lore:
-      - "&8» &7Idealny do farm kaktusów i produkcji szkła."
-
-  obsidian:
-    slot: 16
-    material: "OBSIDIAN"
-    name: "&5&lObsydian (Obsidian)"
-    buy-price: 120.0
-    sell-price: 35.0
-    lore:
-      - "&8» &7Wytrzymały blok wymagany w zaawansowanych misjach."
-
-  ice:
-    slot: 19
-    material: "ICE"
-    name: "&b&lLód (Ice)"
-    buy-price: 45.0
-    sell-price: -1.0
-    lore:
-      - "&8» &7Źródło wody i szybki transport przedmiotów."
-
-  quartz_block:
-    slot: 20
-    material: "QUARTZ_BLOCK"
-    name: "&f&lBlok Kwarcu (Quartz Block)"
-    buy-price: 65.0
-    sell-price: 20.0
-    lore:
-      - "&8» &7Dekoracyjny blok zwiększający wartość wyspy."
+  page3:
+    items:
+      cobblestone_stairs:
+        material: "COBBLESTONE_STAIRS"
+        name: "&7Schody z Bruku"
+        buy-price: 4.5
+        sell-price: 1.5
+      cobblestone_slab:
+        material: "COBBLESTONE_SLAB"
+        name: "&7Półblok z Bruku"
+        buy-price: 2.5
+        sell-price: 0.75
+      cobblestone_wall:
+        material: "COBBLESTONE_WALL"
+        name: "&7Murek z Bruku"
+        buy-price: 4.5
+        sell-price: 1.5
+      stone_stairs:
+        material: "STONE_STAIRS"
+        name: "&7Kamienne Schody"
+        buy-price: 6.5
+        sell-price: 2.0
+      stone_slab:
+        material: "STONE_SLAB"
+        name: "&7Kamienny Półblok"
+        buy-price: 3.5
+        sell-price: 1.0
+      stone_brick_stairs:
+        material: "STONE_BRICK_STAIRS"
+        name: "&7Schody z Kamiennych Cegieł"
+        buy-price: 8.0
+        sell-price: 2.2
+      stone_brick_slab:
+        material: "STONE_BRICK_SLAB"
+        name: "&7Półblok z Kamiennych Cegieł"
+        buy-price: 4.0
+        sell-price: 1.1
+      stone_brick_wall:
+        material: "STONE_BRICK_WALL"
+        name: "&7Murek z Kamiennych Cegieł"
+        buy-price: 8.0
+        sell-price: 2.2
+      deepslate_brick_stairs:
+        material: "DEEPSLATE_BRICK_STAIRS"
+        name: "&8Schody z Łupkowych Cegieł"
+        buy-price: 9.0
+        sell-price: 2.6
+      deepslate_brick_slab:
+        material: "DEEPSLATE_BRICK_SLAB"
+        name: "&8Półblok z Łupkowych Cegieł"
+        buy-price: 4.5
+        sell-price: 1.3
+      blackstone_stairs:
+        material: "BLACKSTONE_STAIRS"
+        name: "&8Czernitowe Schody"
+        buy-price: 8.5
+        sell-price: 2.4
+      blackstone_slab:
+        material: "BLACKSTONE_SLAB"
+        name: "&8Czernitowy Półblok"
+        buy-price: 4.5
+        sell-price: 1.2
+      quartz_stairs:
+        material: "QUARTZ_STAIRS"
+        name: "&fKwarcowe Schody"
+        buy-price: 68.0
+        sell-price: 20.0
+      quartz_slab:
+        material: "QUARTZ_SLAB"
+        name: "&fKwarcowy Półblok"
+        buy-price: 35.0
+        sell-price: 10.0
+      mud_bricks:
+        material: "MUD_BRICKS"
+        name: "&6Cegły z Błota"
+        buy-price: 14.0
+        sell-price: 4.0
+      packed_mud:
+        material: "PACKED_MUD"
+        name: "&6Utwardzone Błoto"
+        buy-price: 12.0
+        sell-price: 3.5
+      copper_block:
+        material: "COPPER_BLOCK"
+        name: "&6Blok Miedzi"
+        buy-price: 55.0
+        sell-price: 16.0
+      cut_copper:
+        material: "CUT_COPPER"
+        name: "&6Cięta Miedź"
+        buy-price: 58.0
+        sell-price: 17.0
+      waxed_copper_block:
+        material: "WAXED_COPPER_BLOCK"
+        name: "&6Woskowany Blok Miedzi"
+        buy-price: 62.0
+        sell-price: 18.0
+      waxed_oxidized_copper:
+        material: "WAXED_OXIDIZED_COPPER"
+        name: "&3Woskowana Utleniona Miedź"
+        buy-price: 75.0
+        sell-price: 22.0

@@ -33,10 +33,10 @@
 - **Architektura:** Modularna (`core` + moduły w `modules/*`), sterowana przez
   `ModuleManager` oraz sekcję `modules:` w `config.yml`
 
-- **Skala projektu:** `73` główne klasy Java w `src/main/java` (`0` ostrzeżeń `javac`)
-  oraz `9` plików zasobów w `src/main/resources`
+- **Skala projektu:** `75` głównych klas Java w `src/main/java` (`0` ostrzeżeń `javac`)
+  oraz `24` pliki zasobów w `src/main/resources`
 
-- **Testy automatyczne:** `15/15` testów JUnit 5 (`org.junit.jupiter:junit-jupiter:5.11.4`)
+- **Testy automatyczne:** `16/16` testów JUnit 5 (`org.junit.jupiter:junit-jupiter:5.11.4`)
   w `src/test/java/pl/nauka/aradium/AradiumAuditTest.java`
 
 - **Artefakt wdrożeniowy:** `target/Aradium.jar` (kopiowany na serwer do
@@ -53,7 +53,8 @@
 - **`src/main/resources/plugin.yml`**
   - Metadane (`api-version: '26.3'`) oraz uprawnienia `aradium.admin`, `aradium.player`.
   - Rejestracja komend: `/aradium`, `/magicitem`, `/magicarmor`, `/oreregion`,
-    `/money`, `/pay`, `/eco`, `/shop`, `/spawner`, `/island` (`/is`, `/wyspa`).
+    `/money`, `/pay`, `/eco`, `/shop`, `/sellall` (`/sprzedajwszystko`),
+    `/sellgui` (`/sprzedaj`), `/spawner`, `/island` (`/is`, `/wyspa`).
 
 - **`src/main/resources/config.yml`**
   - Flagi modułów: `economy`, `shop`, `spawners`, `skyblock`, `magic_items`,
@@ -76,9 +77,12 @@
   - Pełne 5 etapów po 7 współdzielonych misji (`35` zadań łącznie), konfiguracja
     paska postępu, nagrody pieniężne/przedmiotowe oraz bonusy za etapy.
 
-- **`src/main/resources/shops/main.yml` i `shops/blocks.yml`**
-  - Główne menu `/shop` kierujące do kategorii oraz definicje pozycji kategorii
-    `blocks` (`buy-price`, `sell-price`, blokada przez `-1`, przycisk powrotu).
+- **`src/main/resources/shops/*.yml` (`17` plików kategorii i podkategorii)**
+  - Główne menu `/shop` (`main.yml` — 10 kategorii głównych), podkategorie budowania
+    (`building`, `blocks`, `wood`, `natural`, `decorative_blocks`), kategorie tematyczne
+    (`ores`, `farming`, `food`, `combat`, `redstone`, `magic`, `mobdrops`, `decoration`,
+    `music`, `storage`, `misc`) z wielostronicowymi sekcjami `pages:` i balansem cen
+    pod SkyBlock.
 
 - **`src/main/resources/regions.yml`**
   - Domyślny szkielet `regions: {}` dla stref odnawialnych rud.
@@ -122,13 +126,21 @@
     `PayCommand.java` (`/pay`), `EcoAdminCommand.java` (`/eco <give|take|set>`).
 
 - **Sklepy GUI (`modules/shop/`):**
-  - `ShopModule.java` i `ShopManager.java`: kopiowanie `shops/*.yml`, parsowanie
-    kategorii i zamykanie otwartych GUI przy `disable`.
+  - `ShopModule.java` i `ShopManager.java`: kopiowanie wszystkich 17 domyślnych plików
+    `shops/*.yml`, wielostronicowe parsowanie (`pages:`, siatka `7x4` `computeAutoSlots`
+    z automatycznym dzieleniem stron > 28 pozycji), indeks `bestSellByMaterial` ($O(1)$
+    dla `/sellall` i `/sellgui`) oraz bezpieczne rozliczanie `SELL_GUI` i zamykanie okien
+    przy `onDisable`.
   - `ShopCategory.java`, `ShopItem.java`, `ShopInventoryHolder.java`: modele kategorii
-    i pozycji sklepu oraz dedykowany `InventoryHolder` (Anti-Dupe).
-  - `ShopGUI.java`, `ShopListener.java`, `ShopCommand.java`: automatyczne lore
-    (`LPM`, `Shift+LPM`, `PPM`, `ŚPM`), pełny Anti-Dupe, ochrona przed sprzedażą
-    itemów z metadanymi/PDC oraz komenda `/shop [kategoria]` (`/sklep`).
+    wielostronicowych (`pageCount`, `normalizePage`, `pageItems`), pozycji sklepu oraz
+    `ScreenType` (`CATEGORY`, `BUY_SCREEN`, `SELL_SCREEN`, `BUY_STACKS_SCREEN`, `SELL_GUI`)
+    z ochroną `InventoryHolder` i PDC `shop_ui_button`.
+  - `ShopGUI.java`, `ShopListener.java`, `ShopCommand.java`, `SellAllCommand.java`,
+    `SellGuiCommand.java`: dolny pasek nawigacji (głowa gracza z saldem, przyciski stron,
+    powrót/zamknięcie), 45-slotowe ekrany wyboru ilości (`-32/-16/-1/+1/+16/+32` + tryb
+    kupna w stacjach i przycisk *Sprzedaj wszystko*), pełny Anti-Dupe (w tym blokada
+    `COLLECT_TO_CURSOR` w `SELL_GUI`), ochrona itemów z metadanymi/PDC oraz komendy
+    `/shop [kategoria]` (`/sklep`), `/sellall [inventory|hand|<materiał>]` i `/sellgui`.
 
 ---
 
@@ -207,7 +219,7 @@
 
 ---
 
-### 1.7. Testy automatyczne (`AradiumAuditTest.java` — 15/15 zaliczonych)
+### 1.7. Testy automatyczne (`AradiumAuditTest.java` — 16/16 zaliczonych)
 
 1. `cuboidRegionNormalizesMinMaxAndChecksBoundaries` — granice regionów rud.
 
@@ -227,9 +239,9 @@
 
 9. `economyManagerOperationsAndYamlPersistenceWorkCorrectly` — salda i zapis YAML.
 
-10. `spawnerQuestsAndShopYamlConfigsAreValid` — walidacja `spawners.yml`, `quests.yml`, `shops/blocks.yml`.
+10. `spawnerQuestsAndShopYamlConfigsAreValid` — walidacja `spawners.yml`, `quests.yml`, `shops/blocks.yml` i `shops/natural.yml`.
 
-11. `shopManagerAndAutoLoreGenerationWorkCorrectly` — formatowanie kwot i lore sklepu.
+11. `shopManagerAndAutoLoreGenerationWorkCorrectly` — formatowanie kwot, podkategorie i lore sklepu.
 
 12. `spawnerModuleParsingAndGuiLoreWorkCorrectly` — parsowanie tierów spawnerów.
 
@@ -239,6 +251,10 @@
 
 15. `skyblockQuestsAllFiveStagesProgressAndGuiWorkCorrectly` — 5 etapów misji, JSON,
     paski postępu i cele `BLOCK_AND_CRAFT`.
+
+16. `allShopCategoriesLoadCleanlyWithValidMaterialsAndPagination` — walidacja wszystkich 17 plików
+    `shops/*.yml`, materiałów Paper `26.3`, powiązań `parent-shop`/`target-shop`, indeksowania
+    najlepszych cen sprzedaży oraz automatycznego stronicowania.
 
 ---
 
@@ -292,6 +308,26 @@ Aktualna lista zadań pozostałych do realizacji znajduje się w pliku [`PLAN.md
 ---
 
 ## 4. Historia zmian (Changelog)
+
+### 2026-11-15 — Etap 2 (Punkt 1): Rozbudowa Sklepu GUI wzorowana na EconomyShopGUI (`2.0.0-SNAPSHOT`)
+
+- Przebudowano model danych i logikę `modules/shop/` (`ShopItem`, `ShopCategory`,
+  `ShopInventoryHolder`, `ShopManager`, `ShopModule`) pod wielostronicowość (`pages:`,
+  siatka `7x4` z automatycznym podziałem > 28 pozycji), podkategorie oraz indeks
+  najwyższej ceny sprzedaży $O(1)$ (`bestSellByMaterial`).
+
+- Wdrożono w `ShopGUI` i `ShopListener` dolny pasek nawigacji (głowa gracza z saldem,
+  nawigacja stron, powrót/zamknięcie), 45-slotowe ekrany wyboru ilości (`BUY_SCREEN`,
+  `SELL_SCREEN`, `BUY_STACKS_SCREEN`: `-32/-16/-1/+1/+16/+32` + tryb staków i przycisk
+  *Sprzedaj wszystko*) oraz pełny Anti-Dupe z blokadą `COLLECT_TO_CURSOR` w `SELL_GUI`.
+
+- Dodano komendy `SellAllCommand` (`/sellall`) oraz `SellGuiCommand` (`/sellgui`)
+  z bezpiecznym zwrotem przedmiotów niesprzedawalnych/specjalnych przy zamknięciu lub `onDisable`.
+
+- Utworzono komplet 17 polskich plików `shops/*.yml` (`main`, `building`, `blocks`, `wood`,
+  `natural`, `decorative_blocks`, `ores`, `farming`, `food`, `combat`, `redstone`, `magic`,
+  `mobdrops`, `decoration`, `music`, `storage`, `misc`) zbalansowanych pod SkyBlocka
+  i przetestowanych w JUnit 5 (`75` klas bez ostrzeżeń, `16/16` testów, wdrożono na serwer).
 
 ### 2026-11-14 — Dokumentacja i proces GitHub (`2.0.0-SNAPSHOT`)
 

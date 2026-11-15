@@ -1,0 +1,280 @@
+# Kategoria Różności i Akcesoria (2 strony)
+
+shop:
+  id: "misc"
+  title: "&8» &e&lRóżności i Akcesoria"
+  size: 54
+  back-button-slot: 53
+  parent-shop: "main"
+
+pages:
+  page1:
+    items:
+      bucket:
+        material: "BUCKET"
+        name: "&fWiadro"
+        buy-price: 110.0
+        sell-price: 22.0
+      water_bucket:
+        material: "WATER_BUCKET"
+        name: "&9Wiadro z Wodą"
+        buy-price: 140.0
+        sell-price: 25.0
+      lava_bucket:
+        material: "LAVA_BUCKET"
+        name: "&6Wiadro z Lawą"
+        buy-price: 220.0
+        sell-price: 40.0
+      powder_snow_bucket:
+        material: "POWDER_SNOW_BUCKET"
+        name: "&fWiadro ze Śniegiem Sypkim"
+        buy-price: 160.0
+        sell-price: 30.0
+      milk_bucket:
+        material: "MILK_BUCKET"
+        name: "&fWiadro z Mlekiem"
+        buy-price: 145.0
+        sell-price: 26.0
+      name_tag:
+        material: "NAME_TAG"
+        name: "&eZnacznik (Name Tag)"
+        buy-price: 260.0
+        sell-price: 55.0
+      lead:
+        material: "LEAD"
+        name: "&6Smycz"
+        buy-price: 90.0
+        sell-price: 18.0
+      saddle:
+        material: "SADDLE"
+        name: "&6Siodło"
+        buy-price: 280.0
+        sell-price: 60.0
+      compass:
+        material: "COMPASS"
+        name: "&7Kompas"
+        buy-price: 150.0
+        sell-price: 30.0
+      recovery_compass:
+        material: "RECOVERY_COMPASS"
+        name: "&3Kompas Powrotu"
+        buy-price: 4800.0
+        sell-price: 1000.0
+      clock:
+        material: "CLOCK"
+        name: "&eZegar"
+        buy-price: 220.0
+        sell-price: 45.0
+      map:
+        material: "MAP"
+        name: "&fPusta Mapa"
+        buy-price: 190.0
+        sell-price: 38.0
+      torch:
+        material: "TORCH"
+        name: "&ePochodnia"
+        buy-price: 8.0
+        sell-price: 1.5
+      soul_torch:
+        material: "SOUL_TORCH"
+        name: "&bPochodnia Dusz"
+        buy-price: 14.0
+        sell-price: 2.5
+      lantern:
+        material: "LANTERN"
+        name: "&6Latarnia"
+        buy-price: 45.0
+        sell-price: 9.0
+      soul_lantern:
+        material: "SOUL_LANTERN"
+        name: "&bLatarnia Dusz"
+        buy-price: 52.0
+        sell-price: 11.0
+      sea_lantern:
+        material: "SEA_LANTERN"
+        name: "&bLatarnia Morska"
+        buy-price: 280.0
+        sell-price: 60.0
+      glowstone:
+        material: "GLOWSTONE"
+        name: "&eJasnogłaz (Glowstone)"
+        buy-price: 65.0
+        sell-price: 14.0
+      shroomlight:
+        material: "SHROOMLIGHT"
+        name: "&6Grzybolampa"
+        buy-price: 55.0
+        sell-price: 12.0
+      end_rod:
+        material: "END_ROD"
+        name: "&dSłupek Endu"
+        buy-price: 85.0
+        sell-price: 18.0
+      jack_o_lantern:
+        material: "JACK_O_LANTERN"
+        name: "&6Jack o'Lantern"
+        buy-price: 32.0
+        sell-price: 6.0
+      scaffolding:
+        material: "SCAFFOLDING"
+        name: "&eRusztowanie"
+        buy-price: 22.0
+        sell-price: 4.0
+      ladder:
+        material: "LADDER"
+        name: "&6Drabina"
+        buy-price: 12.0
+        sell-price: 2.0
+      lightning_rod:
+        material: "LIGHTNING_ROD"
+        name: "&6Piorunochron"
+        buy-price: 65.0
+        sell-price: 14.0
+      lodestone:
+        material: "LODESTONE"
+        name: "&7Magnetyt (Lodestone)"
+        buy-price: 420.0
+        sell-price: 90.0
+      respawn_anchor:
+        material: "RESPAWN_ANCHOR"
+        name: "&5Kotwica Odrodzenia"
+        buy-price: 1400.0
+        sell-price: 300.0
+      crafting_table:
+        material: "CRAFTING_TABLE"
+        name: "&6Stół Rzemieślniczy"
+        buy-price: 20.0
+        sell-price: 4.0
+      furnace:
+        material: "FURNACE"
+        name: "&7Piec"
+        buy-price: 32.0
+        sell-price: 7.0
+
+  page2:
+    items:
+      blast_furnace:
+        material: "BLAST_FURNACE"
+        name: "&7Piec Hutniczy"
+        buy-price: 210.0
+        sell-price: 45.0
+      smoker:
+        material: "SMOKER"
+        name: "&6Wędzarka"
+        buy-price: 90.0
+        sell-price: 18.0
+      stonecutter:
+        material: "STONECUTTER"
+        name: "&7Przecinarka"
+        buy-price: 60.0
+        sell-price: 12.0
+      loom:
+        material: "LOOM"
+        name: "&6Krosno"
+        buy-price: 45.0
+        sell-price: 9.0
+      cartography_table:
+        material: "CARTOGRAPHY_TABLE"
+        name: "&6Stół Kartograficzny"
+        buy-price: 55.0
+        sell-price: 10.0
+      fletching_table:
+        material: "FLETCHING_TABLE"
+        name: "&6Stół Łucjarski"
+        buy-price: 45.0
+        sell-price: 9.0
+      composter:
+        material: "COMPOSTER"
+        name: "&6Kompostownik"
+        buy-price: 35.0
+        sell-price: 7.0
+      campfire:
+        material: "CAMPFIRE"
+        name: "&6Ognisko"
+        buy-price: 40.0
+        sell-price: 8.0
+      soul_campfire:
+        material: "SOUL_CAMPFIRE"
+        name: "&bOgnisko Dusz"
+        buy-price: 50.0
+        sell-price: 10.0
+      beacon:
+        material: "BEACON"
+        name: "&b&lMagiczna Latarnia (Beacon)"
+        buy-price: 22000.0
+        sell-price: 4800.0
+      conduit:
+        material: "CONDUIT"
+        name: "&bPrzewodnia"
+        buy-price: 5500.0
+        sell-price: 1200.0
+      totem_of_undying:
+        material: "TOTEM_OF_UNDYING"
+        name: "&6&lTotem Nieśmiertelności"
+        buy-price: 4500.0
+        sell-price: 900.0
+      elytra:
+        material: "ELYTRA"
+        name: "&d&lElytra"
+        buy-price: 25000.0
+        sell-price: 5000.0
+      firework_rocket:
+        material: "FIREWORK_ROCKET"
+        name: "&cFajerwerki"
+        buy-price: 38.0
+        sell-price: 7.0
+      oak_boat:
+        material: "OAK_BOAT"
+        name: "&6Łódka"
+        buy-price: 28.0
+        sell-price: 5.0
+      sponge:
+        material: "SPONGE"
+        name: "&eGąbka"
+        buy-price: 380.0
+        sell-price: 80.0
+      wet_sponge:
+        material: "WET_SPONGE"
+        name: "&eMokra Gąbka"
+        buy-price: 380.0
+        sell-price: 80.0
+      dragon_egg:
+        material: "DRAGON_EGG"
+        name: "&5&lJajo Smoka"
+        buy-price: 45000.0
+        sell-price: 8000.0
+      dragon_head:
+        material: "DRAGON_HEAD"
+        name: "&5Głowa Smoka"
+        buy-price: 8500.0
+        sell-price: 1600.0
+      sniffer_egg:
+        material: "SNIFFER_EGG"
+        name: "&cJajo Węszyciela"
+        buy-price: 2200.0
+        sell-price: 450.0
+      turtle_egg:
+        material: "TURTLE_EGG"
+        name: "&2Żółwie Jajo"
+        buy-price: 450.0
+        sell-price: 90.0
+      white_bed:
+        material: "WHITE_BED"
+        name: "&fBiałe Łóżko"
+        buy-price: 80.0
+        sell-price: 15.0
+      red_bed:
+        material: "RED_BED"
+        name: "&cCzerwone Łóżko"
+        buy-price: 85.0
+        sell-price: 15.0
+      blue_bed:
+        material: "BLUE_BED"
+        name: "&9Niebieskie Łóżko"
+        buy-price: 85.0
+        sell-price: 15.0
+      black_bed:
+        material: "BLACK_BED"
+        name: "&8Czarne Łóżko"
+        buy-price: 85.0
+        sell-price: 15.0

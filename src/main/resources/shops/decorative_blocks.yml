@@ -1,0 +1,298 @@
+# Podkategoria Budowanie: Szkło, Wełna, Terakota i Beton (3 strony)
+
+shop:
+  id: "decorative_blocks"
+  title: "&8» &bBudowanie: &fSzkło, Wełna i Kolory"
+  size: 54
+  back-button-slot: 53
+  parent-shop: "building"
+
+pages:
+  page1:
+    items:
+      glass:
+        material: "GLASS"
+        name: "&fSzkło"
+        buy-price: 12.0
+        sell-price: 3.0
+      glass_pane:
+        material: "GLASS_PANE"
+        name: "&fSzyba"
+        buy-price: 5.0
+        sell-price: 1.2
+      tinted_glass:
+        material: "TINTED_GLASS"
+        name: "&8Przyciemnione Szkło"
+        buy-price: 22.0
+        sell-price: 6.0
+      white_stained_glass:
+        material: "WHITE_STAINED_GLASS"
+        name: "&fBiałe Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      light_gray_stained_glass:
+        material: "LIGHT_GRAY_STAINED_GLASS"
+        name: "&7Jasnoszare Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      gray_stained_glass:
+        material: "GRAY_STAINED_GLASS"
+        name: "&8Szare Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      black_stained_glass:
+        material: "BLACK_STAINED_GLASS"
+        name: "&8Czarne Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      brown_stained_glass:
+        material: "BROWN_STAINED_GLASS"
+        name: "&6Brązowe Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      red_stained_glass:
+        material: "RED_STAINED_GLASS"
+        name: "&cCzerwone Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      orange_stained_glass:
+        material: "ORANGE_STAINED_GLASS"
+        name: "&6Pomarańczowe Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      yellow_stained_glass:
+        material: "YELLOW_STAINED_GLASS"
+        name: "&eŻółte Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      lime_stained_glass:
+        material: "LIME_STAINED_GLASS"
+        name: "&aJasnozielone Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      green_stained_glass:
+        material: "GREEN_STAINED_GLASS"
+        name: "&2Zielone Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      cyan_stained_glass:
+        material: "CYAN_STAINED_GLASS"
+        name: "&3Błękitno-Zielone Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      light_blue_stained_glass:
+        material: "LIGHT_BLUE_STAINED_GLASS"
+        name: "&bJasnoniebieskie Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      blue_stained_glass:
+        material: "BLUE_STAINED_GLASS"
+        name: "&9Niebieskie Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      purple_stained_glass:
+        material: "PURPLE_STAINED_GLASS"
+        name: "&5Fioletowe Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      magenta_stained_glass:
+        material: "MAGENTA_STAINED_GLASS"
+        name: "&dKarmazynowe Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+      pink_stained_glass:
+        material: "PINK_STAINED_GLASS"
+        name: "&dRóżowe Szkło"
+        buy-price: 14.0
+        sell-price: 3.5
+
+  page2:
+    items:
+      white_wool:
+        material: "WHITE_WOOL"
+        name: "&fBiała Wełna"
+        buy-price: 18.0
+        sell-price: 5.0
+      light_gray_wool:
+        material: "LIGHT_GRAY_WOOL"
+        name: "&7Jasnoszara Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      gray_wool:
+        material: "GRAY_WOOL"
+        name: "&8Szara Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      black_wool:
+        material: "BLACK_WOOL"
+        name: "&8Czarna Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      brown_wool:
+        material: "BROWN_WOOL"
+        name: "&6Brązowa Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      red_wool:
+        material: "RED_WOOL"
+        name: "&cCzerwona Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      orange_wool:
+        material: "ORANGE_WOOL"
+        name: "&6Pomarańczowa Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      yellow_wool:
+        material: "YELLOW_WOOL"
+        name: "&eŻółta Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      lime_wool:
+        material: "LIME_WOOL"
+        name: "&aJasnozielona Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      green_wool:
+        material: "GREEN_WOOL"
+        name: "&2Zielona Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      cyan_wool:
+        material: "CYAN_WOOL"
+        name: "&3Błękitno-Zielona Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      light_blue_wool:
+        material: "LIGHT_BLUE_WOOL"
+        name: "&bJasnoniebieska Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      blue_wool:
+        material: "BLUE_WOOL"
+        name: "&9Niebieska Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      purple_wool:
+        material: "PURPLE_WOOL"
+        name: "&5Fioletowa Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      magenta_wool:
+        material: "MAGENTA_WOOL"
+        name: "&dKarmazynowa Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+      pink_wool:
+        material: "PINK_WOOL"
+        name: "&dRóżowa Wełna"
+        buy-price: 20.0
+        sell-price: 5.5
+
+  page3:
+    items:
+      terracotta:
+        material: "TERRACOTTA"
+        name: "&6Terakota"
+        buy-price: 16.0
+        sell-price: 4.5
+      white_terracotta:
+        material: "WHITE_TERRACOTTA"
+        name: "&fBiała Terakota"
+        buy-price: 18.0
+        sell-price: 5.0
+      red_terracotta:
+        material: "RED_TERRACOTTA"
+        name: "&cCzerwona Terakota"
+        buy-price: 18.0
+        sell-price: 5.0
+      yellow_terracotta:
+        material: "YELLOW_TERRACOTTA"
+        name: "&eŻółta Terakota"
+        buy-price: 18.0
+        sell-price: 5.0
+      blue_terracotta:
+        material: "BLUE_TERRACOTTA"
+        name: "&9Niebieska Terakota"
+        buy-price: 18.0
+        sell-price: 5.0
+      green_terracotta:
+        material: "GREEN_TERRACOTTA"
+        name: "&2Zielona Terakota"
+        buy-price: 18.0
+        sell-price: 5.0
+      black_terracotta:
+        material: "BLACK_TERRACOTTA"
+        name: "&8Czarna Terakota"
+        buy-price: 18.0
+        sell-price: 5.0
+      white_concrete:
+        material: "WHITE_CONCRETE"
+        name: "&fBiały Beton"
+        buy-price: 18.0
+        sell-price: 5.0
+      light_gray_concrete:
+        material: "LIGHT_GRAY_CONCRETE"
+        name: "&7Jasnoszary Beton"
+        buy-price: 18.0
+        sell-price: 5.0
+      gray_concrete:
+        material: "GRAY_CONCRETE"
+        name: "&8Szary Beton"
+        buy-price: 18.0
+        sell-price: 5.0
+      black_concrete:
+        material: "BLACK_CONCRETE"
+        name: "&8Czarny Beton"
+        buy-price: 18.0
+        sell-price: 5.0
+      red_concrete:
+        material: "RED_CONCRETE"
+        name: "&cCzerwony Beton"
+        buy-price: 18.0
+        sell-price: 5.0
+      orange_concrete:
+        material: "ORANGE_CONCRETE"
+        name: "&6Pomarańczowy Beton"
+        buy-price: 18.0
+        sell-price: 5.0
+      yellow_concrete:
+        material: "YELLOW_CONCRETE"
+        name: "&eŻółty Beton"
+        buy-price: 18.0
+        sell-price: 5.0
+      lime_concrete:
+        material: "LIME_CONCRETE"
+        name: "&aJasnozielony Beton"
+        buy-price: 18.0
+        sell-price: 5.0
+      green_concrete:
+        material: "GREEN_CONCRETE"
+        name: "&2Zielony Beton"
+        buy-price: 18.0
+        sell-price: 5.0
+      cyan_concrete:
+        material: "CYAN_CONCRETE"
+        name: "&3Błękitno-Zielony Beton"
+        buy-price: 18.0
+        sell-price: 5.0
+      light_blue_concrete:
+        material: "LIGHT_BLUE_CONCRETE"
+        name: "&bJasnoniebieski Beton"
+        buy-price: 18.0
+        sell-price: 5.0
+      blue_concrete:
+        material: "BLUE_CONCRETE"
+        name: "&9Niebieski Beton"
+        buy-price: 18.0
+        sell-price: 5.0
+      purple_concrete:
+        material: "PURPLE_CONCRETE"
+        name: "&5Fioletowy Beton"
+        buy-price: 18.0
+        sell-price: 5.0
+      pink_concrete:
+        material: "PINK_CONCRETE"
+        name: "&dRóżowy Beton"
+        buy-price: 18.0
+        sell-price: 5.0

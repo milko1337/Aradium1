@@ -37,7 +37,17 @@ commands:
     description: Otwiera GUI sklepu serwerowego
     usage: /shop [kategoria]
     permission: aradium.player
-    aliases: [sklep]
+    aliases: [sklep, market]
+  sellall:
+    description: Sprzedaje wszystkie przedmioty z ekwipunku lub reki po najwyzszej cenie w sklepie
+    usage: /sellall [inventory|hand|<material>]
+    permission: aradium.player
+    aliases: [sprzedajwszystko]
+  sellgui:
+    description: Otwiera GUI szybkiej sprzedazy przedmiotow po zamknieciu
+    usage: /sellgui
+    permission: aradium.player
+    aliases: [sprzedaj]
   spawner:
     description: Nadaje ulepszane spawnery graczom
     usage: /spawner give <gracz> <mob> [tier]

@@ -1,0 +1,270 @@
+# Kategoria Narzędzia, Broń i Zbroje (2 strony + skrót do Redstone)
+
+shop:
+  id: "combat"
+  title: "&8» &c&lNarzędzia i Walka"
+  size: 54
+  back-button-slot: 53
+  parent-shop: "main"
+
+pages:
+  page1:
+    items:
+      iron_sword:
+        material: "IRON_SWORD"
+        name: "&fŻelazny Miecz"
+        buy-price: 110.0
+        sell-price: 20.0
+      iron_pickaxe:
+        material: "IRON_PICKAXE"
+        name: "&fŻelazny Kilof"
+        buy-price: 150.0
+        sell-price: 28.0
+      iron_axe:
+        material: "IRON_AXE"
+        name: "&fŻelazna Siekiera"
+        buy-price: 150.0
+        sell-price: 28.0
+      iron_shovel:
+        material: "IRON_SHOVEL"
+        name: "&fŻelazna Łopata"
+        buy-price: 65.0
+        sell-price: 12.0
+      iron_hoe:
+        material: "IRON_HOE"
+        name: "&fŻelazna Motyka"
+        buy-price: 100.0
+        sell-price: 18.0
+      iron_helmet:
+        material: "IRON_HELMET"
+        name: "&fŻelazny Hełm"
+        buy-price: 220.0
+        sell-price: 40.0
+      iron_chestplate:
+        material: "IRON_CHESTPLATE"
+        name: "&fŻelazny Napierśnik"
+        buy-price: 340.0
+        sell-price: 65.0
+      iron_leggings:
+        material: "IRON_LEGGINGS"
+        name: "&fŻelazne Nogawice"
+        buy-price: 300.0
+        sell-price: 55.0
+      iron_boots:
+        material: "IRON_BOOTS"
+        name: "&fŻelazne Buty"
+        buy-price: 180.0
+        sell-price: 32.0
+      diamond_sword:
+        material: "DIAMOND_SWORD"
+        name: "&bDiamentowy Miecz"
+        buy-price: 600.0
+        sell-price: 120.0
+      diamond_pickaxe:
+        material: "DIAMOND_PICKAXE"
+        name: "&bDiamentowy Kilof"
+        buy-price: 880.0
+        sell-price: 180.0
+      diamond_axe:
+        material: "DIAMOND_AXE"
+        name: "&bDiamentowa Siekiera"
+        buy-price: 880.0
+        sell-price: 180.0
+      diamond_shovel:
+        material: "DIAMOND_SHOVEL"
+        name: "&bDiamentowa Łopata"
+        buy-price: 340.0
+        sell-price: 65.0
+      diamond_hoe:
+        material: "DIAMOND_HOE"
+        name: "&bDiamentowa Motyka"
+        buy-price: 560.0
+        sell-price: 110.0
+      diamond_helmet:
+        material: "DIAMOND_HELMET"
+        name: "&bDiamentowy Hełm"
+        buy-price: 1400.0
+        sell-price: 280.0
+      diamond_chestplate:
+        material: "DIAMOND_CHESTPLATE"
+        name: "&bDiamentowy Napierśnik"
+        buy-price: 2200.0
+        sell-price: 450.0
+      diamond_leggings:
+        material: "DIAMOND_LEGGINGS"
+        name: "&bDiamentowe Nogawice"
+        buy-price: 1950.0
+        sell-price: 390.0
+      diamond_boots:
+        material: "DIAMOND_BOOTS"
+        name: "&bDiamentowe Buty"
+        buy-price: 1150.0
+        sell-price: 220.0
+      bow:
+        material: "BOW"
+        name: "&6Łuk"
+        buy-price: 90.0
+        sell-price: 15.0
+      crossbow:
+        material: "CROSSBOW"
+        name: "&6Kusza"
+        buy-price: 210.0
+        sell-price: 35.0
+      arrow:
+        material: "ARROW"
+        name: "&fStrzała"
+        buy-price: 8.0
+        sell-price: 1.5
+      spectral_arrow:
+        material: "SPECTRAL_ARROW"
+        name: "&eStrzała Widmowa"
+        buy-price: 26.0
+        sell-price: 5.0
+      shield:
+        material: "SHIELD"
+        name: "&7Tarcza"
+        buy-price: 120.0
+        sell-price: 22.0
+      trident:
+        material: "TRIDENT"
+        name: "&b&lTrójząb"
+        buy-price: 3800.0
+        sell-price: 750.0
+      fishing_rod:
+        material: "FISHING_ROD"
+        name: "&6Wędka"
+        buy-price: 65.0
+        sell-price: 12.0
+      flint_and_steel:
+        material: "FLINT_AND_STEEL"
+        name: "&7Krzesiwo"
+        buy-price: 55.0
+        sell-price: 10.0
+      shears:
+        material: "SHEARS"
+        name: "&fNożyce"
+        buy-price: 80.0
+        sell-price: 15.0
+      cat_redstone:
+        slot: 43
+        material: "REDSTONE"
+        name: "&c&lMechanizmy Redstone »"
+        target-shop: "redstone"
+        lore:
+          - "&8» &7Tłoki, leje, obserwatory,"
+          - "&8» &7przekaźniki, tory oraz TNT."
+          - ""
+          - "&eKliknij, aby przejść do Redstone!"
+
+  page2:
+    items:
+      golden_sword:
+        material: "GOLDEN_SWORD"
+        name: "&eZłoty Miecz"
+        buy-price: 160.0
+        sell-price: 25.0
+      golden_pickaxe:
+        material: "GOLDEN_PICKAXE"
+        name: "&eZłoty Kilof"
+        buy-price: 220.0
+        sell-price: 36.0
+      golden_axe:
+        material: "GOLDEN_AXE"
+        name: "&eZłota Siekiera"
+        buy-price: 220.0
+        sell-price: 36.0
+      golden_helmet:
+        material: "GOLDEN_HELMET"
+        name: "&eZłoty Hełm"
+        buy-price: 320.0
+        sell-price: 50.0
+      golden_chestplate:
+        material: "GOLDEN_CHESTPLATE"
+        name: "&eZłoty Napierśnik"
+        buy-price: 500.0
+        sell-price: 80.0
+      golden_leggings:
+        material: "GOLDEN_LEGGINGS"
+        name: "&eZłote Nogawice"
+        buy-price: 440.0
+        sell-price: 70.0
+      golden_boots:
+        material: "GOLDEN_BOOTS"
+        name: "&eZłote Buty"
+        buy-price: 260.0
+        sell-price: 40.0
+      leather_helmet:
+        material: "LEATHER_HELMET"
+        name: "&6Skórzany Hełm"
+        buy-price: 70.0
+        sell-price: 12.0
+      leather_chestplate:
+        material: "LEATHER_CHESTPLATE"
+        name: "&6Skórzana Tunika"
+        buy-price: 110.0
+        sell-price: 18.0
+      leather_leggings:
+        material: "LEATHER_LEGGINGS"
+        name: "&6Skórzane Spodnie"
+        buy-price: 95.0
+        sell-price: 16.0
+      leather_boots:
+        material: "LEATHER_BOOTS"
+        name: "&6Skórzane Buty"
+        buy-price: 55.0
+        sell-price: 10.0
+      turtle_helmet:
+        material: "TURTLE_HELMET"
+        name: "&2Żółwi Hełm"
+        buy-price: 1200.0
+        sell-price: 240.0
+      wolf_armor:
+        material: "WOLF_ARMOR"
+        name: "&6Zbroja Wilka"
+        buy-price: 480.0
+        sell-price: 90.0
+      spyglass:
+        material: "SPYGLASS"
+        name: "&eLuneta"
+        buy-price: 140.0
+        sell-price: 25.0
+      brush:
+        material: "BRUSH"
+        name: "&6Pędzel"
+        buy-price: 110.0
+        sell-price: 20.0
+      wind_charge:
+        material: "WIND_CHARGE"
+        name: "&bŁadunek Wiatru"
+        buy-price: 120.0
+        sell-price: 25.0
+      mace:
+        material: "MACE"
+        name: "&6&lBuzdygan (Mace)"
+        buy-price: 14500.0
+        sell-price: 2900.0
+      iron_horse_armor:
+        material: "IRON_HORSE_ARMOR"
+        name: "&fŻelazna Zbroja Końska"
+        buy-price: 450.0
+        sell-price: 90.0
+      golden_horse_armor:
+        material: "GOLDEN_HORSE_ARMOR"
+        name: "&eZłota Zbroja Końska"
+        buy-price: 750.0
+        sell-price: 150.0
+      diamond_horse_armor:
+        material: "DIAMOND_HORSE_ARMOR"
+        name: "&bDiamentowa Zbroja Końska"
+        buy-price: 2100.0
+        sell-price: 420.0
+      cat_redstone_p2:
+        slot: 43
+        material: "REDSTONE"
+        name: "&c&lMechanizmy Redstone »"
+        target-shop: "redstone"
+        lore:
+          - "&8» &7Tłoki, leje, obserwatory,"
+          - "&8» &7przekaźniki, tory oraz TNT."
+          - ""
+          - "&eKliknij, aby przejść do Redstone!"

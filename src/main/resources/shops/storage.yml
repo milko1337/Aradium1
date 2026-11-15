@@ -1,0 +1,152 @@
+# Kategoria Przechowywanie i Sakwy (1 strona)
+
+shop:
+  id: "storage"
+  title: "&8» &6&lPrzechowywanie i Sakwy"
+  size: 54
+  back-button-slot: 53
+  parent-shop: "main"
+
+pages:
+  page1:
+    items:
+      chest:
+        material: "CHEST"
+        name: "&6Skrzynia"
+        buy-price: 36.0
+        sell-price: 8.0
+      barrel:
+        material: "BARREL"
+        name: "&6Beczka"
+        buy-price: 32.0
+        sell-price: 7.0
+      ender_chest:
+        material: "ENDER_CHEST"
+        name: "&5Skrzynia Endu"
+        buy-price: 680.0
+        sell-price: 150.0
+      bundle:
+        material: "BUNDLE"
+        name: "&6Sakwa (Bundle)"
+        buy-price: 90.0
+        sell-price: 18.0
+      white_bundle:
+        material: "WHITE_BUNDLE"
+        name: "&fBiała Sakwa"
+        buy-price: 105.0
+        sell-price: 20.0
+      black_bundle:
+        material: "BLACK_BUNDLE"
+        name: "&8Czarna Sakwa"
+        buy-price: 105.0
+        sell-price: 20.0
+      red_bundle:
+        material: "RED_BUNDLE"
+        name: "&cCzerwona Sakwa"
+        buy-price: 105.0
+        sell-price: 20.0
+      blue_bundle:
+        material: "BLUE_BUNDLE"
+        name: "&9Niebieska Sakwa"
+        buy-price: 105.0
+        sell-price: 20.0
+      lime_bundle:
+        material: "LIME_BUNDLE"
+        name: "&aJasnozielona Sakwa"
+        buy-price: 105.0
+        sell-price: 20.0
+      yellow_bundle:
+        material: "YELLOW_BUNDLE"
+        name: "&eŻółta Sakwa"
+        buy-price: 105.0
+        sell-price: 20.0
+      purple_bundle:
+        material: "PURPLE_BUNDLE"
+        name: "&5Fioletowa Sakwa"
+        buy-price: 105.0
+        sell-price: 20.0
+      shulker_box:
+        material: "SHULKER_BOX"
+        name: "&dShulker Box"
+        buy-price: 1600.0
+        sell-price: 260.0
+      white_shulker_box:
+        material: "WHITE_SHULKER_BOX"
+        name: "&fBiały Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      light_gray_shulker_box:
+        material: "LIGHT_GRAY_SHULKER_BOX"
+        name: "&7Jasnoszary Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      gray_shulker_box:
+        material: "GRAY_SHULKER_BOX"
+        name: "&8Szary Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      black_shulker_box:
+        material: "BLACK_SHULKER_BOX"
+        name: "&8Czarny Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      brown_shulker_box:
+        material: "BROWN_SHULKER_BOX"
+        name: "&6Brązowy Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      red_shulker_box:
+        material: "RED_SHULKER_BOX"
+        name: "&cCzerwony Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      orange_shulker_box:
+        material: "ORANGE_SHULKER_BOX"
+        name: "&6Pomarańczowy Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      yellow_shulker_box:
+        material: "YELLOW_SHULKER_BOX"
+        name: "&eŻółty Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      lime_shulker_box:
+        material: "LIME_SHULKER_BOX"
+        name: "&aJasnozielony Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      green_shulker_box:
+        material: "GREEN_SHULKER_BOX"
+        name: "&2Zielony Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      cyan_shulker_box:
+        material: "CYAN_SHULKER_BOX"
+        name: "&3Błękitnozielony Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      light_blue_shulker_box:
+        material: "LIGHT_BLUE_SHULKER_BOX"
+        name: "&bJasnoniebieski Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      blue_shulker_box:
+        material: "BLUE_SHULKER_BOX"
+        name: "&9Niebieski Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      purple_shulker_box:
+        material: "PURPLE_SHULKER_BOX"
+        name: "&5Fioletowy Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      magenta_shulker_box:
+        material: "MAGENTA_SHULKER_BOX"
+        name: "&dKarmazynowy Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0
+      pink_shulker_box:
+        material: "PINK_SHULKER_BOX"
+        name: "&dRóżowy Shulker Box"
+        buy-price: 1650.0
+        sell-price: 260.0

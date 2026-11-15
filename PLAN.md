@@ -10,12 +10,14 @@
 
 ## Zadania pozostałe do wykonania
 
-### 1. Rozbudowa kategorii Sklepu GUI (`shops/`)
+### 1. Rozbudowa kategorii Sklepu GUI (`shops/`) — ✅ UKOŃCZONO (Etap 2)
 
-- [ ] Utworzyć dodatkowe kategorie: `shops/farming.yml`, `shops/mobdrops.yml`
-  oraz `shops/ores.yml`.
+- [x] Utworzyć rozbudowaną hierarchię 17 plików `shops/*.yml` (`main`, `building`,
+  `blocks`, `wood`, `natural`, `decorative_blocks`, `ores`, `farming`, `food`,
+  `combat`, `redstone`, `magic`, `mobdrops`, `decoration`, `music`, `storage`, `misc`).
 
-- [ ] Podpiąć nowe kategorie w `shops/main.yml` i zrównoważyć ceny
+- [x] Podpiąć kategorie w `shops/main.yml`, dodać wielostronicowość, okna wyboru
+  ilości (`-32/-16/-1/+1/+16/+32`), `/sellall`, `/sellgui` i zrównoważyć ceny
   z ekonomią SkyBlocka oraz nagrodami z misji.
 
 ---
@@ -138,19 +140,20 @@
 
 ---
 
-### Etap 2 (Punkt 1): Rozbudowa kategorii Sklepu GUI (`shops/`)
+### Etap 2 (Punkt 1): Rozbudowa kategorii Sklepu GUI (`shops/`) — ✅ UKOŃCZONY
 
-- **Cel:** Rozszerzenie sklepu `/shop` o pełny asortyment SkyBlocka.
+- **Cel:** Rozszerzenie sklepu `/shop` o pełny asortyment SkyBlocka wzorowany na `EconomyShopGUI`.
 
 - **Zadania:**
-  - Utworzyć `shops/farming.yml` (nasiona, sadzonki, pszenica, ziemniaki, marchew,
-    melon, dynia, trzcina, kaktus, brodawki, jajka, wieprzowina).
-  - Utworzyć `shops/mobdrops.yml` (kości, nici, proch, perły Endu, płomienne różdżki,
-    łzy Ghasta, pryzmaryn).
-  - Utworzyć `shops/ores.yml` (węgiel, żelazo, złoto, diament, szmaragd, obsydian,
-    kwarc, sztabki netheritu).
-  - Podpiąć kategorie w `shops/main.yml`, zaktualizować kopiowanie zasobów w `ShopModule`
-    oraz wstępnie dopasować ceny kupna/sprzedaży do nagród z misji.
+  - [x] Utworzyć 17 polskich plików `shops/*.yml` (`main`, `building`, `blocks`, `wood`,
+    `natural`, `decorative_blocks`, `ores`, `farming`, `food`, `combat`, `redstone`,
+    `magic`, `mobdrops`, `decoration`, `music`, `storage`, `misc`).
+  - [x] Wdrożyć wielostronicowość kategorii (`pages:`, siatka `7x4`, automatyczny podział
+    > 28 pozycji), dolny pasek nawigacji (głowa gracza z saldem, strony, powrót/zamknięcie),
+    ekrany wyboru ilości (`BUY_SCREEN`, `SELL_SCREEN`, `BUY_STACKS_SCREEN`: `-32/-16/-1/+1/+16/+32`)
+    oraz komendy `/sellall` i `/sellgui` (`SELL_GUI` z Anti-Dupe i bezpiecznym zwrotem).
+  - [x] Podpiąć kategorie w `shops/main.yml`, zaktualizować kopiowanie zasobów w `ShopModule`
+    oraz zrównoważyć ceny kupna/sprzedaży z ekonomią SkyBlocka i nagrodami z misji (`16/16` testów).
 
 ---
 

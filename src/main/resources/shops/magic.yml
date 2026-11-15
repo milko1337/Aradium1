@@ -1,0 +1,170 @@
+# Kategoria Zaklęcia i Alchemia (2 strony)
+
+shop:
+  id: "magic"
+  title: "&8» &d&lZaklęcia i Alchemia"
+  size: 54
+  back-button-slot: 53
+  parent-shop: "main"
+
+pages:
+  page1:
+    items:
+      enchanting_table:
+        material: "ENCHANTING_TABLE"
+        name: "&dStół do Zaklęć"
+        buy-price: 1600.0
+        sell-price: 250.0
+      bookshelf:
+        material: "BOOKSHELF"
+        name: "&6Biblioteczka"
+        buy-price: 140.0
+        sell-price: 30.0
+      chiseled_bookshelf:
+        material: "CHISELED_BOOKSHELF"
+        name: "&6Rzeźbiona Biblioteczka"
+        buy-price: 120.0
+        sell-price: 25.0
+      lectern:
+        material: "LECTERN"
+        name: "&6Pulpit"
+        buy-price: 150.0
+        sell-price: 30.0
+      anvil:
+        material: "ANVIL"
+        name: "&7Kowadło"
+        buy-price: 1200.0
+        sell-price: 280.0
+      grindstone:
+        material: "GRINDSTONE"
+        name: "&7Kamień Szlifierski"
+        buy-price: 90.0
+        sell-price: 18.0
+      smithing_table:
+        material: "SMITHING_TABLE"
+        name: "&7Stół Kowalski"
+        buy-price: 180.0
+        sell-price: 35.0
+      brewing_stand:
+        material: "BREWING_STAND"
+        name: "&eStatyw Alchemiczny"
+        buy-price: 380.0
+        sell-price: 80.0
+      cauldron:
+        material: "CAULDRON"
+        name: "&7Kocioł"
+        buy-price: 260.0
+        sell-price: 55.0
+      experience_bottle:
+        material: "EXPERIENCE_BOTTLE"
+        name: "&aZaklęta Butelka (EXP)"
+        buy-price: 120.0
+        sell-price: 20.0
+      book:
+        material: "BOOK"
+        name: "&6Książka"
+        buy-price: 35.0
+        sell-price: 7.0
+      writable_book:
+        material: "WRITABLE_BOOK"
+        name: "&eKsiążka z Piórem"
+        buy-price: 55.0
+        sell-price: 11.0
+      paper:
+        material: "PAPER"
+        name: "&fPapier"
+        buy-price: 12.0
+        sell-price: 1.0
+      glass_bottle:
+        material: "GLASS_BOTTLE"
+        name: "&bSzklana Butelka"
+        buy-price: 10.0
+        sell-price: 1.5
+      ink_sac:
+        material: "INK_SAC"
+        name: "&8Torbiel z Atramentem"
+        buy-price: 18.0
+        sell-price: 4.0
+      glow_ink_sac:
+        material: "GLOW_INK_SAC"
+        name: "&bŚwiecący Atrament"
+        buy-price: 45.0
+        sell-price: 10.0
+      feather:
+        material: "FEATHER"
+        name: "&fPióro"
+        buy-price: 12.0
+        sell-price: 2.5
+      leather:
+        material: "LEATHER"
+        name: "&6Skóra"
+        buy-price: 26.0
+        sell-price: 6.0
+      rabbit_hide:
+        material: "RABBIT_HIDE"
+        name: "&6Królicza Skórka"
+        buy-price: 14.0
+        sell-price: 3.0
+
+  page2:
+    items:
+      blaze_powder:
+        material: "BLAZE_POWDER"
+        name: "&6Płomienny Proszek"
+        buy-price: 90.0
+        sell-price: 16.0
+      fermented_spider_eye:
+        material: "FERMENTED_SPIDER_EYE"
+        name: "&cSfermentowane Oko Pająka"
+        buy-price: 75.0
+        sell-price: 16.0
+      magma_cream:
+        material: "MAGMA_CREAM"
+        name: "&6Magmowy Krem"
+        buy-price: 95.0
+        sell-price: 20.0
+      glistering_melon_slice:
+        material: "GLISTERING_MELON_SLICE"
+        name: "&eBłyszczący Arbuz"
+        buy-price: 95.0
+        sell-price: 18.0
+      rabbit_foot:
+        material: "RABBIT_FOOT"
+        name: "&eKrólicza Łapka"
+        buy-price: 180.0
+        sell-price: 40.0
+      pufferfish:
+        material: "PUFFERFISH"
+        name: "&eRozdymka"
+        buy-price: 90.0
+        sell-price: 20.0
+      phantom_membrane:
+        material: "PHANTOM_MEMBRANE"
+        name: "&fBłona Fantoma"
+        buy-price: 220.0
+        sell-price: 45.0
+      dragon_breath:
+        material: "DRAGON_BREATH"
+        name: "&dSmoczy Oddech"
+        buy-price: 950.0
+        sell-price: 200.0
+      turtle_scute:
+        material: "TURTLE_SCUTE"
+        name: "&2Żółwia Tarczka"
+        buy-price: 380.0
+        sell-price: 80.0
+      armadillo_scute:
+        material: "ARMADILLO_SCUTE"
+        name: "&6Tarczka Pancernika"
+        buy-price: 220.0
+        sell-price: 45.0
+      breeze_rod:
+        material: "BREEZE_ROD"
+        name: "&bRóżdżka Bryzy"
+        buy-price: 280.0
+        sell-price: 60.0
+      heavy_core:
+        material: "HEAVY_CORE"
+        name: "&8&lCiężki Rdzeń"
+        buy-price: 14500.0
+        sell-price: 2500.0

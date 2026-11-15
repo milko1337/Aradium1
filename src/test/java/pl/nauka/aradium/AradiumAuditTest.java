@@ -43,13 +43,18 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -322,7 +327,8 @@ class AradiumAuditTest {
 
         try (InputStream spawnersStream = getClass().getClassLoader().getResourceAsStream("spawners.yml");
              InputStream questsStream = getClass().getClassLoader().getResourceAsStream("quests.yml");
-             InputStream blocksShopStream = getClass().getClassLoader().getResourceAsStream("shops/blocks.yml")) {
+             InputStream blocksShopStream = getClass().getClassLoader().getResourceAsStream("shops/blocks.yml");
+             InputStream naturalShopStream = getClass().getClassLoader().getResourceAsStream("shops/natural.yml")) {
 
             assertNotNull(spawnersStream);
             YamlConfiguration spawners = YamlConfiguration.loadConfiguration(
@@ -350,10 +356,17 @@ class AradiumAuditTest {
             YamlConfiguration blocksShop = YamlConfiguration.loadConfiguration(
                     new InputStreamReader(blocksShopStream, StandardCharsets.UTF_8)
             );
-            ConfigurationSection items = blocksShop.getConfigurationSection("items");
-            assertNotNull(items);
-            assertEquals(4.0, items.getDouble("cobblestone.buy-price"), 0.001);
-            assertEquals(-1.0, items.getDouble("grass_block.sell-price"), 0.001);
+            ConfigurationSection blockItems = blocksShop.getConfigurationSection("pages.page1.items");
+            assertNotNull(blockItems);
+            assertEquals(4.0, blockItems.getDouble("cobblestone.buy-price"), 0.001);
+
+            assertNotNull(naturalShopStream);
+            YamlConfiguration naturalShop = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(naturalShopStream, StandardCharsets.UTF_8)
+            );
+            ConfigurationSection naturalItems = naturalShop.getConfigurationSection("pages.page1.items");
+            assertNotNull(naturalItems);
+            assertEquals(-1.0, naturalItems.getDouble("grass_block.sell-price"), 0.001);
         }
     }
 
@@ -366,10 +379,12 @@ class AradiumAuditTest {
         assertEquals(54, ShopCategory.normalizeInventorySize(90));
 
         try (InputStream mainStream = getClass().getClassLoader().getResourceAsStream("shops/main.yml");
-             InputStream blocksStream = getClass().getClassLoader().getResourceAsStream("shops/blocks.yml")) {
+             InputStream blocksStream = getClass().getClassLoader().getResourceAsStream("shops/blocks.yml");
+             InputStream naturalStream = getClass().getClassLoader().getResourceAsStream("shops/natural.yml")) {
 
             assertNotNull(mainStream);
             assertNotNull(blocksStream);
+            assertNotNull(naturalStream);
 
             Logger testLogger = Logger.getLogger("ShopTest");
             YamlConfiguration mainYaml = YamlConfiguration.loadConfiguration(
@@ -378,24 +393,29 @@ class AradiumAuditTest {
             YamlConfiguration blocksYaml = YamlConfiguration.loadConfiguration(
                     new InputStreamReader(blocksStream, StandardCharsets.UTF_8)
             );
+            YamlConfiguration naturalYaml = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(naturalStream, StandardCharsets.UTF_8)
+            );
 
             ShopCategory mainCategory = ShopManager.parseCategory(mainYaml, "main", testLogger);
             ShopCategory blocksCategory = ShopManager.parseCategory(blocksYaml, "blocks", testLogger);
+            ShopCategory naturalCategory = ShopManager.parseCategory(naturalYaml, "natural", testLogger);
 
             assertNotNull(mainCategory);
             assertEquals("main", mainCategory.id());
-            assertEquals(27, mainCategory.size());
-            ShopItem blocksNav = mainCategory.itemsBySlot().get(13);
-            assertNotNull(blocksNav);
-            assertTrue(blocksNav.isNavigationItem());
-            assertEquals("blocks", blocksNav.targetShop());
-            assertFalse(ShopGUI.buildRawLoreLines(mainCategory, blocksNav).stream()
+            assertEquals(54, mainCategory.size());
+            ShopItem buildingNav = mainCategory.itemsBySlot().get(11);
+            assertNotNull(buildingNav);
+            assertTrue(buildingNav.isNavigationItem());
+            assertEquals("building", buildingNav.targetShop());
+            assertFalse(ShopGUI.buildRawLoreLines(mainCategory, buildingNav).stream()
                     .anyMatch(line -> line.contains("LPM")));
 
             assertNotNull(blocksCategory);
             assertEquals("blocks", blocksCategory.id());
-            assertEquals("main", blocksCategory.parentShopId());
-            assertEquals(49, blocksCategory.backButtonSlot());
+            assertEquals("building", blocksCategory.parentShopId());
+            assertEquals(53, blocksCategory.backButtonSlot());
+            assertEquals(3, blocksCategory.pageCount());
 
             ShopItem cobble = blocksCategory.itemsBySlot().get(10);
             assertNotNull(cobble);
@@ -407,14 +427,118 @@ class AradiumAuditTest {
             assertTrue(cobbleLore.stream().anyMatch(line -> line.contains("1.50$") && !line.contains("$$")));
             assertTrue(cobbleLore.stream().anyMatch(line -> line.contains("Sprzedaj wszystko")));
 
-            ShopItem grass = blocksCategory.itemsBySlot().get(13);
+            assertNotNull(naturalCategory);
+            ShopItem grass = naturalCategory.pageItems(0).values().stream()
+                    .filter(item -> item.material() == Material.GRASS_BLOCK)
+                    .findFirst()
+                    .orElse(null);
             assertNotNull(grass);
             assertTrue(grass.canBuy());
             assertFalse(grass.canSell());
-            List<String> grassLore = ShopGUI.buildRawLoreLines(blocksCategory, grass);
+            List<String> grassLore = ShopGUI.buildRawLoreLines(naturalCategory, grass);
             assertTrue(grassLore.stream().anyMatch(line -> line.contains("Sprzedaż tego przedmiotu jest wyłączona")));
             assertFalse(grassLore.stream().anyMatch(line -> line.contains("Sprzedaj wszystko")));
         }
+    }
+
+    @Test
+    void allShopCategoriesLoadCleanlyWithValidMaterialsAndPagination(@TempDir Path tempDir) throws Exception {
+        List<String> shopNames = List.of(
+                "main", "building", "blocks", "wood", "natural", "decorative_blocks",
+                "ores", "farming", "food", "combat", "redstone", "magic",
+                "mobdrops", "decoration", "music", "storage", "misc"
+        );
+
+        Path shopsDir = tempDir.resolve("shops");
+        Files.createDirectories(shopsDir);
+
+        for (String shopName : shopNames) {
+            try (InputStream stream = getClass().getClassLoader().getResourceAsStream("shops/" + shopName + ".yml")) {
+                assertNotNull(stream, "Brak zasobu shops/" + shopName + ".yml");
+                Files.copy(stream, shopsDir.resolve(shopName + ".yml"));
+            }
+        }
+
+        List<String> warningMessages = new ArrayList<>();
+        Logger strictLogger = Logger.getLogger("ShopAuditStrictLogger");
+        strictLogger.setUseParentHandlers(false);
+        Handler captureHandler = new Handler() {
+            @Override
+            public void publish(LogRecord record) {
+                if (record.getLevel().intValue() >= Level.WARNING.intValue()) {
+                    warningMessages.add(record.getMessage());
+                }
+            }
+
+            @Override
+            public void flush() {
+            }
+
+            @Override
+            public void close() {
+            }
+        };
+        strictLogger.addHandler(captureHandler);
+
+        try {
+            ShopManager manager = new ShopManager(strictLogger);
+            manager.loadFromDirectory(shopsDir.toFile());
+
+            assertTrue(warningMessages.isEmpty(), "Błędy parsowania sklepów: " + warningMessages);
+            assertEquals(17, manager.getCategoryIds().size());
+
+            for (ShopCategory category : manager.getCategories()) {
+                assertTrue(category.pageCount() >= 1);
+                if (category.parentShopId() != null) {
+                    assertTrue(
+                            manager.getCategory(category.parentShopId()).isPresent(),
+                            "Nieznany parent-shop '" + category.parentShopId() + "' w " + category.id()
+                    );
+                }
+                for (Map<Integer, ShopItem> page : category.pages()) {
+                    assertFalse(page.isEmpty(), "Pusta strona w kategorii " + category.id());
+                    for (ShopItem item : page.values()) {
+                        assertFalse(item.material().isLegacy(), "Legacy material w " + category.id());
+                        if (item.isNavigationItem()) {
+                            assertTrue(
+                                    manager.getCategory(item.targetShop()).isPresent(),
+                                    "Nieznany target-shop '" + item.targetShop() + "' w " + category.id()
+                            );
+                        } else if (item.canBuy() && item.canSell()) {
+                            assertTrue(
+                                    item.sellPrice() <= item.buyPrice(),
+                                    "Arbitraż ceny w " + category.id() + "/" + item.id()
+                            );
+                        }
+                    }
+                }
+            }
+
+            assertEquals(1.5, manager.findBestSellableItem(Material.COBBLESTONE).orElseThrow().sellPrice(), 0.001);
+            assertEquals(75.0, manager.findBestSellableItem(Material.DIAMOND).orElseThrow().sellPrice(), 0.001);
+            assertTrue(manager.findBestSellableItem(Material.GRASS_BLOCK).isEmpty());
+            assertTrue(manager.findBestSellableItem(Material.SPAWNER).isEmpty());
+        } finally {
+            strictLogger.removeHandler(captureHandler);
+        }
+
+        assertEquals(1, ShopGUI.calculateAdjustedAmount(1, -16, 1, 64));
+        assertEquals(48, ShopGUI.calculateAdjustedAmount(16, 32, 1, 64));
+        assertEquals(64, ShopGUI.calculateAdjustedAmount(40, 32, 1, 64));
+        assertEquals(28, ShopManager.computeAutoSlots(54, 53).size());
+
+        YamlConfiguration overflowYaml = new YamlConfiguration();
+        overflowYaml.set("shop.id", "overflow_test");
+        overflowYaml.set("shop.size", 54);
+        for (int i = 0; i < 30; i++) {
+            overflowYaml.set("items.item_" + i + ".material", "STONE");
+            overflowYaml.set("items.item_" + i + ".buy-price", 5.0);
+        }
+        ShopCategory overflowCategory = ShopManager.parseCategory(overflowYaml, "overflow_test", Logger.getLogger("Overflow"));
+        assertNotNull(overflowCategory);
+        assertEquals(2, overflowCategory.pageCount());
+        assertEquals(28, overflowCategory.pageItems(0).size());
+        assertEquals(2, overflowCategory.pageItems(1).size());
     }
 
     @Test

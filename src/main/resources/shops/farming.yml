@@ -1,0 +1,270 @@
+# Kategoria Rolnictwo i Sadzonki (2 strony + skrót do Jedzenia)
+
+shop:
+  id: "farming"
+  title: "&8» &a&lRolnictwo i Uprawy"
+  size: 54
+  back-button-slot: 53
+  parent-shop: "main"
+
+pages:
+  page1:
+    items:
+      wheat_seeds:
+        material: "WHEAT_SEEDS"
+        name: "&eNasiona Pszenicy"
+        buy-price: 4.0
+        sell-price: 0.5
+      wheat:
+        material: "WHEAT"
+        name: "&ePszenica"
+        buy-price: 10.0
+        sell-price: 2.5
+      hay_block:
+        material: "HAY_BLOCK"
+        name: "&eSnop Siana"
+        buy-price: 90.0
+        sell-price: 22.5
+      carrot:
+        material: "CARROT"
+        name: "&6Marchewka"
+        buy-price: 10.0
+        sell-price: 2.2
+      potato:
+        material: "POTATO"
+        name: "&eZiemniak"
+        buy-price: 10.0
+        sell-price: 2.2
+      poisonous_potato:
+        material: "POISONOUS_POTATO"
+        name: "&2Trujący Ziemniak"
+        buy-price: -1.0
+        sell-price: 3.0
+      beetroot_seeds:
+        material: "BEETROOT_SEEDS"
+        name: "&cNasiona Buraka"
+        buy-price: 5.0
+        sell-price: 0.5
+      beetroot:
+        material: "BEETROOT"
+        name: "&cBurak"
+        buy-price: 12.0
+        sell-price: 2.8
+      pumpkin_seeds:
+        material: "PUMPKIN_SEEDS"
+        name: "&6Nasiona Dyni"
+        buy-price: 8.0
+        sell-price: 1.0
+      pumpkin:
+        material: "PUMPKIN"
+        name: "&6Dynia"
+        buy-price: 18.0
+        sell-price: 4.5
+      carved_pumpkin:
+        material: "CARVED_PUMPKIN"
+        name: "&6Wydrążona Dynia"
+        buy-price: 24.0
+        sell-price: 5.0
+      melon_seeds:
+        material: "MELON_SEEDS"
+        name: "&aNasiona Arbuza"
+        buy-price: 8.0
+        sell-price: 1.0
+      melon_slice:
+        material: "MELON_SLICE"
+        name: "&cKawałek Arbuza"
+        buy-price: 6.0
+        sell-price: 1.0
+      melon:
+        material: "MELON"
+        name: "&aArbuz (Blok)"
+        buy-price: 36.0
+        sell-price: 6.0
+      sugar_cane:
+        material: "SUGAR_CANE"
+        name: "&aTrzcina Cukrowa"
+        buy-price: 12.0
+        sell-price: 1.0
+      cactus:
+        material: "CACTUS"
+        name: "&2Kaktus"
+        buy-price: 12.0
+        sell-price: 1.0
+      bamboo:
+        material: "BAMBOO"
+        name: "&aBambus"
+        buy-price: 8.0
+        sell-price: 0.5
+      cocoa_beans:
+        material: "COCOA_BEANS"
+        name: "&6Ziarna Kakao"
+        buy-price: 14.0
+        sell-price: 3.0
+      nether_wart:
+        material: "NETHER_WART"
+        name: "&cNetherowa Brodawka"
+        buy-price: 24.0
+        sell-price: 5.0
+      sweet_berries:
+        material: "SWEET_BERRIES"
+        name: "&cSłodkie Jagody"
+        buy-price: 10.0
+        sell-price: 2.0
+      glow_berries:
+        material: "GLOW_BERRIES"
+        name: "&eŚwiecące Jagody"
+        buy-price: 18.0
+        sell-price: 4.0
+      brown_mushroom:
+        material: "BROWN_MUSHROOM"
+        name: "&6Brązowy Grzyb"
+        buy-price: 12.0
+        sell-price: 2.5
+      red_mushroom:
+        material: "RED_MUSHROOM"
+        name: "&cCzerwony Grzyb"
+        buy-price: 12.0
+        sell-price: 2.5
+      kelp:
+        material: "KELP"
+        name: "&2Wodorosty"
+        buy-price: 6.0
+        sell-price: 0.8
+      bone_meal:
+        material: "BONE_MEAL"
+        name: "&fMączka Kostna"
+        buy-price: 10.0
+        sell-price: 2.0
+      sugar:
+        material: "SUGAR"
+        name: "&fCukier"
+        buy-price: 10.0
+        sell-price: 1.5
+      honeycomb:
+        material: "HONEYCOMB"
+        name: "&ePlaster Miodu"
+        buy-price: 28.0
+        sell-price: 6.0
+      cat_food:
+        slot: 43
+        material: "COOKED_BEEF"
+        name: "&6&lJedzenie i Wypieki »"
+        target-shop: "food"
+        lore:
+          - "&8» &7Mięsa, ryby, chleb, ciasta"
+          - "&8» &7oraz złote jabłka i marchewki."
+          - ""
+          - "&eKliknij, aby przejść do Jedzenia!"
+
+  page2:
+    items:
+      oak_sapling:
+        material: "OAK_SAPLING"
+        name: "&2Sadzonka Dębu"
+        buy-price: 18.0
+        sell-price: 2.0
+      spruce_sapling:
+        material: "SPRUCE_SAPLING"
+        name: "&2Sadzonka Świerku"
+        buy-price: 18.0
+        sell-price: 2.0
+      birch_sapling:
+        material: "BIRCH_SAPLING"
+        name: "&aSadzonka Brzozy"
+        buy-price: 18.0
+        sell-price: 2.0
+      jungle_sapling:
+        material: "JUNGLE_SAPLING"
+        name: "&2Sadzonka Drzewa Dżunglowego"
+        buy-price: 25.0
+        sell-price: 3.0
+      acacia_sapling:
+        material: "ACACIA_SAPLING"
+        name: "&6Sadzonka Akacji"
+        buy-price: 22.0
+        sell-price: 2.5
+      dark_oak_sapling:
+        material: "DARK_OAK_SAPLING"
+        name: "&2Sadzonka Ciemnego Dębu"
+        buy-price: 25.0
+        sell-price: 3.0
+      mangrove_propagule:
+        material: "MANGROVE_PROPAGULE"
+        name: "&2Sadzonka Namorzynu"
+        buy-price: 30.0
+        sell-price: 3.5
+      cherry_sapling:
+        material: "CHERRY_SAPLING"
+        name: "&dSadzonka Wiśni"
+        buy-price: 35.0
+        sell-price: 4.5
+      pale_oak_sapling:
+        material: "PALE_OAK_SAPLING"
+        name: "&7Sadzonka Bladego Dębu"
+        buy-price: 45.0
+        sell-price: 5.5
+      azalea:
+        material: "AZALEA"
+        name: "&aAzalia"
+        buy-price: 22.0
+        sell-price: 3.0
+      flowering_azalea:
+        material: "FLOWERING_AZALEA"
+        name: "&dKwitnąca Azalia"
+        buy-price: 30.0
+        sell-price: 4.0
+      chorus_flower:
+        material: "CHORUS_FLOWER"
+        name: "&dKwiat Refrenu"
+        buy-price: 140.0
+        sell-price: 25.0
+      chorus_fruit:
+        material: "CHORUS_FRUIT"
+        name: "&dOwoc Refrenu"
+        buy-price: 32.0
+        sell-price: 6.0
+      crimson_fungus:
+        material: "CRIMSON_FUNGUS"
+        name: "&cSzkarłatny Grzyb"
+        buy-price: 20.0
+        sell-price: 4.0
+      warped_fungus:
+        material: "WARPED_FUNGUS"
+        name: "&3Spaczony Grzyb"
+        buy-price: 20.0
+        sell-price: 4.0
+      egg:
+        material: "EGG"
+        name: "&fJajko"
+        buy-price: 14.0
+        sell-price: 3.0
+      honey_bottle:
+        material: "HONEY_BOTTLE"
+        name: "&eButelka Miodu"
+        buy-price: 35.0
+        sell-price: 8.0
+      honeycomb_block:
+        material: "HONEYCOMB_BLOCK"
+        name: "&eBlok Plastra Miodu"
+        buy-price: 112.0
+        sell-price: 24.0
+      honey_block:
+        material: "HONEY_BLOCK"
+        name: "&6Blok Miodu"
+        buy-price: 140.0
+        sell-price: 32.0
+      dried_kelp_block:
+        material: "DRIED_KELP_BLOCK"
+        name: "&2Blok Suszonych Wodorostów"
+        buy-price: 64.0
+        sell-price: 8.0
+      cat_food_p2:
+        slot: 43
+        material: "COOKED_BEEF"
+        name: "&6&lJedzenie i Wypieki »"
+        target-shop: "food"
+        lore:
+          - "&8» &7Mięsa, ryby, chleb, ciasta"
+          - "&8» &7oraz złote jabłka i marchewki."
+          - ""
+          - "&eKliknij, aby przejść do Jedzenia!"

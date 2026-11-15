@@ -1,0 +1,53 @@
+# Podmenu kategorii Budowanie
+
+shop:
+  id: "building"
+  title: "&8» &6Sklep: &eBudowanie i Bloki"
+  size: 27
+  back-button-slot: 26
+  parent-shop: "main"
+
+items:
+  cat_blocks:
+    slot: 10
+    material: "STONE_BRICKS"
+    name: "&7&lKamień i Bloki Budowlane"
+    target-shop: "blocks"
+    lore:
+      - "&8» &7Bruk, kamień, granit, dioryt, andezyt,"
+      - "&8» &7łupki (Deepslate), czernit i cegły Endu."
+      - ""
+      - "&eKliknij, aby otworzyć!"
+
+  cat_wood:
+    slot: 12
+    material: "OAK_LOG"
+    name: "&6&lDrewno i Deski"
+    target-shop: "wood"
+    lore:
+      - "&8» &7Wszystkie rodzaje pni drzew, desek,"
+      - "&8» &7schodów, półbloków, płotków i furtek."
+      - ""
+      - "&eKliknij, aby otworzyć!"
+
+  cat_natural:
+    slot: 14
+    material: "MOSS_BLOCK"
+    name: "&a&lBloki Naturalne"
+    target-shop: "natural"
+    lore:
+      - "&8» &7Ziemia, trawa, piasek, żwir, glina,"
+      - "&8» &7obsydian, netherrack, lód i gąbki."
+      - ""
+      - "&eKliknij, aby otworzyć!"
+
+  cat_decorative_blocks:
+    slot: 16
+    material: "GLASS"
+    name: "&b&lSzkło, Wełna i Kolorowe Bloki"
+    target-shop: "decorative_blocks"
+    lore:
+      - "&8» &7Szkło zwykłe i barwione, szyby,"
+      - "&8» &7wełny, terakota, beton i pryzmaryn."
+      - ""
+      - "&eKliknij, aby otworzyć!"

@@ -1,0 +1,447 @@
+# Podkategoria Budowanie: Drewno i Deski (3 strony)
+
+shop:
+  id: "wood"
+  title: "&8» &6Budowanie: &eDrewno i Deski"
+  size: 54
+  back-button-slot: 53
+  parent-shop: "building"
+
+pages:
+  page1:
+    items:
+      oak_log:
+        material: "OAK_LOG"
+        name: "&6Pień Dębu"
+        buy-price: 12.0
+        sell-price: 4.0
+      oak_wood:
+        material: "OAK_WOOD"
+        name: "&6Drewno Dębowe"
+        buy-price: 16.0
+        sell-price: 5.0
+      oak_planks:
+        material: "OAK_PLANKS"
+        name: "&6Dębowe Deski"
+        buy-price: 3.5
+        sell-price: 1.0
+      oak_stairs:
+        material: "OAK_STAIRS"
+        name: "&6Dębowe Schody"
+        buy-price: 5.5
+        sell-price: 1.5
+      oak_slab:
+        material: "OAK_SLAB"
+        name: "&6Dębowy Półblok"
+        buy-price: 2.0
+        sell-price: 0.5
+      oak_fence:
+        material: "OAK_FENCE"
+        name: "&6Dębowy Płot"
+        buy-price: 6.0
+        sell-price: 1.5
+      oak_fence_gate:
+        material: "OAK_FENCE_GATE"
+        name: "&6Dębowa Furtka"
+        buy-price: 8.0
+        sell-price: 2.0
+
+      spruce_log:
+        material: "SPRUCE_LOG"
+        name: "&6Pień Świerku"
+        buy-price: 12.0
+        sell-price: 4.0
+      spruce_wood:
+        material: "SPRUCE_WOOD"
+        name: "&6Drewno Świerkowe"
+        buy-price: 16.0
+        sell-price: 5.0
+      spruce_planks:
+        material: "SPRUCE_PLANKS"
+        name: "&6Świerkowe Deski"
+        buy-price: 3.5
+        sell-price: 1.0
+      spruce_stairs:
+        material: "SPRUCE_STAIRS"
+        name: "&6Świerkowe Schody"
+        buy-price: 5.5
+        sell-price: 1.5
+      spruce_slab:
+        material: "SPRUCE_SLAB"
+        name: "&6Świerkowy Półblok"
+        buy-price: 2.0
+        sell-price: 0.5
+      spruce_fence:
+        material: "SPRUCE_FENCE"
+        name: "&6Świerkowy Płot"
+        buy-price: 6.0
+        sell-price: 1.5
+      spruce_fence_gate:
+        material: "SPRUCE_FENCE_GATE"
+        name: "&6Świerkowa Furtka"
+        buy-price: 8.0
+        sell-price: 2.0
+
+      birch_log:
+        material: "BIRCH_LOG"
+        name: "&fPień Brzozy"
+        buy-price: 12.0
+        sell-price: 4.0
+      birch_wood:
+        material: "BIRCH_WOOD"
+        name: "&fDrewno Brzozowe"
+        buy-price: 16.0
+        sell-price: 5.0
+      birch_planks:
+        material: "BIRCH_PLANKS"
+        name: "&fBrzozowe Deski"
+        buy-price: 3.5
+        sell-price: 1.0
+      birch_stairs:
+        material: "BIRCH_STAIRS"
+        name: "&fBrzozowe Schody"
+        buy-price: 5.5
+        sell-price: 1.5
+      birch_slab:
+        material: "BIRCH_SLAB"
+        name: "&fBrzozowy Półblok"
+        buy-price: 2.0
+        sell-price: 0.5
+      birch_fence:
+        material: "BIRCH_FENCE"
+        name: "&fBrzozowy Płot"
+        buy-price: 6.0
+        sell-price: 1.5
+      birch_fence_gate:
+        material: "BIRCH_FENCE_GATE"
+        name: "&fBrzozowa Furtka"
+        buy-price: 8.0
+        sell-price: 2.0
+
+      jungle_log:
+        material: "JUNGLE_LOG"
+        name: "&6Pień Dżunglowy"
+        buy-price: 14.0
+        sell-price: 4.5
+      jungle_wood:
+        material: "JUNGLE_WOOD"
+        name: "&6Drewno Dżunglowe"
+        buy-price: 18.0
+        sell-price: 5.5
+      jungle_planks:
+        material: "JUNGLE_PLANKS"
+        name: "&6Dżunglowe Deski"
+        buy-price: 4.0
+        sell-price: 1.1
+      jungle_stairs:
+        material: "JUNGLE_STAIRS"
+        name: "&6Dżunglowe Schody"
+        buy-price: 6.0
+        sell-price: 1.6
+      jungle_slab:
+        material: "JUNGLE_SLAB"
+        name: "&6Dżunglowy Półblok"
+        buy-price: 2.2
+        sell-price: 0.6
+      jungle_fence:
+        material: "JUNGLE_FENCE"
+        name: "&6Dżunglowy Płot"
+        buy-price: 6.5
+        sell-price: 1.6
+      jungle_fence_gate:
+        material: "JUNGLE_FENCE_GATE"
+        name: "&6Dżunglowa Furtka"
+        buy-price: 8.5
+        sell-price: 2.2
+
+  page2:
+    items:
+      acacia_log:
+        material: "ACACIA_LOG"
+        name: "&6Pień Akacji"
+        buy-price: 14.0
+        sell-price: 4.5
+      acacia_wood:
+        material: "ACACIA_WOOD"
+        name: "&6Drewno Akacjowe"
+        buy-price: 18.0
+        sell-price: 5.5
+      acacia_planks:
+        material: "ACACIA_PLANKS"
+        name: "&6Akacjowe Deski"
+        buy-price: 4.0
+        sell-price: 1.1
+      acacia_stairs:
+        material: "ACACIA_STAIRS"
+        name: "&6Akacjowe Schody"
+        buy-price: 6.0
+        sell-price: 1.6
+      acacia_slab:
+        material: "ACACIA_SLAB"
+        name: "&6Akacjowy Półblok"
+        buy-price: 2.2
+        sell-price: 0.6
+      acacia_fence:
+        material: "ACACIA_FENCE"
+        name: "&6Akacjowy Płot"
+        buy-price: 6.5
+        sell-price: 1.6
+      acacia_fence_gate:
+        material: "ACACIA_FENCE_GATE"
+        name: "&6Akacjowa Furtka"
+        buy-price: 8.5
+        sell-price: 2.2
+
+      dark_oak_log:
+        material: "DARK_OAK_LOG"
+        name: "&8Pień Ciemnego Dębu"
+        buy-price: 14.0
+        sell-price: 4.5
+      dark_oak_wood:
+        material: "DARK_OAK_WOOD"
+        name: "&8Drewno Ciemnego Dębu"
+        buy-price: 18.0
+        sell-price: 5.5
+      dark_oak_planks:
+        material: "DARK_OAK_PLANKS"
+        name: "&8Deski Ciemnego Dębu"
+        buy-price: 4.0
+        sell-price: 1.1
+      dark_oak_stairs:
+        material: "DARK_OAK_STAIRS"
+        name: "&8Schody Ciemnego Dębu"
+        buy-price: 6.0
+        sell-price: 1.6
+      dark_oak_slab:
+        material: "DARK_OAK_SLAB"
+        name: "&8Półblok Ciemnego Dębu"
+        buy-price: 2.2
+        sell-price: 0.6
+      dark_oak_fence:
+        material: "DARK_OAK_FENCE"
+        name: "&8Płot Ciemnego Dębu"
+        buy-price: 6.5
+        sell-price: 1.6
+      dark_oak_fence_gate:
+        material: "DARK_OAK_FENCE_GATE"
+        name: "&8Furtka Ciemnego Dębu"
+        buy-price: 8.5
+        sell-price: 2.2
+
+      mangrove_log:
+        material: "MANGROVE_LOG"
+        name: "&cPień Namorzynu"
+        buy-price: 16.0
+        sell-price: 5.0
+      mangrove_wood:
+        material: "MANGROVE_WOOD"
+        name: "&cDrewno Namorzynowe"
+        buy-price: 20.0
+        sell-price: 6.0
+      mangrove_planks:
+        material: "MANGROVE_PLANKS"
+        name: "&cNamorzynowe Deski"
+        buy-price: 4.5
+        sell-price: 1.2
+      mangrove_stairs:
+        material: "MANGROVE_STAIRS"
+        name: "&cNamorzynowe Schody"
+        buy-price: 6.5
+        sell-price: 1.8
+      mangrove_slab:
+        material: "MANGROVE_SLAB"
+        name: "&cNamorzynowy Półblok"
+        buy-price: 2.5
+        sell-price: 0.6
+      mangrove_fence:
+        material: "MANGROVE_FENCE"
+        name: "&cNamorzynowy Płot"
+        buy-price: 7.0
+        sell-price: 1.8
+      mangrove_fence_gate:
+        material: "MANGROVE_FENCE_GATE"
+        name: "&cNamorzynowa Furtka"
+        buy-price: 9.0
+        sell-price: 2.4
+
+      cherry_log:
+        material: "CHERRY_LOG"
+        name: "&dPień Wiśni"
+        buy-price: 18.0
+        sell-price: 5.5
+      cherry_wood:
+        material: "CHERRY_WOOD"
+        name: "&dDrewno Wiśniowe"
+        buy-price: 22.0
+        sell-price: 6.5
+      cherry_planks:
+        material: "CHERRY_PLANKS"
+        name: "&dWiśniowe Deski"
+        buy-price: 5.0
+        sell-price: 1.3
+      cherry_stairs:
+        material: "CHERRY_STAIRS"
+        name: "&dWiśniowe Schody"
+        buy-price: 7.0
+        sell-price: 1.9
+      cherry_slab:
+        material: "CHERRY_SLAB"
+        name: "&dWiśniowy Półblok"
+        buy-price: 2.8
+        sell-price: 0.7
+      cherry_fence:
+        material: "CHERRY_FENCE"
+        name: "&dWiśniowy Płot"
+        buy-price: 7.5
+        sell-price: 1.9
+      cherry_fence_gate:
+        material: "CHERRY_FENCE_GATE"
+        name: "&dWiśniowa Furtka"
+        buy-price: 9.5
+        sell-price: 2.5
+
+  page3:
+    items:
+      pale_oak_log:
+        material: "PALE_OAK_LOG"
+        name: "&7Pień Bladego Dębu"
+        buy-price: 20.0
+        sell-price: 6.0
+      pale_oak_wood:
+        material: "PALE_OAK_WOOD"
+        name: "&7Drewno Bladego Dębu"
+        buy-price: 24.0
+        sell-price: 7.0
+      pale_oak_planks:
+        material: "PALE_OAK_PLANKS"
+        name: "&7Deski Bladego Dębu"
+        buy-price: 5.5
+        sell-price: 1.5
+      pale_oak_stairs:
+        material: "PALE_OAK_STAIRS"
+        name: "&7Schody Bladego Dębu"
+        buy-price: 7.5
+        sell-price: 2.0
+      pale_oak_slab:
+        material: "PALE_OAK_SLAB"
+        name: "&7Półblok Bladego Dębu"
+        buy-price: 3.0
+        sell-price: 0.8
+      pale_oak_fence:
+        material: "PALE_OAK_FENCE"
+        name: "&7Płot Bladego Dębu"
+        buy-price: 8.0
+        sell-price: 2.0
+      pale_oak_fence_gate:
+        material: "PALE_OAK_FENCE_GATE"
+        name: "&7Furtka Bladego Dębu"
+        buy-price: 10.0
+        sell-price: 2.6
+
+      bamboo_block:
+        material: "BAMBOO_BLOCK"
+        name: "&aBlok Bambusa"
+        buy-price: 8.0
+        sell-price: 2.0
+      bamboo_mosaic:
+        material: "BAMBOO_MOSAIC"
+        name: "&aBambusowa Mozaika"
+        buy-price: 6.0
+        sell-price: 1.5
+      bamboo_planks:
+        material: "BAMBOO_PLANKS"
+        name: "&aBambusowe Deski"
+        buy-price: 4.5
+        sell-price: 1.0
+      bamboo_stairs:
+        material: "BAMBOO_STAIRS"
+        name: "&aBambusowe Schody"
+        buy-price: 6.0
+        sell-price: 1.5
+      bamboo_slab:
+        material: "BAMBOO_SLAB"
+        name: "&aBambusowy Półblok"
+        buy-price: 2.5
+        sell-price: 0.5
+      bamboo_fence:
+        material: "BAMBOO_FENCE"
+        name: "&aBambusowy Płot"
+        buy-price: 6.0
+        sell-price: 1.5
+      bamboo_fence_gate:
+        material: "BAMBOO_FENCE_GATE"
+        name: "&aBambusowa Furtka"
+        buy-price: 8.0
+        sell-price: 2.0
+
+      crimson_stem:
+        material: "CRIMSON_STEM"
+        name: "&cSzkarłatny Trzon"
+        buy-price: 18.0
+        sell-price: 5.5
+      crimson_hyphae:
+        material: "CRIMSON_HYPHAE"
+        name: "&cSzkarłatne Strzępki"
+        buy-price: 22.0
+        sell-price: 6.5
+      crimson_planks:
+        material: "CRIMSON_PLANKS"
+        name: "&cSzkarłatne Deski"
+        buy-price: 5.0
+        sell-price: 1.4
+      crimson_stairs:
+        material: "CRIMSON_STAIRS"
+        name: "&cSzkarłatne Schody"
+        buy-price: 7.0
+        sell-price: 1.9
+      crimson_slab:
+        material: "CRIMSON_SLAB"
+        name: "&cSzkarłatny Półblok"
+        buy-price: 2.8
+        sell-price: 0.7
+      crimson_fence:
+        material: "CRIMSON_FENCE"
+        name: "&cSzkarłatny Płot"
+        buy-price: 7.5
+        sell-price: 1.9
+      crimson_fence_gate:
+        material: "CRIMSON_FENCE_GATE"
+        name: "&cSzkarłatna Furtka"
+        buy-price: 9.5
+        sell-price: 2.5
+
+      warped_stem:
+        material: "WARPED_STEM"
+        name: "&3Spaczony Trzon"
+        buy-price: 18.0
+        sell-price: 5.5
+      warped_hyphae:
+        material: "WARPED_HYPHAE"
+        name: "&3Spaczone Strzępki"
+        buy-price: 22.0
+        sell-price: 6.5
+      warped_planks:
+        material: "WARPED_PLANKS"
+        name: "&3Spaczone Deski"
+        buy-price: 5.0
+        sell-price: 1.4
+      warped_stairs:
+        material: "WARPED_STAIRS"
+        name: "&3Spaczone Schody"
+        buy-price: 7.0
+        sell-price: 1.9
+      warped_slab:
+        material: "WARPED_SLAB"
+        name: "&3Spaczony Półblok"
+        buy-price: 2.8
+        sell-price: 0.7
+      warped_fence:
+        material: "WARPED_FENCE"
+        name: "&3Spaczony Płot"
+        buy-price: 7.5
+        sell-price: 1.9
+      warped_fence_gate:
+        material: "WARPED_FENCE_GATE"
+        name: "&3Spaczona Furtka"
+        buy-price: 9.5
+        sell-price: 2.5

@@ -1,0 +1,152 @@
+# Podkategoria Mechanizmy Redstone (1 strona, rodzic: combat)
+
+shop:
+  id: "redstone"
+  title: "&8» &c&lMechanizmy Redstone"
+  size: 54
+  back-button-slot: 53
+  parent-shop: "combat"
+
+pages:
+  page1:
+    items:
+      redstone_torch:
+        material: "REDSTONE_TORCH"
+        name: "&cPochodnia Redstone"
+        buy-price: 18.0
+        sell-price: 4.0
+      repeater:
+        material: "REPEATER"
+        name: "&cPrzekaźnik Redstone"
+        buy-price: 48.0
+        sell-price: 10.0
+      comparator:
+        material: "COMPARATOR"
+        name: "&cKomparator Redstone"
+        buy-price: 68.0
+        sell-price: 15.0
+      piston:
+        material: "PISTON"
+        name: "&7Tłok"
+        buy-price: 65.0
+        sell-price: 14.0
+      sticky_piston:
+        material: "STICKY_PISTON"
+        name: "&aLepki Tłok"
+        buy-price: 110.0
+        sell-price: 22.0
+      observer:
+        material: "OBSERVER"
+        name: "&7Detektor (Observer)"
+        buy-price: 85.0
+        sell-price: 18.0
+      dropper:
+        material: "DROPPER"
+        name: "&7Podajnik"
+        buy-price: 45.0
+        sell-price: 9.0
+      dispenser:
+        material: "DISPENSER"
+        name: "&7Dozownik"
+        buy-price: 85.0
+        sell-price: 18.0
+      hopper:
+        material: "HOPPER"
+        name: "&7Lej"
+        buy-price: 210.0
+        sell-price: 45.0
+      crafter:
+        material: "CRAFTER"
+        name: "&7Automatyczny Stół (Crafter)"
+        buy-price: 160.0
+        sell-price: 35.0
+      redstone_lamp:
+        material: "REDSTONE_LAMP"
+        name: "&6Lampa Redstone"
+        buy-price: 75.0
+        sell-price: 16.0
+      daylight_detector:
+        material: "DAYLIGHT_DETECTOR"
+        name: "&eCzujnik Światła Dziennego"
+        buy-price: 95.0
+        sell-price: 20.0
+      lever:
+        material: "LEVER"
+        name: "&7Dźwignia"
+        buy-price: 8.0
+        sell-price: 1.5
+      stone_button:
+        material: "STONE_BUTTON"
+        name: "&7Kamienny Przycisk"
+        buy-price: 6.0
+        sell-price: 1.0
+      heavy_weighted_pressure_plate:
+        material: "HEAVY_WEIGHTED_PRESSURE_PLATE"
+        name: "&fCiężka Płyta Naciskowa"
+        buy-price: 75.0
+        sell-price: 16.0
+      light_weighted_pressure_plate:
+        material: "LIGHT_WEIGHTED_PRESSURE_PLATE"
+        name: "&eLekka Płyta Naciskowa"
+        buy-price: 115.0
+        sell-price: 24.0
+      tripwire_hook:
+        material: "TRIPWIRE_HOOK"
+        name: "&7Zaczep na Linkę"
+        buy-price: 38.0
+        sell-price: 8.0
+      trapped_chest:
+        material: "TRAPPED_CHEST"
+        name: "&6Skrzynia-Pułapka"
+        buy-price: 60.0
+        sell-price: 12.0
+      target:
+        material: "TARGET"
+        name: "&cTarcza Strzelnicza"
+        buy-price: 130.0
+        sell-price: 26.0
+      sculk_sensor:
+        material: "SCULK_SENSOR"
+        name: "&3Czujnik Sculkowy"
+        buy-price: 420.0
+        sell-price: 90.0
+      rail:
+        material: "RAIL"
+        name: "&7Tory"
+        buy-price: 18.0
+        sell-price: 4.0
+      powered_rail:
+        material: "POWERED_RAIL"
+        name: "&eZasilane Tory"
+        buy-price: 65.0
+        sell-price: 14.0
+      detector_rail:
+        material: "DETECTOR_RAIL"
+        name: "&cTory z Czujnikiem"
+        buy-price: 48.0
+        sell-price: 10.0
+      activator_rail:
+        material: "ACTIVATOR_RAIL"
+        name: "&cTory Aktywacyjne"
+        buy-price: 48.0
+        sell-price: 10.0
+      minecart:
+        material: "MINECART"
+        name: "&7Wagonik"
+        buy-price: 190.0
+        sell-price: 40.0
+      hopper_minecart:
+        material: "HOPPER_MINECART"
+        name: "&7Wagonik z Lejem"
+        buy-price: 420.0
+        sell-price: 90.0
+      chest_minecart:
+        material: "CHEST_MINECART"
+        name: "&6Wagonik ze Skrzynią"
+        buy-price: 230.0
+        sell-price: 50.0
+      tnt:
+        material: "TNT"
+        name: "&c&lTNT"
+        buy-price: 240.0
+        sell-price: 45.0

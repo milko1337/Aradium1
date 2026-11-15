@@ -1,0 +1,147 @@
+# Podkategoria Jedzenie i Wypieki (1 strona, rodzic: farming)
+
+shop:
+  id: "food"
+  title: "&8» &6&lJedzenie i Wypieki"
+  size: 54
+  back-button-slot: 53
+  parent-shop: "farming"
+
+pages:
+  page1:
+    items:
+      bread:
+        material: "BREAD"
+        name: "&eChleb"
+        buy-price: 22.0
+        sell-price: 5.0
+      cookie:
+        material: "COOKIE"
+        name: "&6Ciastko"
+        buy-price: 10.0
+        sell-price: 2.0
+      cake:
+        material: "CAKE"
+        name: "&fTort"
+        buy-price: 95.0
+        sell-price: 18.0
+      pumpkin_pie:
+        material: "PUMPKIN_PIE"
+        name: "&6Ciasto Dyniowe"
+        buy-price: 32.0
+        sell-price: 7.0
+      baked_potato:
+        material: "BAKED_POTATO"
+        name: "&6Pieczony Ziemniak"
+        buy-price: 14.0
+        sell-price: 3.0
+      apple:
+        material: "APPLE"
+        name: "&cJabłko"
+        buy-price: 20.0
+        sell-price: 4.5
+      golden_carrot:
+        material: "GOLDEN_CARROT"
+        name: "&eZłota Marchewka"
+        buy-price: 85.0
+        sell-price: 18.0
+      golden_apple:
+        material: "GOLDEN_APPLE"
+        name: "&eZłote Jabłko"
+        buy-price: 520.0
+        sell-price: 120.0
+      enchanted_golden_apple:
+        material: "ENCHANTED_GOLDEN_APPLE"
+        name: "&d&lZaklęte Złote Jabłko"
+        buy-price: 6500.0
+        sell-price: 1400.0
+      beef:
+        material: "BEEF"
+        name: "&cSurowa Wołowina"
+        buy-price: 18.0
+        sell-price: 4.0
+      cooked_beef:
+        material: "COOKED_BEEF"
+        name: "&6Befsztyk (Pieczona Wołowina)"
+        buy-price: 26.0
+        sell-price: 6.0
+      porkchop:
+        material: "PORKCHOP"
+        name: "&dSurowa Wieprzowina"
+        buy-price: 18.0
+        sell-price: 4.0
+      cooked_porkchop:
+        material: "COOKED_PORKCHOP"
+        name: "&6Pieczona Wieprzowina"
+        buy-price: 26.0
+        sell-price: 6.0
+      chicken:
+        material: "CHICKEN"
+        name: "&fSurowy Kurczak"
+        buy-price: 14.0
+        sell-price: 3.0
+      cooked_chicken:
+        material: "COOKED_CHICKEN"
+        name: "&6Pieczony Kurczak"
+        buy-price: 20.0
+        sell-price: 4.5
+      mutton:
+        material: "MUTTON"
+        name: "&cSurowa Baranina"
+        buy-price: 16.0
+        sell-price: 3.5
+      cooked_mutton:
+        material: "COOKED_MUTTON"
+        name: "&6Pieczona Baranina"
+        buy-price: 22.0
+        sell-price: 5.0
+      rabbit:
+        material: "RABBIT"
+        name: "&eSurowy Królik"
+        buy-price: 18.0
+        sell-price: 4.0
+      cooked_rabbit:
+        material: "COOKED_RABBIT"
+        name: "&6Pieczony Królik"
+        buy-price: 24.0
+        sell-price: 5.5
+      rabbit_stew:
+        material: "RABBIT_STEW"
+        name: "&6Gulasz z Królika"
+        buy-price: 60.0
+        sell-price: 14.0
+      mushroom_stew:
+        material: "MUSHROOM_STEW"
+        name: "&cZupa Grzybowa"
+        buy-price: 35.0
+        sell-price: 8.0
+      cod:
+        material: "COD"
+        name: "&bSurowy Dorsz"
+        buy-price: 16.0
+        sell-price: 4.0
+      cooked_cod:
+        material: "COOKED_COD"
+        name: "&6Pieczony Dorsz"
+        buy-price: 22.0
+        sell-price: 5.5
+      salmon:
+        material: "SALMON"
+        name: "&cSurowy Łosoś"
+        buy-price: 20.0
+        sell-price: 5.0
+      cooked_salmon:
+        material: "COOKED_SALMON"
+        name: "&6Pieczony Łosoś"
+        buy-price: 28.0
+        sell-price: 7.0
+      tropical_fish:
+        material: "TROPICAL_FISH"
+        name: "&6Ryba Tropikalna"
+        buy-price: 45.0
+        sell-price: 12.0
+      dried_kelp:
+        material: "DRIED_KELP"
+        name: "&2Suszone Wodorosty"
+        buy-price: 7.5
+        sell-price: 0.8
