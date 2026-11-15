@@ -111,3 +111,9 @@ buildNumber.properties
 
 # Common working directory
 run/
+
+# SQLite databases
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
