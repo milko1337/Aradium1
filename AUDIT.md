@@ -198,10 +198,9 @@
     i losowanie rud z `cobble-generator.yml`) oraz `MEMBER_LIMIT` z zapisem w `skyblock_upgrades`.
 
 - **`quests/` (`QuestType`, `QuestDefinition`, `QuestStage`, `QuestProgress`, `QuestManager`)**
-  - Obsługa 7 etapów misji wyspy (`56` zadań, w tym `Mistrz Hodowli` na każdym etapie,
-    `Budowniczy` na każdym etapie, `Mistrz Ekonomii` od 3. etapu oraz `Kolekcjoner Spawnerów`
-    na etapach VI–VII), serializacja JSON, paski postępu `buildProgressBar`, kontrola odblokowań
-    etapów i wypłata nagród.
+  - Obsługa 7 etapów misji wyspy (`86` zadań według rozpiski w `QUESTY_LISTA.md`,
+    w tym `SPAWNER_MOB_UNLOCK`, `ISLAND_UPGRADE`, `EQUIP_ARMOR`, `SPAWNER_UPGRADE` i `BREED`),
+    serializacja JSON, paski postępu `buildProgressBar`, kontrola odblokowań etapów i wypłata nagród.
 
 - **`gui/` (`SkyBlockGuiHolder`, `IslandSchematicGUI`, `IslandPanelGUI`, `IslandRolesGUI`, `IslandWarpsGUI`, `IslandUpgradesGUI`, `IslandTopGUI`, `QuestGUI`)**
   - Komplet menu wyspy (w tym `IslandUpgradesGUI` z 7 symetrycznymi ikonami ulepszeń
@@ -213,8 +212,8 @@
   - Ochrona wyspy, limit spawnerów, przyspieszony wzrost roślin (`BlockGrowEvent`),
     szansa na podwójne plony z dojrzałych upraw (`BlockDropItemEvent`), bonus XP/łupu z mobów
     (`EntityDeathEvent` z filtrem Anti-Dupe), generator surowców i mnożnik wydajności (`BlockFormEvent`
-    + `BlockBreakEvent`), czyszczenie `TRUSTED` przy wyjściu oraz zliczanie wszystkich 13 typów celów misji
-    (w tym `EntityBreedEvent` i ulepszeń spawnerów z `SpawnerGUI`).
+    + `BlockBreakEvent`), czyszczenie `TRUSTED` przy wyjściu oraz zliczanie wszystkich `16` typów celów misji
+    (w tym `EntityBreedEvent`, `SpawnerGUI`, `IslandUpgradeManager` oraz `ArmorModule`).
 
 - **`commands/IslandCommand.java`**
   - Obsługa `/is`: `create`, `home`, `sethome`, `panel`, `quests`, `level`, `top`,
@@ -273,10 +272,10 @@
     `7` ulepszeń wyspy (`WORLD_BORDER`, `SPAWNER_LIMIT`, `CROP_GROWTH`, `MEMBER_LIMIT`,
     `COBBLE_GENERATOR_YIELD`, `DOUBLE_CROP_DROP`, `MOB_DROP_BONUS`).
 
-15. `skyblockQuestsAllFiveStagesProgressAndGuiWorkCorrectly` — 7 etapów misji (`56` zadań,
-    w tym `Mistrz Hodowli` na każdym etapie, `Budowniczy` na każdym etapie, `Mistrz Ekonomii`
-    od etapu 3 oraz `Kolekcjoner Spawnerów` na etapach 6–7), JSON, paski postępu,
-    układ `QuestGUI` (etapy `1–7`, misje `10–16`/`19–25`) i cele `BLOCK_AND_CRAFT`, `BREED`, `SPAWNER_UPGRADE`.
+15. `skyblockQuestsAllFiveStagesProgressAndGuiWorkCorrectly` — 7 etapów misji (`86` zadań
+    z `QUESTY_LISTA.md`, w tym `SPAWNER_MOB_UNLOCK`, `ISLAND_UPGRADE`, `EQUIP_ARMOR`,
+    `SPAWNER_UPGRADE` i `BREED`), JSON, paski postępu, układ `QuestGUI` (etapy `1–7`,
+    misje `10–16`/`19–25`) i cele `BLOCK_AND_CRAFT`.
 
 16. `allShopCategoriesLoadCleanlyWithValidMaterialsAndPagination` — walidacja wszystkich 17 plików
     `shops/*.yml`, materiałów Paper `26.3`, powiązań `parent-shop`/`target-shop`, indeksowania
@@ -348,6 +347,16 @@ Aktualna lista zadań pozostałych do realizacji znajduje się w pliku [`PLAN.md
 ---
 
 ## 4. Historia zmian (Changelog)
+
+### 2026-11-20 — Pełna rozpiska 86 misji z `QUESTY_LISTA.md` (Etapy I–VII) (`2.0.0-SNAPSHOT`)
+
+- Dodano `3` nowe typy celów w `QuestType`: `SPAWNER_MOB_UNLOCK` (`SpawnerGUI`), `ISLAND_UPGRADE`
+  (`IslandUpgradeManager` / `Island#getTotalPurchasedUpgradeLevels()`) oraz `EQUIP_ARMOR`
+  (`ArmorModule`: pełne zestawy `GORNIK_TIER_1`, `HANDLARZ_TIER_2` i `BUTY_LOTNIKA`)
+  wraz ze zintegrowaną synchronizacją w `QuestManager#syncDynamicQuests`.
+
+- Zaktualizowano `quests.yml` pod dokładny plan użytkownika z `QUESTY_LISTA.md` (`9 + 11 + 13 + 14 + 13 + 13 + 13 = 86`
+  misji w 7 etapach) oraz zaktualizowano testy #10 i #15 w `AradiumAuditTest`.
 
 ### 2026-11-20 — Nowy układ `QuestGUI` i nowe misje (`Mistrz Hodowli`, `Budowniczy`, `Mistrz Ekonomii`, `Kolekcjoner Spawnerów`) (`2.0.0-SNAPSHOT`)
 

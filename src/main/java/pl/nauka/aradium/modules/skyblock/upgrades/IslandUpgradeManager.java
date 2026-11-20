@@ -284,6 +284,12 @@ public class IslandUpgradeManager {
         }
         islandManager.saveIsland(island);
 
+        plugin.getSkyBlockModule().ifPresent(skyBlock -> {
+            if (skyBlock.getQuestManager() != null) {
+                skyBlock.getQuestManager().syncDynamicQuests(player, island);
+            }
+        });
+
         player.sendMessage(ChatUtils.getMessage(
                         plugin.getConfig(),
                         "messages.island_upgrade_bought",

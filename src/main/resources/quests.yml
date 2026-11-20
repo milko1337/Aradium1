@@ -1,4 +1,4 @@
-# Konfiguracja systemu Misji SkyBlock (Moduł 5: 7 etapów po 7–9 współdzielonych zadań na wyspę)
+# Konfiguracja systemu Misji SkyBlock (Moduł 5: 7 etapów, 86 współdzielonych zadań na wyspę)
 # Menu GUI (45 slotów):
 # - Rząd 1 (sloty 1..7): zakładki etapów I–VII na samej górze w formie surowców (Coal -> Netherite Ingot)
 # - Rząd 2 (sloty 10..16): pierwszy rząd misji wybranego etapu (tematyczne przedmioty)
@@ -26,7 +26,7 @@ stages:
         slot: 10
         type: "BLOCK_BREAK"
         icon: "COBBLESTONE"
-        name: "&7&lGórnik z Wyspy"
+        name: "&7&lGórnik"
         lore:
           - "&7Wykop surowce w generatorze:"
           - "&8• &fBruk (Cobblestone): &e%progress_COBBLESTONE%&8/&a128"
@@ -42,11 +42,27 @@ stages:
             - "TORCH:32"
             - "IRON_PICKAXE:1"
 
-      farming_1:
+      woodcutting_1:
         slot: 11
+        type: "BLOCK_BREAK"
+        icon: "OAK_LOG"
+        name: "&6&lDrwal"
+        lore:
+          - "&7Ścinaj dowolne pnie drzew na wyspie:"
+          - "&8• &fPnie drzew (Logi): &e%progress_ANY_LOG%&8/&a64"
+        objectives:
+          ANY_LOG: 64
+        rewards:
+          money: 450.0
+          items:
+            - "OAK_SAPLING:8"
+            - "IRON_AXE:1"
+
+      farming_1:
+        slot: 12
         type: "COLLECT"
         icon: "WHEAT"
-        name: "&e&lPierwsze Plony i Hodowla"
+        name: "&e&lRolnik / Zbieracz"
         lore:
           - "&7Zbierz wskazane produkty rolne i hodowlane:"
           - "&8• &fPszenica: &e%progress_WHEAT%&8/&a64"
@@ -64,60 +80,11 @@ stages:
             - "BREAD:16"
             - "BONE_MEAL:32"
 
-      breeding_1:
-        slot: 12
-        type: "BREED"
-        icon: "CARROT"
-        name: "&a&lMistrz Hodowli"
-        lore:
-          - "&7Rozmnóż podstawowe zwierzęta na swojej wyspie:"
-          - "&8• &fŚwinie (Pig): &e%progress_PIG%&8/&a8"
-          - "&8• &fKurczaki (Chicken): &e%progress_CHICKEN%&8/&a8"
-        objectives:
-          PIG: 8
-          CHICKEN: 8
-        rewards:
-          money: 600.0
-          items:
-            - "WHEAT_SEEDS:16"
-            - "CARROT:16"
-
-      woodcutting_1:
-        slot: 13
-        type: "BLOCK_BREAK"
-        icon: "OAK_LOG"
-        name: "&6&lDrwal"
-        lore:
-          - "&7Ścinaj dowolne pnie drzew na wyspie:"
-          - "&8• &fPnie drzew (Logi): &e%progress_ANY_LOG%&8/&a64"
-        objectives:
-          ANY_LOG: 64
-        rewards:
-          money: 450.0
-          items:
-            - "OAK_SAPLING:8"
-            - "IRON_AXE:1"
-
-      island_level_1:
-        slot: 14
-        type: "ISLAND_LEVEL"
-        icon: "GRASS_BLOCK"
-        name: "&b&lBudowniczy"
-        lore:
-          - "&7Rozbuduj wyspę i zdobądź wymaganą liczbę punktów:"
-          - "&8• &fPunkty wyspy: &e%progress_ISLAND_LEVEL%&8/&a500"
-        objectives:
-          ISLAND_LEVEL: 500
-        rewards:
-          money: 800.0
-          items:
-            - "DIRT:32"
-
       slayer_1:
-        slot: 15
+        slot: 13
         type: "ENTITY_KILL"
         icon: "IRON_SWORD"
-        name: "&c&lObrońca Nocy"
+        name: "&c&lŁowca Mobów"
         lore:
           - "&7Pokonaj potwory zagrażające wyspie:"
           - "&8• &fZombie: &e%progress_ZOMBIE%&8/&a16"
@@ -134,10 +101,10 @@ stages:
             - "GOLDEN_APPLE:2"
 
       fishing_1:
-        slot: 16
+        slot: 14
         type: "FISH_CATCH"
         icon: "COD"
-        name: "&9&lCierpliwy Wędkarz"
+        name: "&9&lWędkarz"
         lore:
           - "&7Złów ryby z wody na swojej wyspie:"
           - "&8• &fZłowione ryby: &e%progress_ANY_FISH%&8/&a16"
@@ -147,6 +114,73 @@ stages:
           money: 500.0
           items:
             - "PRISMARINE_SHARD:8"
+
+      breeding_1:
+        slot: 15
+        type: "BREED"
+        icon: "CARROT"
+        name: "&a&lMistrz Hodowli"
+        lore:
+          - "&7Rozmnóż podstawowe zwierzęta na swojej wyspie:"
+          - "&8• &fŚwinie (Pig): &e%progress_PIG%&8/&a8"
+          - "&8• &fKurczaki (Chicken): &e%progress_CHICKEN%&8/&a8"
+        objectives:
+          PIG: 8
+          CHICKEN: 8
+        rewards:
+          money: 600.0
+          items:
+            - "WHEAT_SEEDS:16"
+            - "CARROT:16"
+
+      crafting_1:
+        slot: 16
+        type: "CRAFT"
+        icon: "CRAFTING_TABLE"
+        name: "&e&lRzemieślnik"
+        lore:
+          - "&7Stwórz pierwsze niezbędne wyposażenie bazy:"
+          - "&8• &fDębowe deski (Oak Planks): &e%progress_OAK_PLANKS%&8/&a128"
+          - "&8• &fSkrzynie (Chest): &e%progress_CHEST%&8/&a16"
+          - "&8• &fPiece (Furnace): &e%progress_FURNACE%&8/&a4"
+        objectives:
+          OAK_PLANKS: 128
+          CHEST: 16
+          FURNACE: 4
+        rewards:
+          money: 550.0
+          items:
+            - "IRON_INGOT:8"
+
+      economy_1:
+        slot: 19
+        type: "BALANCE_REACH"
+        icon: "GOLD_NUGGET"
+        name: "&a&lMistrz Ekonomii"
+        lore:
+          - "&7Zgromadź na koncie pierwszą gotówkę:"
+          - "&8• &fPosiadana gotówka: &e%progress_BALANCE%&8/&a2000$"
+        objectives:
+          BALANCE: 2000
+        rewards:
+          money: 500.0
+          items:
+            - "EMERALD:4"
+
+      island_level_1:
+        slot: 20
+        type: "ISLAND_LEVEL"
+        icon: "GRASS_BLOCK"
+        name: "&b&lBudowniczy"
+        lore:
+          - "&7Rozbuduj wyspę i zdobądź wymaganą liczbę punktów:"
+          - "&8• &fPunkty wyspy: &e%progress_ISLAND_LEVEL%&8/&a500"
+        objectives:
+          ISLAND_LEVEL: 500
+        rewards:
+          money: 800.0
+          items:
+            - "DIRT:32"
 
   stage_2:
     stage: 2
@@ -159,7 +193,7 @@ stages:
         slot: 10
         type: "BLOCK_BREAK"
         icon: "IRON_ORE"
-        name: "&7&lZaawansowany Górnik"
+        name: "&7&lGórnik"
         lore:
           - "&7Wykop większe zasoby surowców:"
           - "&8• &fBruk (Cobblestone): &e%progress_COBBLESTONE%&8/&a256"
@@ -177,11 +211,26 @@ stages:
             - "IRON_INGOT:16"
             - "COAL:32"
 
-      farming_2:
+      woodcutting_2:
         slot: 11
+        type: "BLOCK_BREAK"
+        icon: "SPRUCE_LOG"
+        name: "&6&lDrwal"
+        lore:
+          - "&7Ścinaj kolejne drzewa pod rozbudowę wyspy:"
+          - "&8• &fPnie drzew (Logi): &e%progress_ANY_LOG%&8/&a192"
+        objectives:
+          ANY_LOG: 192
+        rewards:
+          money: 1200.0
+          items:
+            - "SPRUCE_SAPLING:8"
+
+      farming_2:
+        slot: 12
         type: "COLLECT"
         icon: "POISONOUS_POTATO"
-        name: "&e&lWielka Farma"
+        name: "&e&lRolnik / Zbieracz"
         lore:
           - "&7Zbierz wskazane plony z pól uprawnych:"
           - "&8• &fPszenica: &e%progress_WHEAT%&8/&a128"
@@ -196,8 +245,44 @@ stages:
           items:
             - "GOLDEN_CARROT:16"
 
+      slayer_2:
+        slot: 13
+        type: "ENTITY_KILL"
+        icon: "DIAMOND_SWORD"
+        name: "&c&lŁowca Mobów"
+        lore:
+          - "&7Pokonaj hordy nocnych potworów:"
+          - "&8• &fZombie: &e%progress_ZOMBIE%&8/&a32"
+          - "&8• &fSzkielety: &e%progress_SKELETON%&8/&a16"
+          - "&8• &fWiedźmy (Witch): &e%progress_WITCH%&8/&a2"
+        objectives:
+          ZOMBIE: 32
+          SKELETON: 16
+          WITCH: 2
+        rewards:
+          money: 2000.0
+          items:
+            - "GOLDEN_APPLE:4"
+
+      fishing_2:
+        slot: 14
+        type: "FISH_CATCH"
+        icon: "SALMON"
+        name: "&9&lWędkarz"
+        lore:
+          - "&7Wykaż się cierpliwością nad wodą:"
+          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a64"
+          - "&8• &fŁososie (Salmon): &e%progress_SALMON%&8/&a8"
+        objectives:
+          ANY_FISH: 64
+          SALMON: 8
+        rewards:
+          money: 1500.0
+          items:
+            - "COOKED_SALMON:16"
+
       breeding_2:
-        slot: 12
+        slot: 15
         type: "BREED"
         icon: "HAY_BLOCK"
         name: "&e&lMistrz Hodowli"
@@ -215,10 +300,10 @@ stages:
             - "LEATHER:16"
 
       smelting_2:
-        slot: 13
+        slot: 16
         type: "SMELT"
         icon: "FURNACE"
-        name: "&6&lHutnik Wyspy"
+        name: "&6&lHutnik"
         lore:
           - "&7Przepal bruk na gładki kamień w piecu:"
           - "&8• &fPrzepalony kamień (Stone): &e%progress_STONE%&8/&a128"
@@ -230,8 +315,42 @@ stages:
             - "COAL_BLOCK:4"
             - "BLAST_FURNACE:1"
 
+      crafting_2:
+        slot: 19
+        type: "CRAFT"
+        icon: "HOPPER"
+        name: "&e&lRzemieślnik"
+        lore:
+          - "&7Zbuduj podstawową automatyzację i magazyny:"
+          - "&8• &fLeje (Hopper): &e%progress_HOPPER%&8/&a8"
+          - "&8• &fKompostowniki (Composter): &e%progress_COMPOSTER%&8/&a4"
+          - "&8• &fSkrzynie (Chest): &e%progress_CHEST%&8/&a32"
+        objectives:
+          HOPPER: 8
+          COMPOSTER: 4
+          CHEST: 32
+        rewards:
+          money: 1800.0
+          items:
+            - "REDSTONE:32"
+
+      economy_2:
+        slot: 20
+        type: "BALANCE_REACH"
+        icon: "GOLD_BLOCK"
+        name: "&a&lMistrz Ekonomii"
+        lore:
+          - "&7Zwiększ stan swojego konta bankowego:"
+          - "&8• &fPosiadana gotówka: &e%progress_BALANCE%&8/&a8000$"
+        objectives:
+          BALANCE: 8000
+        rewards:
+          money: 1500.0
+          items:
+            - "EMERALD:8"
+
       island_level_2:
-        slot: 14
+        slot: 21
         type: "ISLAND_LEVEL"
         icon: "IRON_BLOCK"
         name: "&b&lBudowniczy"
@@ -245,41 +364,20 @@ stages:
           items:
             - "IRON_BLOCK:2"
 
-      slayer_2:
-        slot: 15
-        type: "ENTITY_KILL"
-        icon: "DIAMOND_SWORD"
-        name: "&c&lŁowca Wiedźm"
+      armor_gornik_2:
+        slot: 22
+        type: "EQUIP_ARMOR"
+        icon: "IRON_CHESTPLATE"
+        name: "&6&lMistrz Magii i Zbroi: Górnik T1"
         lore:
-          - "&7Pokonaj hordy nocnych potworów:"
-          - "&8• &fZombie: &e%progress_ZOMBIE%&8/&a32"
-          - "&8• &fSzkielety: &e%progress_SKELETON%&8/&a16"
-          - "&8• &fWiedźmy (Witch): &e%progress_WITCH%&8/&a2"
+          - "&7Skompletuj i załóż cały zestaw 4/4 zbroi &eGórnika Tier 1&7:"
+          - "&8• &fPełny set Górnika (Tier 1): &e%progress_GORNIK_TIER_1%&8/&a1"
         objectives:
-          ZOMBIE: 32
-          SKELETON: 16
-          WITCH: 2
+          GORNIK_TIER_1: 1
         rewards:
-          money: 2000.0
+          money: 3000.0
           items:
-            - "GOLDEN_APPLE:4"
-
-      fishing_2:
-        slot: 16
-        type: "FISH_CATCH"
-        icon: "SALMON"
-        name: "&9&lPołów Łososia"
-        lore:
-          - "&7Wykaż się cierpliwością nad wodą:"
-          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a64"
-          - "&8• &fŁososie (Salmon): &e%progress_SALMON%&8/&a8"
-        objectives:
-          ANY_FISH: 64
-          SALMON: 8
-        rewards:
-          money: 1500.0
-          items:
-            - "COOKED_SALMON:16"
+            - "DIAMOND:4"
 
   stage_3:
     stage: 3
@@ -292,7 +390,7 @@ stages:
         slot: 10
         type: "BLOCK_BREAK"
         icon: "DIAMOND_ORE"
-        name: "&b&lDiamentowa Żyła"
+        name: "&b&lGórnik"
         lore:
           - "&7Wydobądź cenne kruszce ze swojego generatora:"
           - "&8• &fBruk (Cobblestone): &e%progress_COBBLESTONE%&8/&a512"
@@ -307,11 +405,26 @@ stages:
           items:
             - "DIAMOND:8"
 
-      farming_3:
+      woodcutting_3:
         slot: 11
+        type: "BLOCK_BREAK"
+        icon: "DARK_OAK_LOG"
+        name: "&6&lDrwal"
+        lore:
+          - "&7Zdobądź duże zapasy drewna pod zaawansowane konstrukcje:"
+          - "&8• &fPnie drzew (Logi): &e%progress_ANY_LOG%&8/&a512"
+        objectives:
+          ANY_LOG: 512
+        rewards:
+          money: 3500.0
+          items:
+            - "DARK_OAK_SAPLING:8"
+
+      farming_3:
+        slot: 12
         type: "COLLECT"
         icon: "CARROT"
-        name: "&e&lOgrodnik Ekspert"
+        name: "&e&lRolnik / Zbieracz"
         lore:
           - "&7Zbierz wielkie ilości warzyw i owoców:"
           - "&8• &fMarchewki (Carrot): &e%progress_CARROT%&8/&a512"
@@ -327,8 +440,42 @@ stages:
             - "COMPOSTER:4"
             - "BONE_BLOCK:8"
 
+      slayer_3:
+        slot: 13
+        type: "ENTITY_KILL"
+        icon: "IRON_GOLEM_SPAWN_EGG"
+        name: "&c&lŁowca Mobów"
+        lore:
+          - "&7Pokonaj potężnych żelaznych strażników:"
+          - "&8• &fŻelazne Golemy: &e%progress_IRON_GOLEM%&8/&a16"
+        objectives:
+          IRON_GOLEM: 16
+        rewards:
+          money: 6000.0
+          items:
+            - "IRON_BLOCK:8"
+
+      fishing_3:
+        slot: 14
+        type: "FISH_CATCH"
+        icon: "PUFFERFISH"
+        name: "&9&lWędkarz"
+        lore:
+          - "&7Złów ryby, rozdymkę oraz pierwszy skarb:"
+          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a128"
+          - "&8• &fRozdymki (Pufferfish): &e%progress_PUFFERFISH%&8/&a16"
+          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a1"
+        objectives:
+          ANY_FISH: 128
+          PUFFERFISH: 16
+          TREASURE: 1
+        rewards:
+          money: 5000.0
+          items:
+            - "NAUTILUS_SHELL:2"
+
       breeding_3:
-        slot: 12
+        slot: 15
         type: "BREED"
         icon: "RABBIT_FOOT"
         name: "&6&lMistrz Hodowli"
@@ -344,8 +491,59 @@ stages:
           items:
             - "GOLDEN_CARROT:32"
 
+      smelting_3:
+        slot: 16
+        type: "SMELT"
+        icon: "BLAST_FURNACE"
+        name: "&6&lHutnik"
+        lore:
+          - "&7Wytop sztabki żelaza i złota w piecach:"
+          - "&8• &fSztabki żelaza: &e%progress_IRON_INGOT%&8/&a128"
+          - "&8• &fSztabki złota: &e%progress_GOLD_INGOT%&8/&a64"
+        objectives:
+          IRON_INGOT: 128
+          GOLD_INGOT: 64
+        rewards:
+          money: 4500.0
+          items:
+            - "COAL_BLOCK:12"
+
+      crafting_3:
+        slot: 19
+        type: "CRAFT"
+        icon: "ANVIL"
+        name: "&e&lRzemieślnik"
+        lore:
+          - "&7Skonstruuj mechanizmy redstone oraz kowadła:"
+          - "&8• &fKowadła (Anvil): &e%progress_ANVIL%&8/&a2"
+          - "&8• &fTłoki (Piston): &e%progress_PISTON%&8/&a16"
+          - "&8• &fDetektory (Observer): &e%progress_OBSERVER%&8/&a8"
+        objectives:
+          ANVIL: 2
+          PISTON: 16
+          OBSERVER: 8
+        rewards:
+          money: 5000.0
+          items:
+            - "REDSTONE_BLOCK:8"
+
+      trading_3:
+        slot: 20
+        type: "VILLAGER_TRADE"
+        icon: "EMERALD"
+        name: "&a&lKupiec Wioski"
+        lore:
+          - "&7Handluj z osadnikami i zdobywaj szmaragdy:"
+          - "&8• &fSzmaragdy z handlu: &e%progress_EMERALD%&8/&a32"
+        objectives:
+          EMERALD: 32
+        rewards:
+          money: 5000.0
+          items:
+            - "EMERALD_BLOCK:2"
+
       economy_3:
-        slot: 13
+        slot: 21
         type: "BALANCE_REACH"
         icon: "EMERALD_BLOCK"
         name: "&a&lMistrz Ekonomii"
@@ -360,7 +558,7 @@ stages:
             - "DIAMOND:6"
 
       island_level_3:
-        slot: 14
+        slot: 22
         type: "ISLAND_LEVEL"
         icon: "DIAMOND_BLOCK"
         name: "&b&lBudowniczy"
@@ -374,54 +572,35 @@ stages:
           items:
             - "DIAMOND_BLOCK:1"
 
-      slayer_3:
-        slot: 15
-        type: "ENTITY_KILL"
-        icon: "IRON_GOLEM_SPAWN_EGG"
-        name: "&c&lPogromca Golemów"
+      spawner_explorer_3:
+        slot: 23
+        type: "SPAWNER_MOB_UNLOCK"
+        icon: "PIG_SPAWN_EGG"
+        name: "&d&lOdkrywca Spawnerów"
         lore:
-          - "&7Pokonaj potężnych żelaznych strażników:"
-          - "&8• &fŻelazne Golemy: &e%progress_IRON_GOLEM%&8/&a16"
+          - "&7Odblokuj nowe typy mobów w sklepie spawnera (Shift + PPM):"
+          - "&8• &fOdblokowane moby: &e%progress_MOB_UNLOCKED%&8/&a2"
         objectives:
-          IRON_GOLEM: 16
+          MOB_UNLOCKED: 2
         rewards:
           money: 6000.0
           items:
-            - "IRON_BLOCK:8"
+            - "EXPERIENCE_BOTTLE:32"
 
-      fishing_3:
-        slot: 16
-        type: "FISH_CATCH"
-        icon: "PUFFERFISH"
-        name: "&9&lPoszukiwacz Skarbów"
+      armor_handlarz_3:
+        slot: 24
+        type: "EQUIP_ARMOR"
+        icon: "GOLDEN_CHESTPLATE"
+        name: "&a&lMistrz Magii i Zbroi: Handlarz T2"
         lore:
-          - "&7Złów ryby, rozdymkę oraz pierwszy skarb:"
-          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a128"
-          - "&8• &fRozdymki (Pufferfish): &e%progress_PUFFERFISH%&8/&a16"
-          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a1"
+          - "&7Skompletuj i załóż cały zestaw 4/4 zbroi &eHandlarza Tier 2&7:"
+          - "&8• &fPełny set Handlarza (Tier 2): &e%progress_HANDLARZ_TIER_2%&8/&a1"
         objectives:
-          ANY_FISH: 128
-          PUFFERFISH: 16
-          TREASURE: 1
+          HANDLARZ_TIER_2: 1
         rewards:
-          money: 5000.0
+          money: 8000.0
           items:
-            - "NAUTILUS_SHELL:2"
-
-      trading_3:
-        slot: 19
-        type: "VILLAGER_TRADE"
-        icon: "EMERALD"
-        name: "&a&lKupiec Wioski"
-        lore:
-          - "&7Handluj z osadnikami i zdobywaj szmaragdy:"
-          - "&8• &fSzmaragdy z handlu: &e%progress_EMERALD%&8/&a32"
-        objectives:
-          EMERALD: 32
-        rewards:
-          money: 5000.0
-          items:
-            - "EMERALD_BLOCK:2"
+            - "EMERALD_BLOCK:4"
 
   stage_4:
     stage: 4
@@ -434,7 +613,7 @@ stages:
         slot: 10
         type: "BLOCK_BREAK"
         icon: "OBSIDIAN"
-        name: "&5&lObsydianowy Kolos"
+        name: "&5&lGórnik"
         lore:
           - "&7Wykop ogromne ilości kamienia, obsydianu i rud:"
           - "&8• &fBruk (Cobblestone): &e%progress_COBBLESTONE%&8/&a1024"
@@ -456,7 +635,7 @@ stages:
         slot: 11
         type: "COLLECT"
         icon: "NETHER_WART"
-        name: "&e&lPlantator Trzciny i Brodawek"
+        name: "&e&lRolnik / Zbieracz"
         lore:
           - "&7Zbierz wielkie plantacje roślin:"
           - "&8• &fTrzcina cukrowa: &e%progress_SUGAR_CANE%&8/&a1024"
@@ -470,8 +649,47 @@ stages:
             - "GLOWSTONE:16"
             - "SOUL_SAND:32"
 
-      breeding_4:
+      slayer_4:
         slot: 12
+        type: "ENTITY_KILL"
+        icon: "BLAZE_ROD"
+        name: "&c&lŁowca Mobów"
+        lore:
+          - "&7Pokonaj potężne istoty innych wymiarów:"
+          - "&8• &fEndermany: &e%progress_ENDERMAN%&8/&a64"
+          - "&8• &fPłomyki (Blaze): &e%progress_BLAZE%&8/&a32"
+          - "&8• &fGhasty: &e%progress_GHAST%&8/&a8"
+        objectives:
+          ENDERMAN: 64
+          BLAZE: 32
+          GHAST: 8
+        rewards:
+          money: 18000.0
+          items:
+            - "ENDER_PEARL:16"
+            - "ENCHANTED_GOLDEN_APPLE:1"
+
+      fishing_4:
+        slot: 13
+        type: "FISH_CATCH"
+        icon: "TROPICAL_FISH"
+        name: "&9&lWędkarz"
+        lore:
+          - "&7Wyłów egzotyczne ryby i cenne skarby:"
+          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a256"
+          - "&8• &fTropikalne ryby: &e%progress_TROPICAL_FISH%&8/&a64"
+          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a5"
+        objectives:
+          ANY_FISH: 256
+          TROPICAL_FISH: 64
+          TREASURE: 5
+        rewards:
+          money: 14000.0
+          items:
+            - "HEART_OF_THE_SEA:1"
+
+      breeding_4:
+        slot: 14
         type: "BREED"
         icon: "GOLDEN_CARROT"
         name: "&d&lMistrz Hodowli"
@@ -490,77 +708,57 @@ stages:
             - "SADDLE:4"
             - "COD:32"
 
-      economy_4:
-        slot: 13
-        type: "BALANCE_REACH"
-        icon: "NETHERITE_SCRAP"
-        name: "&a&lMistrz Ekonomii"
+      smelting_4:
+        slot: 15
+        type: "SMELT"
+        icon: "GLASS"
+        name: "&6&lHutnik"
         lore:
-          - "&7Zgromadź na koncie pokaźny majątek:"
-          - "&8• &fPosiadana gotówka: &e%progress_BALANCE%&8/&a50000$"
+          - "&7Przepal ogromne partie szkła i żelaza:"
+          - "&8• &fSzkło (Glass): &e%progress_GLASS%&8/&a512"
+          - "&8• &fSztabki żelaza: &e%progress_IRON_INGOT%&8/&a256"
         objectives:
-          BALANCE: 50000
+          GLASS: 512
+          IRON_INGOT: 256
         rewards:
-          money: 10000.0
+          money: 13000.0
           items:
-            - "NETHERITE_SCRAP:4"
+            - "IRON_BLOCK:6"
 
-      island_level_4:
-        slot: 14
-        type: "ISLAND_LEVEL"
-        icon: "BEACON"
-        name: "&b&lBudowniczy"
+      crafting_4:
+        slot: 16
+        type: "CRAFT"
+        icon: "ENCHANTING_TABLE"
+        name: "&e&lRzemieślnik"
         lore:
-          - "&7Rozbuduj wyspę i zdobądź 2500 punktów:"
-          - "&8• &fPunkty wyspy: &e%progress_ISLAND_LEVEL%&8/&a2500"
+          - "&7Przygotuj pełną salę do zaklinania na wyspie:"
+          - "&8• &fStół do zaklęć: &e%progress_ENCHANTING_TABLE%&8/&a1"
+          - "&8• &fBiblioteczki (Bookshelf): &e%progress_BOOKSHELF%&8/&a15"
         objectives:
-          ISLAND_LEVEL: 2500
+          ENCHANTING_TABLE: 1
+          BOOKSHELF: 15
         rewards:
           money: 15000.0
           items:
-            - "EMERALD_BLOCK:8"
+            - "LAPIS_BLOCK:8"
 
-      slayer_4:
-        slot: 15
-        type: "ENTITY_KILL"
-        icon: "BLAZE_ROD"
-        name: "&c&lZabójca Netheru i Endu"
+      trading_4:
+        slot: 19
+        type: "VILLAGER_TRADE"
+        icon: "EMERALD"
+        name: "&a&lKupiec Wioski"
         lore:
-          - "&7Pokonaj potężne istoty innych wymiarów:"
-          - "&8• &fEndermany: &e%progress_ENDERMAN%&8/&a64"
-          - "&8• &fPłomyki (Blaze): &e%progress_BLAZE%&8/&a32"
-          - "&8• &fGhasty: &e%progress_GHAST%&8/&a8"
+          - "&7Rozwijaj handel z wioską na swojej wyspie:"
+          - "&8• &fSzmaragdy z handlu: &e%progress_EMERALD%&8/&a64"
         objectives:
-          ENDERMAN: 64
-          BLAZE: 32
-          GHAST: 8
-        rewards:
-          money: 18000.0
-          items:
-            - "ENDER_PEARL:16"
-            - "ENCHANTED_GOLDEN_APPLE:1"
-
-      fishing_4:
-        slot: 16
-        type: "FISH_CATCH"
-        icon: "TROPICAL_FISH"
-        name: "&9&lKapitan Głębin"
-        lore:
-          - "&7Wyłów egzotyczne ryby i cenne skarby:"
-          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a256"
-          - "&8• &fTropikalne ryby: &e%progress_TROPICAL_FISH%&8/&a64"
-          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a5"
-        objectives:
-          ANY_FISH: 256
-          TROPICAL_FISH: 64
-          TREASURE: 5
+          EMERALD: 64
         rewards:
           money: 14000.0
           items:
-            - "HEART_OF_THE_SEA:1"
+            - "EMERALD_BLOCK:6"
 
       alchemy_4:
-        slot: 19
+        slot: 20
         type: "BREW"
         icon: "BREWING_STAND"
         name: "&d&lMistrz Alchemii"
@@ -575,6 +773,81 @@ stages:
             - "BLAZE_ROD:16"
             - "GLOWSTONE_DUST:32"
 
+      economy_4:
+        slot: 21
+        type: "BALANCE_REACH"
+        icon: "NETHERITE_SCRAP"
+        name: "&a&lMistrz Ekonomii"
+        lore:
+          - "&7Zgromadź na koncie pokaźny majątek:"
+          - "&8• &fPosiadana gotówka: &e%progress_BALANCE%&8/&a50000$"
+        objectives:
+          BALANCE: 50000
+        rewards:
+          money: 10000.0
+          items:
+            - "NETHERITE_SCRAP:4"
+
+      island_level_4:
+        slot: 22
+        type: "ISLAND_LEVEL"
+        icon: "BEACON"
+        name: "&b&lBudowniczy"
+        lore:
+          - "&7Rozbuduj wyspę i zdobądź 2500 punktów:"
+          - "&8• &fPunkty wyspy: &e%progress_ISLAND_LEVEL%&8/&a2500"
+        objectives:
+          ISLAND_LEVEL: 2500
+        rewards:
+          money: 15000.0
+          items:
+            - "EMERALD_BLOCK:8"
+
+      spawner_explorer_4:
+        slot: 23
+        type: "SPAWNER_MOB_UNLOCK"
+        icon: "COW_SPAWN_EGG"
+        name: "&d&lOdkrywca Spawnerów"
+        lore:
+          - "&7Odblokuj kolejne moby w sklepie spawnera:"
+          - "&8• &fOdblokowane moby: &e%progress_MOB_UNLOCKED%&8/&a4"
+        objectives:
+          MOB_UNLOCKED: 4
+        rewards:
+          money: 18000.0
+          items:
+            - "DIAMOND:8"
+
+      island_upgrade_4:
+        slot: 24
+        type: "ISLAND_UPGRADE"
+        icon: "EXPERIENCE_BOTTLE"
+        name: "&6&lMistrz Ulepszeń Wyspy"
+        lore:
+          - "&7Kupuj ulepszenia wyspy w &e/is upgrades&7:"
+          - "&8• &fZakupione poziomy ulepszeń: &e%progress_UPGRADE_BOUGHT%&8/&a4"
+        objectives:
+          UPGRADE_BOUGHT: 4
+        rewards:
+          money: 16000.0
+          items:
+            - "GOLD_BLOCK:8"
+
+      armor_lotnika_4:
+        slot: 25
+        type: "EQUIP_ARMOR"
+        icon: "LEATHER_BOOTS"
+        name: "&f&lMistrz Magii i Zbroi: Buty Lotnika"
+        lore:
+          - "&7Zdobądź i załóż magiczne &eButy Lotnika&7:"
+          - "&8• &fZałożone Buty Lotnika: &e%progress_BUTY_LOTNIKA%&8/&a1"
+        objectives:
+          BUTY_LOTNIKA: 1
+        rewards:
+          money: 20000.0
+          items:
+            - "FEATHER:64"
+
   stage_5:
     stage: 5
     icon: "DIAMOND"
@@ -586,7 +859,7 @@ stages:
         slot: 10
         type: "BLOCK_AND_CRAFT"
         icon: "NETHERITE_INGOT"
-        name: "&4&lMistrz Wydobycia i Netheritu"
+        name: "&4&lGórnik"
         lore:
           - "&7Zdobądź ogromne ilości budulca oraz najrzadszy metal:"
           - "&8• &fWykopany bruk (Cobblestone): &e%progress_COBBLESTONE%&8/&a2048"
@@ -604,7 +877,7 @@ stages:
         slot: 11
         type: "COLLECT"
         icon: "CACTUS"
-        name: "&2&lKaktusowe Imperium"
+        name: "&2&lRolnik / Zbieracz"
         lore:
           - "&7Zbierz gigantyczną ilość kaktusów:"
           - "&8• &fKaktusy (Cactus): &e%progress_CACTUS%&8/&a2048"
@@ -615,8 +888,43 @@ stages:
           items:
             - "HOPPER:32"
 
-      breeding_5:
+      slayer_5:
         slot: 12
+        type: "ENTITY_KILL"
+        icon: "WITHER_SKELETON_SKULL"
+        name: "&4&lŁowca Mobów"
+        lore:
+          - "&7Pokonaj Withera i setkę Żelaznych Golemów:"
+          - "&8• &fWither: &e%progress_WITHER%&8/&a1"
+          - "&8• &fŻelazne Golemy: &e%progress_IRON_GOLEM%&8/&a100"
+        objectives:
+          WITHER: 1
+          IRON_GOLEM: 100
+        rewards:
+          money: 80000.0
+          items:
+            - "NETHER_STAR:1"
+            - "ENCHANTED_GOLDEN_APPLE:4"
+
+      fishing_5:
+        slot: 13
+        type: "FISH_CATCH"
+        icon: "HEART_OF_THE_SEA"
+        name: "&9&lWędkarz"
+        lore:
+          - "&7Zostań największym wędkarzem serwera:"
+          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a1000"
+          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a25"
+        objectives:
+          ANY_FISH: 1000
+          TREASURE: 25
+        rewards:
+          money: 60000.0
+          items:
+            - "TRIDENT:1"
+
+      breeding_5:
+        slot: 14
         type: "BREED"
         icon: "HONEYCOMB"
         name: "&5&lMistrz Hodowli"
@@ -634,8 +942,70 @@ stages:
           items:
             - "HONEY_BLOCK:16"
 
+      smelting_5:
+        slot: 15
+        type: "SMELT"
+        icon: "RAW_IRON_BLOCK"
+        name: "&6&lHutnik"
+        lore:
+          - "&7Przetop przemysłowe ilości żelaza i złota:"
+          - "&8• &fSztabki żelaza: &e%progress_IRON_INGOT%&8/&a512"
+          - "&8• &fSztabki złota: &e%progress_GOLD_INGOT%&8/&a256"
+        objectives:
+          IRON_INGOT: 512
+          GOLD_INGOT: 256
+        rewards:
+          money: 45000.0
+          items:
+            - "GOLD_BLOCK:8"
+
+      crafting_5:
+        slot: 16
+        type: "CRAFT"
+        icon: "BEACON"
+        name: "&b&lRzemieślnik"
+        lore:
+          - "&7Wytwórz na stole rzemieślniczym magiczną latarnię:"
+          - "&8• &fStworzona Latarnia (Beacon): &e%progress_BEACON%&8/&a1"
+        objectives:
+          BEACON: 1
+        rewards:
+          money: 60000.0
+          items:
+            - "NETHERITE_BLOCK:1"
+
+      trading_5:
+        slot: 19
+        type: "VILLAGER_TRADE"
+        icon: "EMERALD_BLOCK"
+        name: "&a&lKupiec Wioski"
+        lore:
+          - "&7Handluj hurtowo z osadnikami na wyspie:"
+          - "&8• &fSzmaragdy z handlu: &e%progress_EMERALD%&8/&a128"
+        objectives:
+          EMERALD: 128
+        rewards:
+          money: 45000.0
+          items:
+            - "EMERALD_BLOCK:16"
+
+      alchemy_5:
+        slot: 20
+        type: "BREW"
+        icon: "SPLASH_POTION"
+        name: "&d&lMistrz Alchemii"
+        lore:
+          - "&7Warz kolejne partie mikstur poziomu II:"
+          - "&8• &fMikstury poziomu II: &e%progress_POTION_TIER_2%&8/&a35"
+        objectives:
+          POTION_TIER_2: 35
+        rewards:
+          money: 45000.0
+          items:
+            - "BLAZE_ROD:32"
+
       economy_5:
-        slot: 13
+        slot: 21
         type: "BALANCE_REACH"
         icon: "RAW_GOLD_BLOCK"
         name: "&a&lMistrz Ekonomii"
@@ -650,7 +1020,7 @@ stages:
             - "EMERALD_BLOCK:32"
 
       island_level_5:
-        slot: 14
+        slot: 22
         type: "ISLAND_LEVEL"
         icon: "DRAGON_EGG"
         name: "&b&lBudowniczy"
@@ -664,55 +1034,35 @@ stages:
           items:
             - "NETHERITE_INGOT:8"
 
-      slayer_5:
-        slot: 15
-        type: "ENTITY_KILL"
-        icon: "WITHER_SKELETON_SKULL"
-        name: "&4&lPogromca Withera"
+      spawner_explorer_5:
+        slot: 23
+        type: "SPAWNER_MOB_UNLOCK"
+        icon: "BLAZE_SPAWN_EGG"
+        name: "&d&lOdkrywca Spawnerów"
         lore:
-          - "&7Pokonaj Withera i setkę Żelaznych Golemów:"
-          - "&8• &fWither: &e%progress_WITHER%&8/&a1"
-          - "&8• &fŻelazne Golemy: &e%progress_IRON_GOLEM%&8/&a100"
+          - "&7Odblokuj szeroką gamę mobów w sklepie spawnera:"
+          - "&8• &fOdblokowane moby: &e%progress_MOB_UNLOCKED%&8/&a8"
         objectives:
-          WITHER: 1
-          IRON_GOLEM: 100
+          MOB_UNLOCKED: 8
         rewards:
-          money: 80000.0
+          money: 55000.0
           items:
-            - "NETHER_STAR:1"
-            - "ENCHANTED_GOLDEN_APPLE:4"
+            - "DIAMOND_BLOCK:8"
 
-      fishing_5:
-        slot: 16
-        type: "FISH_CATCH"
-        icon: "HEART_OF_THE_SEA"
-        name: "&9&lWładca Oceanów"
+      island_upgrade_5:
+        slot: 24
+        type: "ISLAND_UPGRADE"
+        icon: "NETHER_STAR"
+        name: "&6&lMistrz Ulepszeń Wyspy"
         lore:
-          - "&7Zostań największym wędkarzem serwera:"
-          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a1000"
-          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a25"
+          - "&7Rozwijaj statystyki swojej wyspy w &e/is upgrades&7:"
+          - "&8• &fZakupione poziomy ulepszeń: &e%progress_UPGRADE_BOUGHT%&8/&a10"
         objectives:
-          ANY_FISH: 1000
-          TREASURE: 25
+          UPGRADE_BOUGHT: 10
         rewards:
-          money: 60000.0
+          money: 55000.0
           items:
-            - "TRIDENT:1"
-
-      crafting_5:
-        slot: 19
-        type: "CRAFT"
-        icon: "BEACON"
-        name: "&b&lTwórca Magicznej Latarni"
-        lore:
-          - "&7Wytwórz na stole rzemieślniczym magiczną latarnię:"
-          - "&8• &fStworzona Latarnia (Beacon): &e%progress_BEACON%&8/&a1"
-        objectives:
-          BEACON: 1
-        rewards:
-          money: 60000.0
-          items:
-            - "NETHERITE_BLOCK:1"
+            - "DIAMOND_BLOCK:10"
 
   stage_6:
     stage: 6
@@ -725,7 +1075,7 @@ stages:
         slot: 10
         type: "BLOCK_BREAK"
         icon: "EMERALD_ORE"
-        name: "&a&lKról Generatora"
+        name: "&a&lGórnik"
         lore:
           - "&7Wydobądź ogromne złoża z ulepszonej brukarki:"
           - "&8• &fRuda diamentu: &e%progress_DIAMOND_ORE%&8/&a256"
@@ -745,7 +1095,7 @@ stages:
         slot: 11
         type: "COLLECT"
         icon: "GOLDEN_HOE"
-        name: "&2&lZłote Żniwa"
+        name: "&2&lRolnik / Zbieracz"
         lore:
           - "&7Zbierz rekordowe plony dzięki ulepszeniu Podwójnych Plonów:"
           - "&8• &fPszenica: &e%progress_WHEAT%&8/&a2048"
@@ -761,8 +1111,45 @@ stages:
             - "HAY_BLOCK:64"
             - "GOLDEN_APPLE:16"
 
-      breeding_6:
+      slayer_6:
         slot: 12
+        type: "ENTITY_KILL"
+        icon: "CREEPER_HEAD"
+        name: "&c&lŁowca Mobów"
+        lore:
+          - "&7Oczyść farmy spawnerów na wyspie:"
+          - "&8• &fCreepery: &e%progress_CREEPER%&8/&a250"
+          - "&8• &fPłomyki (Blaze): &e%progress_BLAZE%&8/&a250"
+          - "&8• &fŻelazne Golemy: &e%progress_IRON_GOLEM%&8/&a200"
+        objectives:
+          CREEPER: 250
+          BLAZE: 250
+          IRON_GOLEM: 200
+        rewards:
+          money: 85000.0
+          items:
+            - "SPAWNER:1"
+            - "ENCHANTED_GOLDEN_APPLE:2"
+
+      fishing_6:
+        slot: 13
+        type: "FISH_CATCH"
+        icon: "NAUTILUS_SHELL"
+        name: "&9&lWędkarz"
+        lore:
+          - "&7Wyłów morskie okazy i zaginione skarby:"
+          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a1500"
+          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a40"
+        objectives:
+          ANY_FISH: 1500
+          TREASURE: 40
+        rewards:
+          money: 60000.0
+          items:
+            - "HEART_OF_THE_SEA:2"
+
+      breeding_6:
+        slot: 14
         type: "BREED"
         icon: "TURTLE_SCUTE"
         name: "&b&lMistrz Hodowli"
@@ -780,8 +1167,55 @@ stages:
           items:
             - "TURTLE_SCUTE:16"
 
+      crafting_6:
+        slot: 15
+        type: "CRAFT"
+        icon: "SHULKER_BOX"
+        name: "&e&lRzemieślnik"
+        lore:
+          - "&7Stwórz najlepsze pojemniki transportowe:"
+          - "&8• &fShulkerowe skrzynie: &e%progress_SHULKER_BOX%&8/&a8"
+          - "&8• &fKresowe skrzynie (Ender Chest): &e%progress_ENDER_CHEST%&8/&a4"
+        objectives:
+          SHULKER_BOX: 8
+          ENDER_CHEST: 4
+        rewards:
+          money: 60000.0
+          items:
+            - "SHULKER_SHELL:8"
+
+      trading_6:
+        slot: 16
+        type: "VILLAGER_TRADE"
+        icon: "EMERALD_ORE"
+        name: "&a&lKupiec Wioski"
+        lore:
+          - "&7Zostań czołowym kupcem wioskowym:"
+          - "&8• &fSzmaragdy z handlu: &e%progress_EMERALD%&8/&a256"
+        objectives:
+          EMERALD: 256
+        rewards:
+          money: 65000.0
+          items:
+            - "EMERALD_BLOCK:24"
+
+      alchemy_6:
+        slot: 19
+        type: "BREW"
+        icon: "LINGERING_POTION"
+        name: "&d&lMistrz Alchemii"
+        lore:
+          - "&7Uwarz duże zapasy eliksirów poziomu II:"
+          - "&8• &fMikstury poziomu II: &e%progress_POTION_TIER_2%&8/&a60"
+        objectives:
+          POTION_TIER_2: 60
+        rewards:
+          money: 65000.0
+          items:
+            - "GLOWSTONE:64"
+
       economy_6:
-        slot: 13
+        slot: 20
         type: "BALANCE_REACH"
         icon: "DIAMOND_BLOCK"
         name: "&a&lMistrz Ekonomii"
@@ -796,7 +1230,7 @@ stages:
             - "NETHERITE_INGOT:4"
 
       island_level_6:
-        slot: 14
+        slot: 21
         type: "ISLAND_LEVEL"
         icon: "BEACON"
         name: "&b&lBudowniczy"
@@ -811,63 +1245,8 @@ stages:
             - "BEACON:1"
             - "DIAMOND_BLOCK:16"
 
-      slayer_6:
-        slot: 15
-        type: "ENTITY_KILL"
-        icon: "CREEPER_HEAD"
-        name: "&c&lRzeźnia Mobów"
-        lore:
-          - "&7Oczyść farmy spawnerów na wyspie:"
-          - "&8• &fCreepery: &e%progress_CREEPER%&8/&a250"
-          - "&8• &fPłomyki (Blaze): &e%progress_BLAZE%&8/&a250"
-          - "&8• &fŻelazne Golemy: &e%progress_IRON_GOLEM%&8/&a200"
-        objectives:
-          CREEPER: 250
-          BLAZE: 250
-          IRON_GOLEM: 200
-        rewards:
-          money: 85000.0
-          items:
-            - "SPAWNER:1"
-            - "ENCHANTED_GOLDEN_APPLE:2"
-
-      fishing_6:
-        slot: 16
-        type: "FISH_CATCH"
-        icon: "NAUTILUS_SHELL"
-        name: "&9&lPoławiacz Skarbów"
-        lore:
-          - "&7Wyłów morskie okazy i zaginione skarby:"
-          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a1500"
-          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a40"
-        objectives:
-          ANY_FISH: 1500
-          TREASURE: 40
-        rewards:
-          money: 60000.0
-          items:
-            - "HEART_OF_THE_SEA:2"
-
-      smelting_6:
-        slot: 19
-        type: "SMELT"
-        icon: "GOLD_INGOT"
-        name: "&6&lWielka Huta"
-        lore:
-          - "&7Przetop rudy z generatora w sztabki kruszców:"
-          - "&8• &fSztabki żelaza: &e%progress_IRON_INGOT%&8/&a1024"
-          - "&8• &fSztabki złota: &e%progress_GOLD_INGOT%&8/&a512"
-        objectives:
-          IRON_INGOT: 1024
-          GOLD_INGOT: 512
-        rewards:
-          money: 40000.0
-          items:
-            - "GOLD_BLOCK:12"
-            - "BLAST_FURNACE:4"
-
       spawner_collector_6:
-        slot: 20
+        slot: 22
         type: "SPAWNER_UPGRADE"
         icon: "SPAWNER"
         name: "&d&lKolekcjoner Spawnerów"
@@ -881,6 +1260,36 @@ stages:
           items:
             - "SPAWNER:1"
 
+      spawner_explorer_6:
+        slot: 23
+        type: "SPAWNER_MOB_UNLOCK"
+        icon: "CREEPER_SPAWN_EGG"
+        name: "&d&lOdkrywca Spawnerów"
+        lore:
+          - "&7Odblokuj kolejne moby w sklepie spawnera:"
+          - "&8• &fOdblokowane moby: &e%progress_MOB_UNLOCKED%&8/&a15"
+        objectives:
+          MOB_UNLOCKED: 15
+        rewards:
+          money: 80000.0
+          items:
+            - "SPAWNER:1"
+
+      island_upgrade_6:
+        slot: 24
+        type: "ISLAND_UPGRADE"
+        icon: "ENCHANTED_GOLDEN_APPLE"
+        name: "&6&lMistrz Ulepszeń Wyspy"
+        lore:
+          - "&7Rozwijaj ulepszenia wyspy w &e/is upgrades&7:"
+          - "&8• &fZakupione poziomy ulepszeń: &e%progress_UPGRADE_BOUGHT%&8/&a18"
+        objectives:
+          UPGRADE_BOUGHT: 18
+        rewards:
+          money: 90000.0
+          items:
+            - "NETHERITE_INGOT:4"
+
   stage_7:
     stage: 7
     icon: "NETHERITE_INGOT"
@@ -892,7 +1301,7 @@ stages:
         slot: 10
         type: "BLOCK_AND_CRAFT"
         icon: "ANCIENT_DEBRIS"
-        name: "&4&lWładca Pradawnych Złóż"
+        name: "&4&lGórnik"
         lore:
           - "&7Wydobądź najrzadszy surowiec i wykuj najpotężniejsze bloki:"
           - "&8• &fPradawne zgliszcza: &e%progress_ANCIENT_DEBRIS%&8/&a64"
@@ -909,7 +1318,7 @@ stages:
         slot: 11
         type: "COLLECT"
         icon: "SUGAR_CANE"
-        name: "&2&lAgrarny Monopolista"
+        name: "&2&lRolnik / Zbieracz"
         lore:
           - "&7Zdominuj serwerowy rynek rolny:"
           - "&8• &fTrzcina cukrowa: &e%progress_SUGAR_CANE%&8/&a4096"
@@ -924,8 +1333,46 @@ stages:
           items:
             - "EMERALD_BLOCK:32"
 
-      breeding_7:
+      slayer_7:
         slot: 12
+        type: "ENTITY_KILL"
+        icon: "WITHER_ROSE"
+        name: "&4&lŁowca Mobów"
+        lore:
+          - "&7Pokonaj najgroźniejszych przeciwników Minecrafta:"
+          - "&8• &fWither: &e%progress_WITHER%&8/&a3"
+          - "&8• &fMroczne Szkielety: &e%progress_WITHER_SKELETON%&8/&a250"
+          - "&8• &fŻelazne Golemy: &e%progress_IRON_GOLEM%&8/&a500"
+        objectives:
+          WITHER: 3
+          WITHER_SKELETON: 250
+          IRON_GOLEM: 500
+        rewards:
+          money: 200000.0
+          items:
+            - "NETHER_STAR:3"
+            - "ENCHANTED_GOLDEN_APPLE:8"
+
+      fishing_7:
+        slot: 13
+        type: "FISH_CATCH"
+        icon: "TRIDENT"
+        name: "&9&lWędkarz"
+        lore:
+          - "&7Zostań absolutnym legendarnym wędkarzem:"
+          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a3000"
+          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a75"
+        objectives:
+          ANY_FISH: 3000
+          TREASURE: 75
+        rewards:
+          money: 150000.0
+          items:
+            - "TRIDENT:2"
+            - "HEART_OF_THE_SEA:4"
+
+      breeding_7:
+        slot: 14
         type: "BREED"
         icon: "SNIFFER_EGG"
         name: "&4&lMistrz Hodowli"
@@ -943,8 +1390,56 @@ stages:
           items:
             - "ENCHANTED_GOLDEN_APPLE:4"
 
+      crafting_7:
+        slot: 15
+        type: "CRAFT"
+        icon: "NETHERITE_INGOT"
+        name: "&b&lRzemieślnik"
+        lore:
+          - "&7Wykuj najdroższe bloki i latarnie SkyBlocka:"
+          - "&8• &fMagiczne Latarnie (Beacon): &e%progress_BEACON%&8/&a4"
+          - "&8• &fBloki Netheritu: &e%progress_NETHERITE_BLOCK%&8/&a4"
+        objectives:
+          BEACON: 4
+          NETHERITE_BLOCK: 4
+        rewards:
+          money: 180000.0
+          items:
+            - "NETHERITE_BLOCK:2"
+
+      trading_7:
+        slot: 16
+        type: "VILLAGER_TRADE"
+        icon: "EMERALD_BLOCK"
+        name: "&a&lKupiec Wioski"
+        lore:
+          - "&7Zbuduj potęgę handlową swojej wyspy:"
+          - "&8• &fSzmaragdy z handlu: &e%progress_EMERALD%&8/&a512"
+        objectives:
+          EMERALD: 512
+        rewards:
+          money: 130000.0
+          items:
+            - "EMERALD_BLOCK:64"
+
+      alchemy_7:
+        slot: 19
+        type: "BREW"
+        icon: "DRAGON_BREATH"
+        name: "&d&lMistrz Alchemii"
+        lore:
+          - "&7Uwarz setkę wzmocnionych eliksirów poziomu II:"
+          - "&8• &fMikstury poziomu II: &e%progress_POTION_TIER_2%&8/&a100"
+        objectives:
+          POTION_TIER_2: 100
+        rewards:
+          money: 110000.0
+          items:
+            - "BLAZE_ROD:64"
+            - "EXPERIENCE_BOTTLE:64"
+
       economy_7:
-        slot: 13
+        slot: 20
         type: "BALANCE_REACH"
         icon: "NETHER_STAR"
         name: "&a&lMistrz Ekonomii"
@@ -959,7 +1454,7 @@ stages:
             - "BEACON:2"
 
       island_level_7:
-        slot: 14
+        slot: 21
         type: "ISLAND_LEVEL"
         icon: "NETHERITE_BLOCK"
         name: "&b&lBudowniczy"
@@ -973,62 +1468,8 @@ stages:
           items:
             - "DRAGON_EGG:1"
 
-      slayer_7:
-        slot: 15
-        type: "ENTITY_KILL"
-        icon: "WITHER_ROSE"
-        name: "&4&lŁowca Bossów i Piekła"
-        lore:
-          - "&7Pokonaj najgroźniejszych przeciwników Minecrafta:"
-          - "&8• &fWither: &e%progress_WITHER%&8/&a3"
-          - "&8• &fMroczne Szkielety: &e%progress_WITHER_SKELETON%&8/&a250"
-          - "&8• &fŻelazne Golemy: &e%progress_IRON_GOLEM%&8/&a500"
-        objectives:
-          WITHER: 3
-          WITHER_SKELETON: 250
-          IRON_GOLEM: 500
-        rewards:
-          money: 200000.0
-          items:
-            - "NETHER_STAR:3"
-            - "ENCHANTED_GOLDEN_APPLE:8"
-
-      fishing_7:
-        slot: 16
-        type: "FISH_CATCH"
-        icon: "TRIDENT"
-        name: "&9&lPosejdon SkyBlocka"
-        lore:
-          - "&7Zostań absolutnym legendarnym wędkarzem:"
-          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a3000"
-          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a75"
-        objectives:
-          ANY_FISH: 3000
-          TREASURE: 75
-        rewards:
-          money: 150000.0
-          items:
-            - "TRIDENT:2"
-            - "HEART_OF_THE_SEA:4"
-
-      alchemy_7:
-        slot: 19
-        type: "BREW"
-        icon: "DRAGON_BREATH"
-        name: "&d&lArcymistrz Alchemii"
-        lore:
-          - "&7Uwarz setkę wzmocnionych eliksirów poziomu II:"
-          - "&8• &fMikstury poziomu II: &e%progress_POTION_TIER_2%&8/&a100"
-        objectives:
-          POTION_TIER_2: 100
-        rewards:
-          money: 110000.0
-          items:
-            - "BLAZE_ROD:64"
-            - "EXPERIENCE_BOTTLE:64"
-
       spawner_collector_7:
-        slot: 20
+        slot: 22
         type: "SPAWNER_UPGRADE"
         icon: "SPAWNER"
         name: "&d&lKolekcjoner Spawnerów"
@@ -1042,3 +1483,33 @@ stages:
           items:
             - "SPAWNER:2"
             - "NETHERITE_INGOT:8"
+
+      spawner_explorer_7:
+        slot: 23
+        type: "SPAWNER_MOB_UNLOCK"
+        icon: "VILLAGER_SPAWN_EGG"
+        name: "&d&lOdkrywca Spawnerów"
+        lore:
+          - "&7Odblokuj elitarną kolekcję mobów w sklepie spawnera:"
+          - "&8• &fOdblokowane moby: &e%progress_MOB_UNLOCKED%&8/&a25"
+        objectives:
+          MOB_UNLOCKED: 25
+        rewards:
+          money: 200000.0
+          items:
+            - "SPAWNER:2"
+
+      island_upgrade_7:
+        slot: 24
+        type: "ISLAND_UPGRADE"
+        icon: "TOTEM_OF_UNDYING"
+        name: "&6&lMistrz Ulepszeń Wyspy"
+        lore:
+          - "&7Wymaksuj niemal wszystkie ulepszenia w &e/is upgrades&7:"
+          - "&8• &fZakupione poziomy ulepszeń: &e%progress_UPGRADE_BOUGHT%&8/&a25"
+        objectives:
+          UPGRADE_BOUGHT: 25
+        rewards:
+          money: 250000.0
+          items:
+            - "NETHERITE_BLOCK:2"

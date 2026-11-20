@@ -8,6 +8,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import pl.nauka.aradium.AradiumPlugin;
+import pl.nauka.aradium.core.PluginModule;
+import pl.nauka.aradium.modules.armor.ArmorModule;
 import pl.nauka.aradium.modules.economy.EconomyManager;
 import pl.nauka.aradium.modules.economy.EconomyModule;
 import pl.nauka.aradium.modules.skyblock.island.Island;
@@ -332,6 +334,13 @@ public class QuestManager {
         }
         int currentLevel = (int) Math.floor(Math.max(0.0, island.getIslandLevel()));
         updateAbsoluteProgress(player, island, QuestType.ISLAND_LEVEL, "ISLAND_LEVEL", currentLevel);
+        updateAbsoluteProgress(
+                player,
+                island,
+                QuestType.ISLAND_UPGRADE,
+                "UPGRADE_BOUGHT",
+                island.getTotalPurchasedUpgradeLevels()
+        );
 
         if (plugin != null && player != null) {
             EconomyManager economy = plugin.getEconomyModule()
@@ -340,6 +349,23 @@ public class QuestManager {
             if (economy != null) {
                 int balance = (int) Math.floor(Math.max(0.0, economy.getMoney(player.getUniqueId())));
                 updateAbsoluteProgress(player, island, QuestType.BALANCE_REACH, "BALANCE", balance);
+            }
+
+            ArmorModule armorModule = plugin.getArmorModule()
+                    .filter(PluginModule::isEnabled)
+                    .orElse(null);
+            if (armorModule != null) {
+                armorModule.getActiveEquippedSet(player.getUniqueId()).ifPresent(set ->
+                        updateAbsoluteProgress(
+                                player,
+                                island,
+                                QuestType.EQUIP_ARMOR,
+                                set.setId().toUpperCase(Locale.ROOT) + "_TIER_" + set.tier(),
+                                1
+                        ));
+                if (armorModule.hasActiveFlightBoots(player.getUniqueId())) {
+                    updateAbsoluteProgress(player, island, QuestType.EQUIP_ARMOR, "BUTY_LOTNIKA", 1);
+                }
             }
         }
     }

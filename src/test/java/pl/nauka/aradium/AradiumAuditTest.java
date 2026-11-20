@@ -354,14 +354,18 @@ class AradiumAuditTest {
             );
             ConfigurationSection stage1Quests = quests.getConfigurationSection("stages.stage_1.quests");
             assertNotNull(stage1Quests);
-            assertEquals(7, stage1Quests.getKeys(false).size());
+            assertEquals(9, stage1Quests.getKeys(false).size());
             assertEquals(128, stage1Quests.getInt("mining_1.objectives.COBBLESTONE"));
             assertEquals(8, stage1Quests.getInt("breeding_1.objectives.PIG"));
             assertEquals(500, stage1Quests.getInt("island_level_1.objectives.ISLAND_LEVEL"));
+            assertEquals(2000, stage1Quests.getInt("economy_1.objectives.BALANCE"));
             assertEquals(20000, quests.getInt("stages.stage_3.quests.economy_3.objectives.BALANCE"));
             assertEquals(16, quests.getInt("stages.stage_5.quests.mining_5.objectives.NETHERITE_INGOT"));
             assertEquals(1, quests.getInt("stages.stage_6.quests.spawner_collector_6.objectives.SPAWNER_UPGRADED"));
             assertEquals(4, quests.getInt("stages.stage_7.quests.spawner_collector_7.objectives.SPAWNER_UPGRADED"));
+            assertEquals(1, quests.getInt("stages.stage_2.quests.armor_gornik_2.objectives.GORNIK_TIER_1"));
+            assertEquals(1, quests.getInt("stages.stage_3.quests.armor_handlarz_3.objectives.HANDLARZ_TIER_2"));
+            assertEquals(1, quests.getInt("stages.stage_4.quests.armor_lotnika_4.objectives.BUTY_LOTNIKA"));
 
             assertNotNull(blocksShopStream);
             YamlConfiguration blocksShop = YamlConfiguration.loadConfiguration(
@@ -899,7 +903,7 @@ class AradiumAuditTest {
             assertTrue(QuestGUI.isValidQuestSlot(25));
             assertFalse(QuestGUI.isValidQuestSlot(27));
 
-            int[] expectedCounts = {0, 7, 7, 8, 8, 8, 9, 9};
+            int[] expectedCounts = {0, 9, 11, 13, 14, 13, 13, 13};
             int totalQuests = 0;
             for (int stageNum = 1; stageNum <= 7; stageNum++) {
                 QuestStage stage = stages.get(stageNum);
@@ -910,10 +914,17 @@ class AradiumAuditTest {
                         "Etap " + stageNum + " powinien zawierać Mistrz Hodowli");
                 assertTrue(stage.questsById().containsKey("island_level_" + stageNum),
                         "Etap " + stageNum + " powinien zawierać Budowniczy");
+                assertTrue(stage.questsById().containsKey("economy_" + stageNum),
+                        "Etap " + stageNum + " powinien zawierać Mistrz Ekonomii");
                 if (stageNum < 3) {
-                    assertFalse(stage.questsById().containsKey("economy_" + stageNum));
+                    assertFalse(stage.questsById().containsKey("spawner_explorer_" + stageNum));
                 } else {
-                    assertTrue(stage.questsById().containsKey("economy_" + stageNum));
+                    assertTrue(stage.questsById().containsKey("spawner_explorer_" + stageNum));
+                }
+                if (stageNum < 4) {
+                    assertFalse(stage.questsById().containsKey("island_upgrade_" + stageNum));
+                } else {
+                    assertTrue(stage.questsById().containsKey("island_upgrade_" + stageNum));
                 }
                 if (stageNum < 6) {
                     assertFalse(stage.questsById().containsKey("spawner_collector_" + stageNum));
@@ -929,8 +940,11 @@ class AradiumAuditTest {
                 }
                 totalQuests += stage.getQuests().size();
             }
-            assertEquals(56, totalQuests);
+            assertEquals(86, totalQuests);
             assertEquals(Material.COD, stages.get(1).questsById().get("fishing_1").icon());
+            assertTrue(stages.get(2).questsById().containsKey("armor_gornik_2"));
+            assertTrue(stages.get(3).questsById().containsKey("armor_handlarz_3"));
+            assertTrue(stages.get(4).questsById().containsKey("armor_lotnika_4"));
             assertEquals(1, stages.get(6).questsById().get("spawner_collector_6").getRequiredAmount("SPAWNER_UPGRADED"));
             assertEquals(4, stages.get(7).questsById().get("spawner_collector_7").getRequiredAmount("SPAWNER_UPGRADED"));
 
@@ -959,7 +973,7 @@ class AradiumAuditTest {
             assertNull(island.getQuestProgress("mining_2"));
             assertEquals(100, island.getQuestProgress("mining_1").getProgress("COBBLESTONE"));
 
-            // Dokończenie wszystkich 7 misji Etapu 1
+            // Dokończenie wszystkich 9 misji Etapu 1
             manager.recordProgress(null, island, QuestType.BLOCK_BREAK, "COBBLESTONE", 50);
             manager.recordProgress(null, island, QuestType.BLOCK_BREAK, "COAL_ORE", 32);
             manager.recordProgress(null, island, QuestType.BLOCK_BREAK, "IRON_ORE", 16);
@@ -978,6 +992,14 @@ class AradiumAuditTest {
             manager.recordProgress(null, island, QuestType.BREED, "CHICKEN", 8);
             assertTrue(island.getQuestProgress("breeding_1").isCompleted());
 
+            manager.recordProgress(null, island, QuestType.CRAFT, "OAK_PLANKS", 128);
+            manager.recordProgress(null, island, QuestType.CRAFT, "CHEST", 16);
+            manager.recordProgress(null, island, QuestType.CRAFT, "FURNACE", 4);
+            assertTrue(island.getQuestProgress("crafting_1").isCompleted());
+
+            manager.updateAbsoluteProgress(null, island, QuestType.BALANCE_REACH, "BALANCE", 2000);
+            assertTrue(island.getQuestProgress("economy_1").isCompleted());
+
             manager.updateAbsoluteProgress(null, island, QuestType.ISLAND_LEVEL, "ISLAND_LEVEL", 500);
             assertTrue(island.getQuestProgress("island_level_1").isCompleted());
 
@@ -989,17 +1011,39 @@ class AradiumAuditTest {
             manager.recordProgress(null, island, QuestType.FISH_CATCH, "ANY_FISH", 16);
             assertTrue(island.getQuestProgress("fishing_1").isCompleted());
 
-            // Po ukończeniu Etapu 1 odblokowuje się Etap 2
+            // Po ukończeniu Etapu 1 odblokowuje się Etap 2 (test EQUIP_ARMOR dla Górnika Tier 1)
             assertTrue(manager.isStageCompleted(island, 1));
             assertTrue(manager.isStageUnlocked(island, 2));
             assertFalse(manager.isStageUnlocked(island, 3));
             assertEquals(2, manager.getHighestUnlockedStage(island));
 
-            // Odblokowanie etapów 2–4 w modelu postępu odblokowuje Etap 5 i złożone misje BLOCK_AND_CRAFT
-            for (int s = 2; s <= 4; s++) {
-                for (QuestDefinition q : manager.getStage(s).getQuests()) {
-                    island.getOrCreateQuestProgress(q.id(), s).markCompleted(System.currentTimeMillis());
-                }
+            manager.recordProgress(null, island, QuestType.EQUIP_ARMOR, "GORNIK_TIER_1", 1);
+            assertTrue(island.getQuestProgress("armor_gornik_2").isCompleted());
+
+            // Odblokowanie etapów 2–4 w modelu postępu odblokowuje Etap 5 i sprawdza nowe cele (SPAWNER_MOB_UNLOCK, ISLAND_UPGRADE, EQUIP_ARMOR)
+            for (QuestDefinition q : manager.getStage(2).getQuests()) {
+                island.getOrCreateQuestProgress(q.id(), 2).markCompleted(System.currentTimeMillis());
+            }
+            assertTrue(manager.isStageUnlocked(island, 3));
+            manager.recordProgress(null, island, QuestType.SPAWNER_MOB_UNLOCK, "MOB_UNLOCKED", 2);
+            assertTrue(island.getQuestProgress("spawner_explorer_3").isCompleted());
+            manager.recordProgress(null, island, QuestType.EQUIP_ARMOR, "HANDLARZ_TIER_2", 1);
+            assertTrue(island.getQuestProgress("armor_handlarz_3").isCompleted());
+
+            for (QuestDefinition q : manager.getStage(3).getQuests()) {
+                island.getOrCreateQuestProgress(q.id(), 3).markCompleted(System.currentTimeMillis());
+            }
+            assertTrue(manager.isStageUnlocked(island, 4));
+            island.setUpgradeTier(IslandUpgradeType.WORLD_BORDER, 3);
+            island.setUpgradeTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD, 3);
+            assertEquals(4, island.getTotalPurchasedUpgradeLevels());
+            manager.updateAbsoluteProgress(null, island, QuestType.ISLAND_UPGRADE, "UPGRADE_BOUGHT", island.getTotalPurchasedUpgradeLevels());
+            assertTrue(island.getQuestProgress("island_upgrade_4").isCompleted());
+            manager.recordProgress(null, island, QuestType.EQUIP_ARMOR, "BUTY_LOTNIKA", 1);
+            assertTrue(island.getQuestProgress("armor_lotnika_4").isCompleted());
+
+            for (QuestDefinition q : manager.getStage(4).getQuests()) {
+                island.getOrCreateQuestProgress(q.id(), 4).markCompleted(System.currentTimeMillis());
             }
             assertTrue(manager.isStageUnlocked(island, 5));
             assertEquals(5, manager.getHighestUnlockedStage(island));

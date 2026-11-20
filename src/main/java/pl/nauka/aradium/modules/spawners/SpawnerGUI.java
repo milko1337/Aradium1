@@ -302,7 +302,7 @@ public class SpawnerGUI {
 
         SpawnerState updatedState = currentState.withTrackLevel(track, nextLevel.level());
         dataManager.applyStateToBlock(spawner, updatedState, module);
-        recordSpawnerUpgradeQuestProgress(player, spawner);
+        recordSpawnerQuestProgress(player, spawner, QuestType.SPAWNER_UPGRADE, "SPAWNER_UPGRADED");
 
         player.sendMessage(ChatUtils.getMessage(
                         plugin.getConfig(),
@@ -409,6 +409,7 @@ public class SpawnerGUI {
 
         SpawnerState updated = currentState.withActiveEntity(clickedMob);
         dataManager.applyStateToBlock(spawner, updated, module);
+        recordSpawnerQuestProgress(player, spawner, QuestType.SPAWNER_MOB_UNLOCK, "MOB_UNLOCKED");
 
         player.sendMessage(ChatUtils.getMessage(
                         plugin.getConfig(),
@@ -468,8 +469,13 @@ public class SpawnerGUI {
                 .orElse(null);
     }
 
-    private void recordSpawnerUpgradeQuestProgress(Player player, CreatureSpawner spawner) {
-        if (player == null || spawner == null) {
+    private void recordSpawnerQuestProgress(
+            Player player,
+            CreatureSpawner spawner,
+            QuestType questType,
+            String objectiveKey
+    ) {
+        if (player == null || spawner == null || questType == null || objectiveKey == null) {
             return;
         }
         SkyBlockModule skyBlock = plugin.getSkyBlockModule()
@@ -482,7 +488,7 @@ public class SpawnerGUI {
                 .or(() -> skyBlock.getIslandManager().getPlayerIsland(player.getUniqueId()))
                 .orElse(null);
         if (island != null && island.getPlayerRole(player.getUniqueId()) != IslandRole.VISITOR) {
-            skyBlock.getQuestManager().recordProgress(player, island, QuestType.SPAWNER_UPGRADE, "SPAWNER_UPGRADED", 1);
+            skyBlock.getQuestManager().recordProgress(player, island, questType, objectiveKey, 1);
         }
     }
 

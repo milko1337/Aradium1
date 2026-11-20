@@ -283,6 +283,14 @@ public class Island {
         return Collections.unmodifiableMap(new EnumMap<>(upgradeTiers));
     }
 
+    public int getTotalPurchasedUpgradeLevels() {
+        int sum = 0;
+        for (IslandUpgradeType type : IslandUpgradeType.values()) {
+            sum += Math.max(0, getUpgradeTier(type) - 1);
+        }
+        return sum;
+    }
+
     public IslandRole getPlayerRole(UUID playerId) {
         if (playerId == null) {
             return IslandRole.VISITOR;

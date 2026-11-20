@@ -29,6 +29,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pl.nauka.aradium.AradiumPlugin;
 import pl.nauka.aradium.core.AbstractModule;
+import pl.nauka.aradium.core.PluginModule;
+import pl.nauka.aradium.modules.skyblock.SkyBlockModule;
+import pl.nauka.aradium.modules.skyblock.island.Island;
+import pl.nauka.aradium.modules.skyblock.island.IslandRole;
+import pl.nauka.aradium.modules.skyblock.quests.QuestType;
 import pl.nauka.aradium.utils.ChatUtils;
 
 import java.io.File;
@@ -628,6 +633,32 @@ public class ArmorModule extends AbstractModule {
         return consumeFallProtection(fallDamageProtectedPlayers, playerId);
     }
 
+    public Optional<EquippedSet> getActiveEquippedSet(UUID playerId) {
+        return playerId != null ? Optional.ofNullable(activeSets.get(playerId)) : Optional.empty();
+    }
+
+    public boolean hasActiveFlightBoots(UUID playerId) {
+        return playerId != null && flightGrantedPlayers.contains(playerId);
+    }
+
+    private void notifyArmorQuestProgress(Player player, String objectiveKey) {
+        if (player == null || objectiveKey == null || objectiveKey.isBlank()) {
+            return;
+        }
+        SkyBlockModule skyBlock = plugin.getSkyBlockModule()
+                .filter(PluginModule::isEnabled)
+                .orElse(null);
+        if (skyBlock == null || skyBlock.getIslandManager() == null || skyBlock.getQuestManager() == null) {
+            return;
+        }
+        Island island = skyBlock.getIslandManager().getIslandAt(player.getLocation())
+                .or(() -> skyBlock.getIslandManager().getPlayerIsland(player.getUniqueId()))
+                .orElse(null);
+        if (island != null && island.getPlayerRole(player.getUniqueId()) != IslandRole.VISITOR) {
+            skyBlock.getQuestManager().recordProgress(player, island, QuestType.EQUIP_ARMOR, objectiveKey, 1);
+        }
+    }
+
     public Optional<EquippedSet> evaluatePlayerArmor(Player player) {
         return evaluatePlayerArmor(player, null, null);
     }
@@ -662,6 +693,7 @@ public class ArmorModule extends AbstractModule {
                 sendSetStatusMessage(player, "messages.armor_set_activated",
                         "&aAktywowano bonus pełnego zestawu: &e" + def.displayName() + " Tier " + next.tier() + "&a!",
                         def.displayName(), next.tier());
+                notifyArmorQuestProgress(player, next.setId().toUpperCase(Locale.ROOT) + "_TIER_" + next.tier());
                 return resolved;
             }
         }
@@ -719,10 +751,13 @@ public class ArmorModule extends AbstractModule {
         UUID playerId = player.getUniqueId();
 
         if (hasFlightBoots(boots)) {
-            flightGrantedPlayers.add(playerId);
+            boolean newlyGranted = flightGrantedPlayers.add(playerId);
             fallDamageProtectedPlayers.remove(playerId);
             if (!player.getAllowFlight()) {
                 player.setAllowFlight(true);
+            }
+            if (newlyGranted) {
+                notifyArmorQuestProgress(player, "BUTY_LOTNIKA");
             }
             return;
         }

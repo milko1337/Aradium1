@@ -18,7 +18,10 @@ public enum QuestType {
     ISLAND_LEVEL,
     ENTITY_KILL,
     FISH_CATCH,
-    SPAWNER_UPGRADE;
+    SPAWNER_UPGRADE,
+    SPAWNER_MOB_UNLOCK,
+    ISLAND_UPGRADE,
+    EQUIP_ARMOR;
 
     public boolean matchesAction(QuestType action) {
         if (action == null) {
