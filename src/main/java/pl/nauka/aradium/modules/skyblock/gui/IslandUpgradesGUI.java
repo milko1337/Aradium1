@@ -24,14 +24,15 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Menu GUI ulepszeń wyspy SkyBlock (WorldBorder, Limit Spawnerów, Wzrost Roślin, Limit Członków).
+ * Menu GUI ulepszeń wyspy SkyBlock (WorldBorder, Limit Spawnerów, Wzrost Roślin, Limit Członków, Wydajność Brukarki).
  */
 public class IslandUpgradesGUI {
 
-    private static final int SLOT_BORDER = 10;
+    private static final int SLOT_BORDER = 11;
     private static final int SLOT_SPAWNERS = 12;
-    private static final int SLOT_CROPS = 14;
-    private static final int SLOT_MEMBERS = 16;
+    private static final int SLOT_CROPS = 13;
+    private static final int SLOT_MEMBERS = 14;
+    private static final int SLOT_COBBLE_GEN = 15;
     private static final int SLOT_BACK = 22;
 
     private final AradiumPlugin plugin;
@@ -59,6 +60,7 @@ public class IslandUpgradesGUI {
         inventory.setItem(SLOT_SPAWNERS, buildUpgradeIcon(player, island, IslandUpgradeType.SPAWNER_LIMIT));
         inventory.setItem(SLOT_CROPS, buildUpgradeIcon(player, island, IslandUpgradeType.CROP_GROWTH));
         inventory.setItem(SLOT_MEMBERS, buildUpgradeIcon(player, island, IslandUpgradeType.MEMBER_LIMIT));
+        inventory.setItem(SLOT_COBBLE_GEN, buildUpgradeIcon(player, island, IslandUpgradeType.COBBLE_GENERATOR_YIELD));
 
         inventory.setItem(SLOT_BACK, createItem(
                 Material.ARROW,
@@ -85,6 +87,8 @@ public class IslandUpgradesGUI {
             lore.add("&8» &7Spawnery na wyspie: &f" + island.getPlacedSpawnersCount() + "&7/&f" + island.getSpawnerLimit());
         } else if (type == IslandUpgradeType.MEMBER_LIMIT) {
             lore.add("&8» &7Członkowie na wyspie: &f" + island.getPermanentMemberCount() + "&7/&f" + island.getMaxMembers());
+        } else if (type == IslandUpgradeType.COBBLE_GENERATOR_YIELD) {
+            lore.add("&8» &7Dotyczy: &fGenerator z lawy i wody (bez Silk Touch)");
         }
 
         lore.add("");
@@ -128,6 +132,7 @@ public class IslandUpgradesGUI {
             case SLOT_SPAWNERS -> IslandUpgradeType.SPAWNER_LIMIT;
             case SLOT_CROPS -> IslandUpgradeType.CROP_GROWTH;
             case SLOT_MEMBERS -> IslandUpgradeType.MEMBER_LIMIT;
+            case SLOT_COBBLE_GEN -> IslandUpgradeType.COBBLE_GENERATOR_YIELD;
             default -> null;
         };
 

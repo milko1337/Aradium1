@@ -11,7 +11,8 @@ public enum IslandUpgradeType {
     WORLD_BORDER("world_border", "&b&lRozmiar Granicy", Material.BEACON, "kratek promienia"),
     SPAWNER_LIMIT("spawner_limit", "&d&lLimit Spawnerów", Material.SPAWNER, "spawnerów"),
     CROP_GROWTH("crop_growth", "&a&lWzrost Roślin", Material.WHEAT, "% bonusu wzrostu"),
-    MEMBER_LIMIT("member_limit", "&e&lLimit Członków", Material.PLAYER_HEAD, "członków");
+    MEMBER_LIMIT("member_limit", "&e&lLimit Członków", Material.PLAYER_HEAD, "członków"),
+    COBBLE_GENERATOR_YIELD("cobble_generator_yield", "&6&lWydajność Brukarki", Material.COBBLESTONE, "x surowca z generatora");
 
     private final String key;
     private final String displayName;
@@ -42,7 +43,9 @@ public enum IslandUpgradeType {
     }
 
     public String formatValue(int value) {
-        return unitLabel.startsWith("%") ? value + unitLabel : value + " " + unitLabel;
+        return (unitLabel.startsWith("%") || unitLabel.startsWith("x"))
+                ? value + unitLabel
+                : value + " " + unitLabel;
     }
 
     public static IslandUpgradeType parse(String raw) {

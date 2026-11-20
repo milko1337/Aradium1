@@ -1,36 +1,59 @@
 package pl.nauka.aradium.modules.skyblock.listeners;
 
+import org.bukkit.Chunk;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.Ageable;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockGrowEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.inventory.ItemStack;
 import pl.nauka.aradium.AradiumPlugin;
 import pl.nauka.aradium.modules.skyblock.SkyBlockModule;
 import pl.nauka.aradium.modules.skyblock.island.Island;
 import pl.nauka.aradium.modules.skyblock.island.IslandManager;
 import pl.nauka.aradium.utils.ChatUtils;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Listener egzekwujący limit spawnerów na wyspie, przyspieszający wzrost roślin (CROP_GROWTH)
- * oraz aktualizujący poziom wyspy na żywo po postawieniu/zniszczeniu bloków.
+ * Listener egzekwujący limit spawnerów na wyspie, przyspieszający wzrost roślin (CROP_GROWTH),
+ * obsługujący mnożnik podstawowego generatora cobla z lawy i wody (COBBLE_GENERATOR_YIELD)
+ * z ochroną Anti-Dupe oraz aktualizujący poziom wyspy na żywo.
  */
 public class SpawnerLimitListener implements Listener {
 
     private final AradiumPlugin plugin;
     private final SkyBlockModule module;
+    private final Set<GeneratorBlockKey> generatedCobbleBlocks = ConcurrentHashMap.newKeySet();
+
+    public record GeneratorBlockKey(String worldName, int x, int y, int z) {
+        public static GeneratorBlockKey fromBlock(Block block) {
+            return new GeneratorBlockKey(block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+        }
+    }
 
     public SpawnerLimitListener(AradiumPlugin plugin, SkyBlockModule module) {
         this.plugin = Objects.requireNonNull(plugin, "plugin");
@@ -72,10 +95,11 @@ public class SpawnerLimitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlaceMonitor(BlockPlaceEvent event) {
+        Block block = event.getBlockPlaced();
+        generatedCobbleBlocks.remove(GeneratorBlockKey.fromBlock(block));
         if (!module.isEnabled()) {
             return;
         }
-        Block block = event.getBlockPlaced();
         Optional<Island> islandOpt = module.getIslandManager().getIslandAt(block.getLocation());
         if (islandOpt.isEmpty()) {
             return;
@@ -87,6 +111,115 @@ public class SpawnerLimitListener implements Listener {
         if (module.getLevelCalculator() != null) {
             module.getLevelCalculator().adjustLevelForBlockChange(island, block.getType(), true);
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onCobbleGeneratorBreak(BlockBreakEvent event) {
+        Block block = event.getBlock();
+        Material brokenMaterial = block.getType();
+        boolean wasGenerated = generatedCobbleBlocks.remove(GeneratorBlockKey.fromBlock(block));
+        if (!module.isEnabled() || !wasGenerated || !isCobbleGeneratorMaterial(brokenMaterial)) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+        if (player.getGameMode() == GameMode.CREATIVE || !event.isDropItems()) {
+            return;
+        }
+
+        ItemStack tool = player.getInventory().getItemInMainHand();
+        boolean hasSilkTouch = tool != null && tool.getEnchantmentLevel(Enchantment.SILK_TOUCH) > 0;
+        if (block.getDrops(tool, player).isEmpty()) {
+            return;
+        }
+
+        Optional<Island> islandOpt = module.getIslandManager().getIslandAt(block.getLocation());
+        if (islandOpt.isEmpty()) {
+            return;
+        }
+
+        int yieldMultiplier = islandOpt.get().getCobbleGeneratorYield();
+        int extraDrops = computeExtraCobbleDrops(yieldMultiplier, true, hasSilkTouch);
+        if (extraDrops > 0) {
+            Location dropLoc = block.getLocation().add(0.5, 0.5, 0.5);
+            block.getWorld().dropItemNaturally(dropLoc, new ItemStack(Material.COBBLESTONE, extraDrops));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onCobbleGeneratorForm(BlockFormEvent event) {
+        if (!module.isEnabled()) {
+            return;
+        }
+        Material formedType = event.getNewState().getType();
+        if (!isCobbleGeneratorMaterial(formedType)) {
+            return;
+        }
+        Block block = event.getBlock();
+        if (module.getIslandManager().getIslandAt(block.getLocation()).isPresent()) {
+            generatedCobbleBlocks.add(GeneratorBlockKey.fromBlock(block));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPistonExtend(BlockPistonExtendEvent event) {
+        untrackPistonBlocks(event.getBlocks(), event.getDirection());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPistonRetract(BlockPistonRetractEvent event) {
+        untrackPistonBlocks(event.getBlocks(), event.getDirection());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityExplode(EntityExplodeEvent event) {
+        for (Block block : event.blockList()) {
+            generatedCobbleBlocks.remove(GeneratorBlockKey.fromBlock(block));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockExplode(BlockExplodeEvent event) {
+        for (Block block : event.blockList()) {
+            generatedCobbleBlocks.remove(GeneratorBlockKey.fromBlock(block));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onChunkUnload(ChunkUnloadEvent event) {
+        if (generatedCobbleBlocks.isEmpty()) {
+            return;
+        }
+        Chunk chunk = event.getChunk();
+        String worldName = chunk.getWorld().getName();
+        int chunkX = chunk.getX();
+        int chunkZ = chunk.getZ();
+        generatedCobbleBlocks.removeIf(key ->
+                key.worldName().equals(worldName)
+                        && (key.x() >> 4) == chunkX
+                        && (key.z() >> 4) == chunkZ);
+    }
+
+    private void untrackPistonBlocks(List<Block> blocks, BlockFace direction) {
+        for (Block moved : blocks) {
+            generatedCobbleBlocks.remove(GeneratorBlockKey.fromBlock(moved));
+            generatedCobbleBlocks.remove(GeneratorBlockKey.fromBlock(moved.getRelative(direction)));
+        }
+    }
+
+    public static boolean isCobbleGeneratorMaterial(Material material) {
+        return material == Material.COBBLESTONE || material == Material.STONE;
+    }
+
+    public static int computeExtraCobbleDrops(
+            int yieldMultiplier,
+            boolean wasGeneratedByLiquid,
+            boolean hasSilkTouch
+    ) {
+        if (!wasGeneratedByLiquid || hasSilkTouch || yieldMultiplier <= 1) {
+            return 0;
+        }
+        return yieldMultiplier - 1;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

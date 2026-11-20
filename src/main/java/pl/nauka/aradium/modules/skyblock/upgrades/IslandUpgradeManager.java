@@ -20,7 +20,7 @@ import java.util.TreeMap;
 import java.util.logging.Logger;
 
 /**
- * Menedżer ulepszeń wyspy (rozmiar WorldBorder, limit spawnerów, bonus wzrostu roślin, limit członków).
+ * Menedżer ulepszeń wyspy (rozmiar WorldBorder, limit spawnerów, bonus wzrostu roślin, limit członków, wydajność brukarki).
  */
 public class IslandUpgradeManager {
 
@@ -108,6 +108,9 @@ public class IslandUpgradeManager {
         registerDefault(IslandUpgradeType.MEMBER_LIMIT, new int[][]{
                 {1, 4, 0}, {2, 6, 3000}, {3, 8, 8000}, {4, 12, 20000}, {5, 16, 45000}
         });
+        registerDefault(IslandUpgradeType.COBBLE_GENERATOR_YIELD, new int[][]{
+                {1, 1, 0}, {2, 2, 1500}, {3, 3, 5000}, {4, 4, 15000}, {5, 5, 35000}
+        });
     }
 
     private void registerDefault(IslandUpgradeType type, int[][] rows) {
@@ -177,6 +180,14 @@ public class IslandUpgradeManager {
         UpgradeTier members = getTier(IslandUpgradeType.MEMBER_LIMIT, island.getUpgradeTier(IslandUpgradeType.MEMBER_LIMIT));
         if (members != null) {
             island.setMaxMembers(members.value());
+        }
+
+        UpgradeTier cobbleGen = getTier(
+                IslandUpgradeType.COBBLE_GENERATOR_YIELD,
+                island.getUpgradeTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD)
+        );
+        if (cobbleGen != null) {
+            island.setCobbleGeneratorYield(cobbleGen.value());
         }
     }
 

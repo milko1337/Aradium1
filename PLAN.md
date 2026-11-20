@@ -97,9 +97,8 @@
 - [x] Ulepszenie na ignorowanie podłoża i spawn mobów w powietrzu (`GROUND_IMMUNITY`)
 - [x] Moduł do zakupu moba jaki ma się respić (bazowo zawsze świnia, wszystkie 85 mobów poza bossami: Wither, Ender Dragon, Warden)
 
-### 11. rozbudowa upgrade wysp 
-- [ ] Ulepszenie na ilość itemów respu na generatorze cobla - nie jako generator specjalny z plan wcześniej lecz podstawowy generator z lavy i wody na początek rozgrywki. Gracz będzie mógł kupić ulepszenia do generatora cobla podnoszące ilość produkowanego surowca.
-- [ ]
+### 11. rozbudowa upgrade wysp — ✅ UKOŃCZONO (Etap 4)
+- [x] Ulepszenie na ilość itemów respu na generatorze cobla - nie jako generator specjalny z plan wcześniej lecz podstawowy generator z lavy i wody na początek rozgrywki. Gracz będzie mógł kupić ulepszenia do generatora cobla podnoszące ilość produkowanego surowca (`COBBLE_GENERATOR_YIELD`, poziomy `1x–5x`).
 
 ---
 
@@ -180,19 +179,20 @@
 
 ---
 
-### Etap 4 (Punkt 11): Rozbudowa ulepszeń wysp — podstawowy generator cobla z lawy i wody
+### Etap 4 (Punkt 11): Rozbudowa ulepszeń wysp — podstawowy generator cobla z lawy i wody — ✅ UKOŃCZONY
 
 - **Cel:** Wzmocnienie wczesnej rozgrywki SkyBlocka poprzez ulepszanie klasycznego generatora z lawy i wody (niezależnie od specjalnych bloków generatorów z Punktu 8).
 
 - **Zadania:**
-  - Dodać w `IslandUpgradeType` oraz `/is upgrades` ulepszenie `COBBLE_GENERATOR_YIELD`
-    dla **podstawowego generatora z lawy i wody na początek rozgrywki**.
-  - Śledzić w `BlockFormEvent` bloki bruku i kamienia powstające z kontaktu lawy i wody
-    na terenie wyspy.
-  - Zwiększać w `BlockBreakEvent` ilość wypadającego surowca z wykopanych bloków generatora
-    zgodnie z poziomem ulepszenia wyspy (`Poziom 0: 1x` -> `Poziom 1: 2x` -> `Poziom 2: 3x`
-    -> `Poziom 3: 4x` -> `Poziom 4: 5x`).
-  - Zabezpieczyć przed duplikacją dropu przy ręcznym stawianiu bloków lub wykopywaniu `Silk Touch`.
+  - [x] Dodać w `IslandUpgradeType` oraz `/is upgrades` ulepszenie `COBBLE_GENERATOR_YIELD`
+    dla **podstawowego generatora z lawy i wody na początek rozgrywki** (`sloty 11–15`).
+  - [x] Śledzić w `BlockFormEvent` bloki bruku i kamienia powstające z kontaktu lawy i wody
+    na terenie wyspy (`GeneratorBlockKey`).
+  - [x] Zwiększać w `BlockBreakEvent` ilość wypadającego surowca z wykopanych bloków generatora
+    zgodnie z poziomem ulepszenia wyspy (`Tier 1: 1x` -> `Tier 2: 2x` -> `Tier 3: 3x`
+    -> `Tier 4: 4x` -> `Tier 5: 5x`).
+  - [x] Zabezpieczyć przed duplikacją dropu przy ręcznym stawianiu bloków, przesunięciach tłokami,
+    eksplozjach, odładowaniu chunków oraz wykopywaniu `Silk Touch` (`18/18` testów).
 
 ---
 

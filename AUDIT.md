@@ -194,19 +194,22 @@
 
 - **`upgrades/` (`IslandUpgradeType`, `IslandUpgradeManager`)**
   - Ulepszenia wyspy za `$`: `WORLD_BORDER`, `SPAWNER_LIMIT`, `CROP_GROWTH`,
-    `MEMBER_LIMIT` z zapisem w `skyblock_upgrades`.
+    `MEMBER_LIMIT`, `COBBLE_GENERATOR_YIELD` (mnożnik `1x–5x` z podstawowego
+    generatora cobla z lawy i wody) z zapisem w `skyblock_upgrades`.
 
 - **`quests/` (`QuestType`, `QuestDefinition`, `QuestStage`, `QuestProgress`, `QuestManager`)**
   - Obsługa 5 etapów po 7 współdzielonych misji wyspy, serializacja JSON,
     paski postępu `buildProgressBar`, kontrola odblokowań etapów i wypłata nagród.
 
 - **`gui/` (`SkyBlockGuiHolder`, `IslandSchematicGUI`, `IslandPanelGUI`, `IslandRolesGUI`, `IslandWarpsGUI`, `IslandUpgradesGUI`, `IslandTopGUI`, `QuestGUI`)**
-  - Komplet menu wyspy (w tym `QuestGUI` z zieloną/żółtą/czerwoną szybą i paskiem
-    postępu) chronionych przez `SkyBlockGuiHolder`.
+  - Komplet menu wyspy (w tym `IslandUpgradesGUI` z 5 symetrycznymi ikonami ulepszeń
+    oraz `QuestGUI` z zieloną/żółtą/czerwoną szybą i paskiem postępu) chronionych przez `SkyBlockGuiHolder`.
 
 - **`listeners/` (`IslandProtectionListener`, `SpawnerLimitListener`, `QuestProgressListener`)**
   - Ochrona wyspy, limit spawnerów, przyspieszony wzrost roślin (`BlockGrowEvent`),
-    czyszczenie `TRUSTED` przy wyjściu i zliczanie wszystkich 11 typów celów misji.
+    mnożnik wydajności generatora cobla (`BlockFormEvent` + `BlockBreakEvent` z blokadą duplikacji
+    przy ręcznym stawianiu, tłokach, wybuchach i `Silk Touch`), czyszczenie `TRUSTED` przy wyjściu
+    i zliczanie wszystkich 11 typów celów misji.
 
 - **`commands/IslandCommand.java`**
   - Obsługa `/is`: `create`, `home`, `sethome`, `panel`, `quests`, `level`, `top`,
@@ -233,7 +236,7 @@
 
 ---
 
-### 1.7. Testy automatyczne (`AradiumAuditTest.java` — 17/17 zaliczonych)
+### 1.7. Testy automatyczne (`AradiumAuditTest.java` — 18/18 zaliczonych)
 
 1. `cuboidRegionNormalizesMinMaxAndChecksBoundaries` — granice regionów rud.
 
@@ -274,6 +277,10 @@
     (`DELAY`, `AMOUNT`, `RANGE`, `LIGHT_IMMUNITY`, `GROUND_IMMUNITY`) w `spawners.yml`,
     kompletu `85` mobów z wykluczeniem bossów (`WITHER`, `ENDER_DRAGON`, `WARDEN`),
     domyślnego stanu `PIG`, serializacji PDC, reguły światła `SpawnRule(0, 15, 0, 15)` i lore GUI.
+
+18. `cobbleGeneratorUpgradeAndAntiDupeRulesWorkCorrectly` — walidacja materiałów generatora
+    z lawy i wody (`COBBLESTONE`, `STONE`), obliczeń mnożnika dropu `1x–5x`
+    oraz blokady duplikacji dla ręcznie postawionych bloków i kilofów z `Silk Touch`.
 
 ---
 
@@ -327,6 +334,26 @@ Aktualna lista zadań pozostałych do realizacji znajduje się w pliku [`PLAN.md
 ---
 
 ## 4. Historia zmian (Changelog)
+
+### 2026-11-20 — Etap 4 (Punkt 11): Ulepszenie wyspy — podstawowy generator cobla (`COBBLE_GENERATOR_YIELD`) (`2.0.0-SNAPSHOT`)
+
+- Dodano typ ulepszenia `IslandUpgradeType.COBBLE_GENERATOR_YIELD` (`&6&lWydajność Brukarki`),
+  pole `cobbleGeneratorYield` w `Island`, domyślne i konfigurowalne tiery `1–5` (`1x–5x`
+  za `0$–35 000$`) w `IslandUpgradeManager` oraz sekcji `skyblock.upgrades.cobble_generator_yield`
+  w `config.yml`.
+
+- Przebudowano układ 5 symetrycznych ikon ulepszeń w `IslandUpgradesGUI` (`sloty 11–15`)
+  z obsługą kliknięć i czytelnym lore wskazującym działanie wyłącznie dla generatorów z lawy i wody.
+
+- Wdrożono w `SpawnerLimitListener` śledzenie bloków `COBBLESTONE`/`STONE` powstałych w `BlockFormEvent`,
+  dodatkowy drop `(yieldMultiplier - 1)x COBBLESTONE` w `BlockBreakEvent` oraz pełną ochronę
+  Anti-Dupe (czyszczenie kluczy `GeneratorBlockKey` przy `BlockPlaceEvent`, `BlockPistonExtendEvent`,
+  `BlockPistonRetractEvent`, eksplozjach, `ChunkUnloadEvent` oraz wyłączeniu mnożnika dla `Silk Touch`
+  i trybu `CREATIVE`).
+
+- Rozszerzono test #14 i dodano test JUnit 5 #18 (`cobbleGeneratorUpgradeAndAntiDupeRulesWorkCorrectly`),
+  uzyskując `80` klas głównych bez ostrzeżeń kompilacji oraz `18/18` zaliczonych testów
+  i wdrożono zmiany na serwer testowy.
 
 ### 2026-11-15 — Etap 3 (Punkt 10): Zaawansowane ulepszenia spawnerów (`5` ścieżek + spawn w powietrzu + 85 mobów) (`2.0.0-SNAPSHOT`)
 

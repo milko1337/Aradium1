@@ -27,6 +27,7 @@ import pl.nauka.aradium.modules.skyblock.island.IslandRole;
 import pl.nauka.aradium.modules.skyblock.level.BlockValueManager;
 import pl.nauka.aradium.modules.skyblock.level.IslandLevelCalculator;
 import pl.nauka.aradium.modules.skyblock.level.IslandTopCache;
+import pl.nauka.aradium.modules.skyblock.listeners.SpawnerLimitListener;
 import pl.nauka.aradium.modules.skyblock.quests.QuestDefinition;
 import pl.nauka.aradium.modules.skyblock.quests.QuestManager;
 import pl.nauka.aradium.modules.skyblock.quests.QuestProgress;
@@ -822,6 +823,8 @@ class AradiumAuditTest {
 
             assertEquals(IslandUpgradeType.WORLD_BORDER, IslandUpgradeType.parse("world_border"));
             assertEquals(IslandUpgradeType.SPAWNER_LIMIT, IslandUpgradeType.parse("SPAWNER_LIMIT"));
+            assertEquals(IslandUpgradeType.COBBLE_GENERATOR_YIELD, IslandUpgradeType.parse("cobble_generator_yield"));
+            assertEquals("3x surowca z generatora", IslandUpgradeType.COBBLE_GENERATOR_YIELD.formatValue(3));
 
             YamlConfiguration cfgYaml = YamlConfiguration.loadConfiguration(
                     new InputStreamReader(cfgStream, StandardCharsets.UTF_8)
@@ -829,18 +832,23 @@ class AradiumAuditTest {
             IslandUpgradeManager upgradeManager = new IslandUpgradeManager(Logger.getLogger("UpgradesTest"));
             upgradeManager.reload(cfgYaml);
             assertEquals(5, upgradeManager.getMaxTier(IslandUpgradeType.WORLD_BORDER));
+            assertEquals(5, upgradeManager.getMaxTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD));
             assertEquals(32, upgradeManager.getTier(IslandUpgradeType.SPAWNER_LIMIT, 3).value());
+            assertEquals(4, upgradeManager.getTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD, 4).value());
+            assertEquals(15000.0, upgradeManager.getTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD, 4).cost(), 0.001);
 
             i1.setUpgradeTier(IslandUpgradeType.WORLD_BORDER, 4);
             i1.setUpgradeTier(IslandUpgradeType.SPAWNER_LIMIT, 3);
             i1.setUpgradeTier(IslandUpgradeType.CROP_GROWTH, 5);
             i1.setUpgradeTier(IslandUpgradeType.MEMBER_LIMIT, 2);
+            i1.setUpgradeTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD, 5);
             upgradeManager.applyUpgradesToIsland(i1);
 
             assertEquals(150, i1.getBorderRadius());
             assertEquals(32, i1.getSpawnerLimit());
             assertEquals(100, i1.getCropGrowthBonusPercent());
             assertEquals(6, i1.getMaxMembers());
+            assertEquals(5, i1.getCobbleGeneratorYield());
         }
     }
 
@@ -939,5 +947,29 @@ class AradiumAuditTest {
             manager.recordProgress(null, island, QuestType.CRAFT, "NETHERITE_INGOT", 16);
             assertTrue(island.getQuestProgress("mining_5").isCompleted());
         }
+    }
+
+    @Test
+    void cobbleGeneratorUpgradeAndAntiDupeRulesWorkCorrectly() {
+        assertTrue(SpawnerLimitListener.isCobbleGeneratorMaterial(Material.COBBLESTONE));
+        assertTrue(SpawnerLimitListener.isCobbleGeneratorMaterial(Material.STONE));
+        assertFalse(SpawnerLimitListener.isCobbleGeneratorMaterial(Material.OBSIDIAN));
+        assertFalse(SpawnerLimitListener.isCobbleGeneratorMaterial(Material.DIAMOND_ORE));
+
+        // Poziomy 1..5 dla bloków wygenerowanych z lawy i wody bez Silk Touch
+        assertEquals(0, SpawnerLimitListener.computeExtraCobbleDrops(1, true, false));
+        assertEquals(1, SpawnerLimitListener.computeExtraCobbleDrops(2, true, false));
+        assertEquals(2, SpawnerLimitListener.computeExtraCobbleDrops(3, true, false));
+        assertEquals(3, SpawnerLimitListener.computeExtraCobbleDrops(4, true, false));
+        assertEquals(4, SpawnerLimitListener.computeExtraCobbleDrops(5, true, false));
+
+        // Anti-Dupe: ręcznie postawiony bruk/kamień oraz wykopanie Silk Touch nie dają bonusu
+        assertEquals(0, SpawnerLimitListener.computeExtraCobbleDrops(5, false, false));
+        assertEquals(0, SpawnerLimitListener.computeExtraCobbleDrops(5, true, true));
+
+        SpawnerLimitListener.GeneratorBlockKey k1 = new SpawnerLimitListener.GeneratorBlockKey("skyblock_world", 12, 100, -8);
+        SpawnerLimitListener.GeneratorBlockKey k2 = new SpawnerLimitListener.GeneratorBlockKey("skyblock_world", 12, 100, -8);
+        assertEquals(k1, k2);
+        assertEquals(k1.hashCode(), k2.hashCode());
     }
 }
