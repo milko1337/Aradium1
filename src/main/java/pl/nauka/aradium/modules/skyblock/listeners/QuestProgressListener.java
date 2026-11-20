@@ -16,6 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
+import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.BrewEvent;
@@ -264,6 +265,19 @@ public class QuestProgressListener implements Listener {
         } else if (isFishingTreasure(stack)) {
             questManager.recordProgress(player, island, QuestType.FISH_CATCH, "TREASURE", amount);
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityBreed(EntityBreedEvent event) {
+        if (!(event.getBreeder() instanceof Player player)) {
+            return;
+        }
+        Island island = resolveBlockIsland(player, event.getEntity().getLocation());
+        if (island == null) {
+            return;
+        }
+        questManager.recordProgress(player, island, QuestType.BREED, event.getEntityType().name(), 1);
+        questManager.recordProgress(player, island, QuestType.BREED, "ANY_ANIMAL", 1);
     }
 
     private Island resolveBlockIsland(Player player, Location location) {

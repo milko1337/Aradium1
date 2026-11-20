@@ -198,20 +198,23 @@
     i losowanie rud z `cobble-generator.yml`) oraz `MEMBER_LIMIT` z zapisem w `skyblock_upgrades`.
 
 - **`quests/` (`QuestType`, `QuestDefinition`, `QuestStage`, `QuestProgress`, `QuestManager`)**
-  - Obsługa 7 etapów po 7 współdzielonych misji wyspy (`49` misji), serializacja JSON,
-    paski postępu `buildProgressBar`, kontrola odblokowań etapów i wypłata nagród.
+  - Obsługa 7 etapów misji wyspy (`56` zadań, w tym `Mistrz Hodowli` na każdym etapie,
+    `Budowniczy` na każdym etapie, `Mistrz Ekonomii` od 3. etapu oraz `Kolekcjoner Spawnerów`
+    na etapach VI–VII), serializacja JSON, paski postępu `buildProgressBar`, kontrola odblokowań
+    etapów i wypłata nagród.
 
 - **`gui/` (`SkyBlockGuiHolder`, `IslandSchematicGUI`, `IslandPanelGUI`, `IslandRolesGUI`, `IslandWarpsGUI`, `IslandUpgradesGUI`, `IslandTopGUI`, `QuestGUI`)**
   - Komplet menu wyspy (w tym `IslandUpgradesGUI` z 7 symetrycznymi ikonami ulepszeń
-    oraz `QuestGUI` o rozmiarze `45` slotów z pełną obramówką z szarego szkła, zakładkami etapów `1–7`
-    w formie surowców w 2. linii `10–16`, tematycznymi ikonami misji z połyskiem w 4. linii `28–34`
-    i paskiem postępu) chronionych przez `SkyBlockGuiHolder`.
+    oraz `QuestGUI` o rozmiarze `45` slotów z zakładkami etapów `1–7` w formie surowców na samej górze
+    `1–7`, dwoma rzędami tematycznych misji `10–16` i `19–25`, przerwą z szarego szkła `27–35`,
+    powrotem na slocie `40` i paskiem postępu) chronionych przez `SkyBlockGuiHolder`.
 
 - **`listeners/` (`IslandProtectionListener`, `SpawnerLimitListener`, `QuestProgressListener`)**
   - Ochrona wyspy, limit spawnerów, przyspieszony wzrost roślin (`BlockGrowEvent`),
     szansa na podwójne plony z dojrzałych upraw (`BlockDropItemEvent`), bonus XP/łupu z mobów
     (`EntityDeathEvent` z filtrem Anti-Dupe), generator surowców i mnożnik wydajności (`BlockFormEvent`
-    + `BlockBreakEvent`), czyszczenie `TRUSTED` przy wyjściu oraz zliczanie wszystkich 11 typów celów misji.
+    + `BlockBreakEvent`), czyszczenie `TRUSTED` przy wyjściu oraz zliczanie wszystkich 13 typów celów misji
+    (w tym `EntityBreedEvent` i ulepszeń spawnerów z `SpawnerGUI`).
 
 - **`commands/IslandCommand.java`**
   - Obsługa `/is`: `create`, `home`, `sethome`, `panel`, `quests`, `level`, `top`,
@@ -270,8 +273,10 @@
     `7` ulepszeń wyspy (`WORLD_BORDER`, `SPAWNER_LIMIT`, `CROP_GROWTH`, `MEMBER_LIMIT`,
     `COBBLE_GENERATOR_YIELD`, `DOUBLE_CROP_DROP`, `MOB_DROP_BONUS`).
 
-15. `skyblockQuestsAllFiveStagesProgressAndGuiWorkCorrectly` — 7 etapów misji (`49` zadań),
-    JSON, paski postępu, odblokowania etapów `1–7` i cele `BLOCK_AND_CRAFT`.
+15. `skyblockQuestsAllFiveStagesProgressAndGuiWorkCorrectly` — 7 etapów misji (`56` zadań,
+    w tym `Mistrz Hodowli` na każdym etapie, `Budowniczy` na każdym etapie, `Mistrz Ekonomii`
+    od etapu 3 oraz `Kolekcjoner Spawnerów` na etapach 6–7), JSON, paski postępu,
+    układ `QuestGUI` (etapy `1–7`, misje `10–16`/`19–25`) i cele `BLOCK_AND_CRAFT`, `BREED`, `SPAWNER_UPGRADE`.
 
 16. `allShopCategoriesLoadCleanlyWithValidMaterialsAndPagination` — walidacja wszystkich 17 plików
     `shops/*.yml`, materiałów Paper `26.3`, powiązań `parent-shop`/`target-shop`, indeksowania
@@ -343,6 +348,18 @@ Aktualna lista zadań pozostałych do realizacji znajduje się w pliku [`PLAN.md
 ---
 
 ## 4. Historia zmian (Changelog)
+
+### 2026-11-20 — Nowy układ `QuestGUI` i nowe misje (`Mistrz Hodowli`, `Budowniczy`, `Mistrz Ekonomii`, `Kolekcjoner Spawnerów`) (`2.0.0-SNAPSHOT`)
+
+- Przesunięto zakładki Etapów I–VII na samą górę `QuestGUI` (`sloty 1–7`), dwa rzędy misji
+  etapu na `sloty 10–16` oraz `19–25`, przerwę z szarego szkła na `sloty 27–35` i dolną linię
+  z przyciskiem powrotu na slocie `40`.
+
+- Dodano nowe typy celów `QuestType.BREED` (`EntityBreedEvent` w `QuestProgressListener`)
+  oraz `QuestType.SPAWNER_UPGRADE` (wykrywane przy ulepszeniu w `SpawnerGUI`), rozszerzając
+  `quests.yml` do `56` misji w `7` etapach: `Mistrz Hodowli` na każdym etapie (z różnymi mobami),
+  `Budowniczy` (punkty wyspy) na każdym etapie, `Mistrz Ekonomii` (posiadana gotówka)
+  od Etapu III oraz `Kolekcjoner Spawnerów` na Etapach VI (`1` ulepszenie) i VII (`4` ulepszenia).
 
 ### 2026-11-20 — Odświeżenie `QuestGUI` (45 slotów, ikony surowców etapów i przedmiotów misji) (`2.0.0-SNAPSHOT`)
 

@@ -8,6 +8,7 @@ import java.util.Locale;
 public enum QuestType {
     BLOCK_BREAK,
     COLLECT,
+    BREED,
     SMELT,
     CRAFT,
     BLOCK_AND_CRAFT,
@@ -16,7 +17,8 @@ public enum QuestType {
     BALANCE_REACH,
     ISLAND_LEVEL,
     ENTITY_KILL,
-    FISH_CATCH;
+    FISH_CATCH,
+    SPAWNER_UPGRADE;
 
     public boolean matchesAction(QuestType action) {
         if (action == null) {

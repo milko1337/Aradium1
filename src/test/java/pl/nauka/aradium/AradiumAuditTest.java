@@ -356,9 +356,12 @@ class AradiumAuditTest {
             assertNotNull(stage1Quests);
             assertEquals(7, stage1Quests.getKeys(false).size());
             assertEquals(128, stage1Quests.getInt("mining_1.objectives.COBBLESTONE"));
-            assertEquals(2000, stage1Quests.getInt("economy_1.objectives.BALANCE"));
+            assertEquals(8, stage1Quests.getInt("breeding_1.objectives.PIG"));
             assertEquals(500, stage1Quests.getInt("island_level_1.objectives.ISLAND_LEVEL"));
+            assertEquals(20000, quests.getInt("stages.stage_3.quests.economy_3.objectives.BALANCE"));
             assertEquals(16, quests.getInt("stages.stage_5.quests.mining_5.objectives.NETHERITE_INGOT"));
+            assertEquals(1, quests.getInt("stages.stage_6.quests.spawner_collector_6.objectives.SPAWNER_UPGRADED"));
+            assertEquals(4, quests.getInt("stages.stage_7.quests.spawner_collector_7.objectives.SPAWNER_UPGRADED"));
 
             assertNotNull(blocksShopStream);
             YamlConfiguration blocksShop = YamlConfiguration.loadConfiguration(
@@ -888,25 +891,48 @@ class AradiumAuditTest {
             assertEquals(Material.EMERALD, stages.get(6).icon());
             assertEquals(Material.NETHERITE_INGOT, stages.get(7).icon());
             assertEquals(45, QuestGUI.SIZE);
-            assertEquals(28, QuestGUI.resolveQuestSlot(10));
-            assertEquals(34, QuestGUI.resolveQuestSlot(34));
+            assertEquals(0, QuestGUI.STAGE_TAB_OFFSET);
+            assertEquals(40, QuestGUI.SLOT_BACK);
+            assertEquals(10, QuestGUI.resolveQuestSlot(10));
+            assertEquals(10, QuestGUI.resolveQuestSlot(28));
+            assertTrue(QuestGUI.isValidQuestSlot(10));
+            assertTrue(QuestGUI.isValidQuestSlot(25));
+            assertFalse(QuestGUI.isValidQuestSlot(27));
 
+            int[] expectedCounts = {0, 7, 7, 8, 8, 8, 9, 9};
             int totalQuests = 0;
             for (int stageNum = 1; stageNum <= 7; stageNum++) {
                 QuestStage stage = stages.get(stageNum);
                 assertNotNull(stage, "Brak etapu " + stageNum);
-                assertEquals(7, stage.getQuests().size(), "Etap " + stageNum + " powinien mieć 7 zadań");
+                assertEquals(expectedCounts[stageNum], stage.getQuests().size(),
+                        "Etap " + stageNum + " powinien mieć " + expectedCounts[stageNum] + " zadań");
+                assertTrue(stage.questsById().containsKey("breeding_" + stageNum),
+                        "Etap " + stageNum + " powinien zawierać Mistrz Hodowli");
+                assertTrue(stage.questsById().containsKey("island_level_" + stageNum),
+                        "Etap " + stageNum + " powinien zawierać Budowniczy");
+                if (stageNum < 3) {
+                    assertFalse(stage.questsById().containsKey("economy_" + stageNum));
+                } else {
+                    assertTrue(stage.questsById().containsKey("economy_" + stageNum));
+                }
+                if (stageNum < 6) {
+                    assertFalse(stage.questsById().containsKey("spawner_collector_" + stageNum));
+                } else {
+                    assertTrue(stage.questsById().containsKey("spawner_collector_" + stageNum));
+                }
                 for (QuestDefinition q : stage.getQuests()) {
                     assertFalse(q.icon().name().endsWith("_STAINED_GLASS_PANE"),
                             "Misja " + q.id() + " powinna mieć tematyczny przedmiot zamiast szyby");
                     int resolvedSlot = QuestGUI.resolveQuestSlot(q.slot());
-                    assertTrue(resolvedSlot >= QuestGUI.SLOT_QUEST_FIRST && resolvedSlot <= QuestGUI.SLOT_QUEST_LAST,
+                    assertTrue(QuestGUI.isValidQuestSlot(resolvedSlot),
                             "Nieprawidłowy slot misji " + q.id() + ": " + resolvedSlot);
                 }
                 totalQuests += stage.getQuests().size();
             }
-            assertEquals(49, totalQuests);
+            assertEquals(56, totalQuests);
             assertEquals(Material.COD, stages.get(1).questsById().get("fishing_1").icon());
+            assertEquals(1, stages.get(6).questsById().get("spawner_collector_6").getRequiredAmount("SPAWNER_UPGRADED"));
+            assertEquals(4, stages.get(7).questsById().get("spawner_collector_7").getRequiredAmount("SPAWNER_UPGRADED"));
 
             // Weryfikacja JSON roundtrip oraz paska postępu
             QuestProgress rawProgress = new QuestProgress("mining_1", 1, Map.of("COBBLESTONE", 64, "COAL_ORE", 16), false, 0L);
@@ -948,8 +974,9 @@ class AradiumAuditTest {
             manager.recordProgress(null, island, QuestType.BLOCK_BREAK, "ANY_LOG", 64);
             assertTrue(island.getQuestProgress("woodcutting_1").isCompleted());
 
-            manager.updateAbsoluteProgress(null, island, QuestType.BALANCE_REACH, "BALANCE", 2000);
-            assertTrue(island.getQuestProgress("economy_1").isCompleted());
+            manager.recordProgress(null, island, QuestType.BREED, "PIG", 8);
+            manager.recordProgress(null, island, QuestType.BREED, "CHICKEN", 8);
+            assertTrue(island.getQuestProgress("breeding_1").isCompleted());
 
             manager.updateAbsoluteProgress(null, island, QuestType.ISLAND_LEVEL, "ISLAND_LEVEL", 500);
             assertTrue(island.getQuestProgress("island_level_1").isCompleted());
@@ -981,13 +1008,16 @@ class AradiumAuditTest {
             manager.recordProgress(null, island, QuestType.CRAFT, "NETHERITE_INGOT", 16);
             assertTrue(island.getQuestProgress("mining_5").isCompleted());
 
-            // Odblokowanie pozostałych misji Etapu 5 odblokowuje Etap 6 i Etap 7
+            // Odblokowanie pozostałych misji Etapu 5 odblokowuje Etap 6 i Etap 7 (w tym Kolekcjoner Spawnerów)
             for (QuestDefinition q : manager.getStage(5).getQuests()) {
                 island.getOrCreateQuestProgress(q.id(), 5).markCompleted(System.currentTimeMillis());
             }
             assertTrue(manager.isStageUnlocked(island, 6));
             assertFalse(manager.isStageUnlocked(island, 7));
             assertEquals(6, manager.getHighestUnlockedStage(island));
+
+            manager.recordProgress(null, island, QuestType.SPAWNER_UPGRADE, "SPAWNER_UPGRADED", 1);
+            assertTrue(island.getQuestProgress("spawner_collector_6").isCompleted());
 
             for (QuestDefinition q : manager.getStage(6).getQuests()) {
                 island.getOrCreateQuestProgress(q.id(), 6).markCompleted(System.currentTimeMillis());
@@ -998,6 +1028,9 @@ class AradiumAuditTest {
             manager.recordProgress(null, island, QuestType.BLOCK_BREAK, "ANCIENT_DEBRIS", 64);
             manager.recordProgress(null, island, QuestType.CRAFT, "NETHERITE_BLOCK", 8);
             assertTrue(island.getQuestProgress("mining_7").isCompleted());
+
+            manager.recordProgress(null, island, QuestType.SPAWNER_UPGRADE, "SPAWNER_UPGRADED", 4);
+            assertTrue(island.getQuestProgress("spawner_collector_7").isCompleted());
         }
     }
 

@@ -21,6 +21,10 @@ import pl.nauka.aradium.modules.economy.EconomyModule;
 import pl.nauka.aradium.modules.shop.ShopCategory;
 import pl.nauka.aradium.modules.shop.ShopGUI;
 import pl.nauka.aradium.modules.shop.ShopManager;
+import pl.nauka.aradium.modules.skyblock.SkyBlockModule;
+import pl.nauka.aradium.modules.skyblock.island.Island;
+import pl.nauka.aradium.modules.skyblock.island.IslandRole;
+import pl.nauka.aradium.modules.skyblock.quests.QuestType;
 import pl.nauka.aradium.utils.ChatUtils;
 
 import java.util.ArrayList;
@@ -298,6 +302,7 @@ public class SpawnerGUI {
 
         SpawnerState updatedState = currentState.withTrackLevel(track, nextLevel.level());
         dataManager.applyStateToBlock(spawner, updatedState, module);
+        recordSpawnerUpgradeQuestProgress(player, spawner);
 
         player.sendMessage(ChatUtils.getMessage(
                         plugin.getConfig(),
@@ -461,6 +466,24 @@ public class SpawnerGUI {
                 .filter(PluginModule::isEnabled)
                 .map(EconomyModule::getEconomyManager)
                 .orElse(null);
+    }
+
+    private void recordSpawnerUpgradeQuestProgress(Player player, CreatureSpawner spawner) {
+        if (player == null || spawner == null) {
+            return;
+        }
+        SkyBlockModule skyBlock = plugin.getSkyBlockModule()
+                .filter(PluginModule::isEnabled)
+                .orElse(null);
+        if (skyBlock == null || skyBlock.getIslandManager() == null || skyBlock.getQuestManager() == null) {
+            return;
+        }
+        Island island = skyBlock.getIslandManager().getIslandAt(spawner.getLocation())
+                .or(() -> skyBlock.getIslandManager().getPlayerIsland(player.getUniqueId()))
+                .orElse(null);
+        if (island != null && island.getPlayerRole(player.getUniqueId()) != IslandRole.VISITOR) {
+            skyBlock.getQuestManager().recordProgress(player, island, QuestType.SPAWNER_UPGRADE, "SPAWNER_UPGRADED", 1);
+        }
     }
 
     private static Map<Material, Integer> computeMissingItems(PlayerInventory inventory, Map<Material, Integer> requiredItems) {
