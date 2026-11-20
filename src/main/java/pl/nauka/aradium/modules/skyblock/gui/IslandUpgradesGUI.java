@@ -89,6 +89,10 @@ public class IslandUpgradesGUI {
             lore.add("&8» &7Członkowie na wyspie: &f" + island.getPermanentMemberCount() + "&7/&f" + island.getMaxMembers());
         } else if (type == IslandUpgradeType.COBBLE_GENERATOR_YIELD) {
             lore.add("&8» &7Dotyczy: &fGenerator z lawy i wody (bez Silk Touch)");
+            if (module.getCobbleGeneratorManager() != null) {
+                lore.add("&8» &7Szanse na bloki (&eTier " + currentTierNum + "&7):");
+                lore.addAll(module.getCobbleGeneratorManager().formatTierDropsLore(currentTierNum));
+            }
         }
 
         lore.add("");

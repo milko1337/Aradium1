@@ -187,7 +187,8 @@
   - [x] Dodać w `IslandUpgradeType` oraz `/is upgrades` ulepszenie `COBBLE_GENERATOR_YIELD`
     dla **podstawowego generatora z lawy i wody na początek rozgrywki** (`sloty 11–15`).
   - [x] Śledzić w `BlockFormEvent` bloki bruku i kamienia powstające z kontaktu lawy i wody
-    na terenie wyspy (`GeneratorBlockKey`).
+    na terenie wyspy, podmieniać je na wylosowane rudy z `cobble-generator.yml` (`CobbleGeneratorManager`)
+    i rejestrować w `GeneratorBlockKey`.
   - [x] Zwiększać w `BlockBreakEvent` ilość wypadającego surowca z wykopanych bloków generatora
     zgodnie z poziomem ulepszenia wyspy (`Tier 1: 1x` -> `Tier 2: 2x` -> `Tier 3: 3x`
     -> `Tier 4: 4x` -> `Tier 5: 5x`).

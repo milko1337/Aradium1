@@ -191,6 +191,21 @@ public class IslandUpgradeManager {
         }
     }
 
+    public synchronized void syncCobbleGeneratorTiers(CobbleGeneratorManager generatorManager) {
+        if (generatorManager == null) {
+            return;
+        }
+        Map<Integer, CobbleGeneratorManager.GeneratorTierConfig> configured = generatorManager.getTiersSnapshot();
+        if (configured.isEmpty()) {
+            return;
+        }
+        TreeMap<Integer, UpgradeTier> synced = new TreeMap<>();
+        for (CobbleGeneratorManager.GeneratorTierConfig cfg : configured.values()) {
+            synced.put(cfg.tier(), new UpgradeTier(cfg.tier(), cfg.dropMultiplier(), cfg.cost()));
+        }
+        tiersByType.put(IslandUpgradeType.COBBLE_GENERATOR_YIELD, synced);
+    }
+
     public boolean purchaseUpgrade(Player player, Island island, IslandUpgradeType type) {
         if (player == null || island == null || type == null || plugin == null || islandManager == null) {
             return false;

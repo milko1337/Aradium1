@@ -29,8 +29,11 @@ import pl.nauka.aradium.AradiumPlugin;
 import pl.nauka.aradium.modules.skyblock.SkyBlockModule;
 import pl.nauka.aradium.modules.skyblock.island.Island;
 import pl.nauka.aradium.modules.skyblock.island.IslandManager;
+import pl.nauka.aradium.modules.skyblock.upgrades.CobbleGeneratorManager;
+import pl.nauka.aradium.modules.skyblock.upgrades.IslandUpgradeType;
 import pl.nauka.aradium.utils.ChatUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -118,7 +121,10 @@ public class SpawnerLimitListener implements Listener {
         Block block = event.getBlock();
         Material brokenMaterial = block.getType();
         boolean wasGenerated = generatedCobbleBlocks.remove(GeneratorBlockKey.fromBlock(block));
-        if (!module.isEnabled() || !wasGenerated || !isCobbleGeneratorMaterial(brokenMaterial)) {
+        CobbleGeneratorManager generatorManager = module.getCobbleGeneratorManager();
+        boolean isGeneratorBlock = isCobbleGeneratorMaterial(brokenMaterial)
+                || (generatorManager != null && generatorManager.isGeneratableMaterial(brokenMaterial));
+        if (!module.isEnabled() || !wasGenerated || !isGeneratorBlock) {
             return;
         }
 
@@ -128,8 +134,9 @@ public class SpawnerLimitListener implements Listener {
         }
 
         ItemStack tool = player.getInventory().getItemInMainHand();
-        boolean hasSilkTouch = tool != null && tool.getEnchantmentLevel(Enchantment.SILK_TOUCH) > 0;
-        if (block.getDrops(tool, player).isEmpty()) {
+        boolean hasSilkTouch = tool.getEnchantmentLevel(Enchantment.SILK_TOUCH) > 0;
+        Collection<ItemStack> naturalDrops = block.getDrops(tool, player);
+        if (naturalDrops.isEmpty()) {
             return;
         }
 
@@ -139,14 +146,29 @@ public class SpawnerLimitListener implements Listener {
         }
 
         int yieldMultiplier = islandOpt.get().getCobbleGeneratorYield();
-        int extraDrops = computeExtraCobbleDrops(yieldMultiplier, true, hasSilkTouch);
-        if (extraDrops > 0) {
-            Location dropLoc = block.getLocation().add(0.5, 0.5, 0.5);
-            block.getWorld().dropItemNaturally(dropLoc, new ItemStack(Material.COBBLESTONE, extraDrops));
+        int extraMultiplier = computeExtraCobbleDrops(yieldMultiplier, true, hasSilkTouch);
+        if (extraMultiplier <= 0) {
+            return;
+        }
+
+        Location dropLoc = block.getLocation().add(0.5, 0.5, 0.5);
+        for (ItemStack naturalDrop : naturalDrops) {
+            if (naturalDrop == null || naturalDrop.getType().isAir() || naturalDrop.getAmount() <= 0) {
+                continue;
+            }
+            int remainingExtra = naturalDrop.getAmount() * extraMultiplier;
+            int maxStack = Math.max(1, naturalDrop.getMaxStackSize());
+            while (remainingExtra > 0) {
+                int batch = Math.min(remainingExtra, maxStack);
+                ItemStack extra = naturalDrop.clone();
+                extra.setAmount(batch);
+                block.getWorld().dropItemNaturally(dropLoc, extra);
+                remainingExtra -= batch;
+            }
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onCobbleGeneratorForm(BlockFormEvent event) {
         if (!module.isEnabled()) {
             return;
@@ -156,8 +178,25 @@ public class SpawnerLimitListener implements Listener {
             return;
         }
         Block block = event.getBlock();
-        if (module.getIslandManager().getIslandAt(block.getLocation()).isPresent()) {
-            generatedCobbleBlocks.add(GeneratorBlockKey.fromBlock(block));
+        Optional<Island> islandOpt = module.getIslandManager().getIslandAt(block.getLocation());
+        if (islandOpt.isEmpty()) {
+            return;
+        }
+
+        Island island = islandOpt.get();
+        Material resultMaterial = formedType;
+        CobbleGeneratorManager generatorManager = module.getCobbleGeneratorManager();
+        if (generatorManager != null) {
+            int genTier = island.getUpgradeTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD);
+            resultMaterial = generatorManager.rollBlockForTier(genTier);
+            if (resultMaterial != formedType) {
+                event.getNewState().setType(resultMaterial);
+            }
+        }
+
+        generatedCobbleBlocks.add(GeneratorBlockKey.fromBlock(block));
+        if (module.getLevelCalculator() != null) {
+            module.getLevelCalculator().adjustLevelForBlockChange(island, resultMaterial, true);
         }
     }
 

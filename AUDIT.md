@@ -192,10 +192,10 @@
     odświeżanie punktów przy zmianie bloków, cache rankingu `/is top` oraz
     automatyczna synchronizacja misji `ISLAND_LEVEL`.
 
-- **`upgrades/` (`IslandUpgradeType`, `IslandUpgradeManager`)**
+- **`upgrades/` (`IslandUpgradeType`, `IslandUpgradeManager`, `CobbleGeneratorManager`)**
   - Ulepszenia wyspy za `$`: `WORLD_BORDER`, `SPAWNER_LIMIT`, `CROP_GROWTH`,
-    `MEMBER_LIMIT`, `COBBLE_GENERATOR_YIELD` (mnożnik `1x–5x` z podstawowego
-    generatora cobla z lawy i wody) z zapisem w `skyblock_upgrades`.
+    `MEMBER_LIMIT`, `COBBLE_GENERATOR_YIELD` (mnożnik `1x–5x` i losowanie rud
+    z `cobble-generator.yml` w generatorze z lawy i wody) z zapisem w `skyblock_upgrades`.
 
 - **`quests/` (`QuestType`, `QuestDefinition`, `QuestStage`, `QuestProgress`, `QuestManager`)**
   - Obsługa 5 etapów po 7 współdzielonych misji wyspy, serializacja JSON,
@@ -203,13 +203,14 @@
 
 - **`gui/` (`SkyBlockGuiHolder`, `IslandSchematicGUI`, `IslandPanelGUI`, `IslandRolesGUI`, `IslandWarpsGUI`, `IslandUpgradesGUI`, `IslandTopGUI`, `QuestGUI`)**
   - Komplet menu wyspy (w tym `IslandUpgradesGUI` z 5 symetrycznymi ikonami ulepszeń
-    oraz `QuestGUI` z zieloną/żółtą/czerwoną szybą i paskiem postępu) chronionych przez `SkyBlockGuiHolder`.
+    i listą procentową surowców oraz `QuestGUI` z zieloną/żółtą/czerwoną szybą i paskiem postępu)
+    chronionych przez `SkyBlockGuiHolder`.
 
 - **`listeners/` (`IslandProtectionListener`, `SpawnerLimitListener`, `QuestProgressListener`)**
   - Ochrona wyspy, limit spawnerów, przyspieszony wzrost roślin (`BlockGrowEvent`),
-    mnożnik wydajności generatora cobla (`BlockFormEvent` + `BlockBreakEvent` z blokadą duplikacji
-    przy ręcznym stawianiu, tłokach, wybuchach i `Silk Touch`), czyszczenie `TRUSTED` przy wyjściu
-    i zliczanie wszystkich 11 typów celów misji.
+    generator surowców i mnożnik wydajności (`BlockFormEvent` z losowaniem rud z `cobble-generator.yml`
+    + `BlockBreakEvent` z blokadą duplikacji przy ręcznym stawianiu, tłokach, wybuchach
+    i `Silk Touch`), czyszczenie `TRUSTED` przy wyjściu i zliczanie wszystkich 11 typów celów misji.
 
 - **`commands/IslandCommand.java`**
   - Obsługa `/is`: `create`, `home`, `sethome`, `panel`, `quests`, `level`, `top`,
@@ -278,8 +279,9 @@
     kompletu `85` mobów z wykluczeniem bossów (`WITHER`, `ENDER_DRAGON`, `WARDEN`),
     domyślnego stanu `PIG`, serializacji PDC, reguły światła `SpawnRule(0, 15, 0, 15)` i lore GUI.
 
-18. `cobbleGeneratorUpgradeAndAntiDupeRulesWorkCorrectly` — walidacja materiałów generatora
-    z lawy i wody (`COBBLESTONE`, `STONE`), obliczeń mnożnika dropu `1x–5x`
+18. `cobbleGeneratorUpgradeAndAntiDupeRulesWorkCorrectly` — walidacja `cobble-generator.yml`
+    (`5` tierów, wagi sumujące się do `100%`, losowanie rud `COAL_ORE`–`ANCIENT_DEBRIS`,
+    synchronizacja z `IslandUpgradeManager`), obliczeń mnożnika dropu `1x–5x`
     oraz blokady duplikacji dla ręcznie postawionych bloków i kilofów z `Silk Touch`.
 
 ---
@@ -335,24 +337,25 @@ Aktualna lista zadań pozostałych do realizacji znajduje się w pliku [`PLAN.md
 
 ## 4. Historia zmian (Changelog)
 
-### 2026-11-20 — Etap 4 (Punkt 11): Ulepszenie wyspy — podstawowy generator cobla (`COBBLE_GENERATOR_YIELD`) (`2.0.0-SNAPSHOT`)
+### 2026-11-20 — Etap 4 (Punkt 11): Ulepszenie wyspy — generator surowców z lawy i wody (`cobble-generator.yml`) (`2.0.0-SNAPSHOT`)
 
-- Dodano typ ulepszenia `IslandUpgradeType.COBBLE_GENERATOR_YIELD` (`&6&lWydajność Brukarki`),
-  pole `cobbleGeneratorYield` w `Island`, domyślne i konfigurowalne tiery `1–5` (`1x–5x`
-  za `0$–35 000$`) w `IslandUpgradeManager` oraz sekcji `skyblock.upgrades.cobble_generator_yield`
-  w `config.yml`.
+- Wydzielono plik konfiguracyjny `cobble-generator.yml` (kopiowany automatycznie do folderu pluginu)
+  z polskimi nazwami materiałów oraz wagami szans dla `5` poziomów generatora (`COBBLESTONE`,
+  `COAL_ORE`, `COPPER_ORE`, `IRON_ORE`, `LAPIS_ORE`, `REDSTONE_ORE`, `GOLD_ORE`,
+  `DIAMOND_ORE`, `EMERALD_ORE`, `ANCIENT_DEBRIS`).
 
-- Przebudowano układ 5 symetrycznych ikon ulepszeń w `IslandUpgradesGUI` (`sloty 11–15`)
-  z obsługą kliknięć i czytelnym lore wskazującym działanie wyłącznie dla generatorów z lawy i wody.
+- Utworzono `CobbleGeneratorManager`, dodano `IslandUpgradeType.COBBLE_GENERATOR_YIELD`,
+  pole `cobbleGeneratorYield` w `Island` oraz synchronizację `syncCobbleGeneratorTiers`
+  w `IslandUpgradeManager` i `SkyBlockModule`.
 
-- Wdrożono w `SpawnerLimitListener` śledzenie bloków `COBBLESTONE`/`STONE` powstałych w `BlockFormEvent`,
-  dodatkowy drop `(yieldMultiplier - 1)x COBBLESTONE` w `BlockBreakEvent` oraz pełną ochronę
-  Anti-Dupe (czyszczenie kluczy `GeneratorBlockKey` przy `BlockPlaceEvent`, `BlockPistonExtendEvent`,
-  `BlockPistonRetractEvent`, eksplozjach, `ChunkUnloadEvent` oraz wyłączeniu mnożnika dla `Silk Touch`
-  i trybu `CREATIVE`).
+- Przebudowano `IslandUpgradesGUI` (`5` symetrycznych ikon na slotach `11–15` + rozpiska procentowa
+  surowców dla aktualnego poziomu) oraz wdrożono w `SpawnerLimitListener` podmienianie bloku
+  w `BlockFormEvent` na wylosowaną rudę i mnożenie naturalnych dropów (`block.getDrops`)
+  z pełnym Anti-Dupe (czyszczenie przy `BlockPlaceEvent`, tłokach, eksplozjach,
+  odładowaniu chunku i wyłączeniu bonusu dla `Silk Touch` / `CREATIVE`).
 
-- Rozszerzono test #14 i dodano test JUnit 5 #18 (`cobbleGeneratorUpgradeAndAntiDupeRulesWorkCorrectly`),
-  uzyskując `80` klas głównych bez ostrzeżeń kompilacji oraz `18/18` zaliczonych testów
+- Zaktualizowano test #14 i test JUnit 5 #18 (`cobbleGeneratorUpgradeAndAntiDupeRulesWorkCorrectly`),
+  uzyskując `81` klas głównych bez ostrzeżeń kompilacji oraz `18/18` zaliczonych testów
   i wdrożono zmiany na serwer testowy.
 
 ### 2026-11-15 — Etap 3 (Punkt 10): Zaawansowane ulepszenia spawnerów (`5` ścieżek + spawn w powietrzu + 85 mobów) (`2.0.0-SNAPSHOT`)

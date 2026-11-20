@@ -21,6 +21,7 @@ import pl.nauka.aradium.modules.skyblock.listeners.IslandProtectionListener;
 import pl.nauka.aradium.modules.skyblock.listeners.QuestProgressListener;
 import pl.nauka.aradium.modules.skyblock.listeners.SpawnerLimitListener;
 import pl.nauka.aradium.modules.skyblock.quests.QuestManager;
+import pl.nauka.aradium.modules.skyblock.upgrades.CobbleGeneratorManager;
 import pl.nauka.aradium.modules.skyblock.upgrades.IslandUpgradeManager;
 
 import java.io.File;
@@ -32,6 +33,7 @@ public class SkyBlockModule extends AbstractModule {
 
     private IslandManager islandManager;
     private IslandUpgradeManager upgradeManager;
+    private CobbleGeneratorManager cobbleGeneratorManager;
     private BlockValueManager blockValueManager;
     private IslandTopCache topCache;
     private IslandLevelCalculator levelCalculator;
@@ -54,6 +56,8 @@ public class SkyBlockModule extends AbstractModule {
         this.islandManager = new IslandManager(plugin, plugin.getDatabaseManager(), yamlFallback, plugin.getLogger());
         this.upgradeManager = new IslandUpgradeManager(plugin, islandManager);
         this.upgradeManager.reload();
+        this.cobbleGeneratorManager = new CobbleGeneratorManager(plugin);
+        this.upgradeManager.syncCobbleGeneratorTiers(cobbleGeneratorManager);
         this.islandManager.setUpgradeManager(upgradeManager);
 
         this.islandManager.reloadSettings();
@@ -119,6 +123,10 @@ public class SkyBlockModule extends AbstractModule {
 
     public IslandUpgradeManager getUpgradeManager() {
         return upgradeManager;
+    }
+
+    public CobbleGeneratorManager getCobbleGeneratorManager() {
+        return cobbleGeneratorManager;
     }
 
     public BlockValueManager getBlockValueManager() {

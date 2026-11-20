@@ -1,0 +1,85 @@
+# Konfiguracja generatora cobla/surowców z lawy i wody (Etap 4)
+# Wagi w sekcji 'drops' określają procentową szansę wygenerowania danego bloku na każdym poziomie ulepszenia wyspy (/is upgrades).
+
+material-names:
+  COBBLESTONE: "&7Bruk"
+  STONE: "&7Kamień"
+  COAL_ORE: "&8Ruda węgla"
+  COPPER_ORE: "&6Ruda miedzi"
+  IRON_ORE: "&fRuda żelaza"
+  LAPIS_ORE: "&9Ruda lazurytu"
+  REDSTONE_ORE: "&cRuda redstone"
+  GOLD_ORE: "&eRuda złota"
+  DIAMOND_ORE: "&bRuda diamentu"
+  EMERALD_ORE: "&aRuda szmaragdu"
+  ANCIENT_DEBRIS: "&4Pradawne zgliszcza"
+
+tiers:
+  "1":
+    name: "&7Poziom 1 &8(Podstawowy)"
+    cost: 0.0
+    drop-multiplier: 1
+    drops:
+      COBBLESTONE: 74.0
+      COAL_ORE: 12.0
+      COPPER_ORE: 7.0
+      IRON_ORE: 5.0
+      GOLD_ORE: 1.5
+      DIAMOND_ORE: 0.5
+  "2":
+    name: "&ePoziom 2 &8(Ulepszony)"
+    cost: 1500.0
+    drop-multiplier: 2
+    drops:
+      COBBLESTONE: 62.0
+      COAL_ORE: 14.0
+      COPPER_ORE: 8.0
+      IRON_ORE: 8.5
+      LAPIS_ORE: 3.5
+      GOLD_ORE: 2.5
+      DIAMOND_ORE: 1.2
+      EMERALD_ORE: 0.3
+  "3":
+    name: "&6Poziom 3 &8(Zaawansowany)"
+    cost: 5000.0
+    drop-multiplier: 3
+    drops:
+      COBBLESTONE: 50.0
+      COAL_ORE: 14.0
+      COPPER_ORE: 8.0
+      IRON_ORE: 11.0
+      LAPIS_ORE: 5.5
+      REDSTONE_ORE: 5.0
+      GOLD_ORE: 4.0
+      DIAMOND_ORE: 1.8
+      EMERALD_ORE: 0.7
+  "4":
+    name: "&bPoziom 4 &8(Mistrzowski)"
+    cost: 15000.0
+    drop-multiplier: 4
+    drops:
+      COBBLESTONE: 38.0
+      COAL_ORE: 13.0
+      COPPER_ORE: 7.0
+      IRON_ORE: 14.0
+      LAPIS_ORE: 7.5
+      REDSTONE_ORE: 7.5
+      GOLD_ORE: 7.0
+      DIAMOND_ORE: 3.8
+      EMERALD_ORE: 2.0
+      ANCIENT_DEBRIS: 0.2
+  "5":
+    name: "&dPoziom 5 &8(Legendarny)"
+    cost: 35000.0
+    drop-multiplier: 5
+    drops:
+      COBBLESTONE: 25.0
+      COAL_ORE: 12.0
+      COPPER_ORE: 6.0
+      IRON_ORE: 16.0
+      LAPIS_ORE: 9.0
+      REDSTONE_ORE: 9.0
+      GOLD_ORE: 10.0
+      DIAMOND_ORE: 7.0
+      EMERALD_ORE: 5.0
+      ANCIENT_DEBRIS: 1.0

@@ -33,6 +33,7 @@ import pl.nauka.aradium.modules.skyblock.quests.QuestManager;
 import pl.nauka.aradium.modules.skyblock.quests.QuestProgress;
 import pl.nauka.aradium.modules.skyblock.quests.QuestStage;
 import pl.nauka.aradium.modules.skyblock.quests.QuestType;
+import pl.nauka.aradium.modules.skyblock.upgrades.CobbleGeneratorManager;
 import pl.nauka.aradium.modules.skyblock.upgrades.IslandUpgradeManager;
 import pl.nauka.aradium.modules.skyblock.upgrades.IslandUpgradeType;
 import pl.nauka.aradium.modules.spawners.SpawnerDataManager;
@@ -950,7 +951,7 @@ class AradiumAuditTest {
     }
 
     @Test
-    void cobbleGeneratorUpgradeAndAntiDupeRulesWorkCorrectly() {
+    void cobbleGeneratorUpgradeAndAntiDupeRulesWorkCorrectly() throws Exception {
         assertTrue(SpawnerLimitListener.isCobbleGeneratorMaterial(Material.COBBLESTONE));
         assertTrue(SpawnerLimitListener.isCobbleGeneratorMaterial(Material.STONE));
         assertFalse(SpawnerLimitListener.isCobbleGeneratorMaterial(Material.OBSIDIAN));
@@ -971,5 +972,44 @@ class AradiumAuditTest {
         SpawnerLimitListener.GeneratorBlockKey k2 = new SpawnerLimitListener.GeneratorBlockKey("skyblock_world", 12, 100, -8);
         assertEquals(k1, k2);
         assertEquals(k1.hashCode(), k2.hashCode());
+
+        try (InputStream stream = getClass().getClassLoader().getResourceAsStream("cobble-generator.yml")) {
+            assertNotNull(stream);
+            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(stream, StandardCharsets.UTF_8)
+            );
+
+            CobbleGeneratorManager manager = new CobbleGeneratorManager(Logger.getLogger("CobbleGenTest"));
+            manager.reload(yaml);
+
+            Map<Integer, CobbleGeneratorManager.GeneratorTierConfig> tiers = manager.getTiersSnapshot();
+            assertEquals(5, tiers.size());
+            for (int t = 1; t <= 5; t++) {
+                CobbleGeneratorManager.GeneratorTierConfig cfg = tiers.get(t);
+                assertNotNull(cfg, "Brak tieru generatora: " + t);
+                assertEquals(100.0, cfg.totalWeight(), 0.001, "Suma wag w tier " + t + " powinna wynosić 100%");
+                assertEquals(t, cfg.dropMultiplier());
+            }
+
+            // Tier 1: COBBLESTONE=74%, COAL=12%, COPPER=7%, IRON=5%, GOLD=1.5%, DIAMOND=0.5%
+            assertEquals(Material.COBBLESTONE, manager.rollBlockForTier(1, 0.0));
+            assertEquals(Material.COAL_ORE, manager.rollBlockForTier(1, 0.75));
+            assertEquals(Material.IRON_ORE, manager.rollBlockForTier(1, 0.94));
+            assertEquals(Material.DIAMOND_ORE, manager.rollBlockForTier(1, 0.997));
+
+            // Tier 5 obejmuje także EMERALD_ORE oraz ANCIENT_DEBRIS
+            assertEquals(Material.ANCIENT_DEBRIS, manager.rollBlockForTier(5, 0.995));
+            assertTrue(manager.isGeneratableMaterial(Material.EMERALD_ORE));
+            assertTrue(manager.isGeneratableMaterial(Material.ANCIENT_DEBRIS));
+            assertFalse(manager.isGeneratableMaterial(Material.OBSIDIAN));
+
+            List<String> lore = manager.formatTierDropsLore(5);
+            assertTrue(lore.stream().anyMatch(line -> line.contains("Pradawne zgliszcza") && line.contains("1%")));
+
+            IslandUpgradeManager upgradeManager = new IslandUpgradeManager(Logger.getLogger("CobbleSyncTest"));
+            upgradeManager.syncCobbleGeneratorTiers(manager);
+            assertEquals(5, upgradeManager.getTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD, 5).value());
+            assertEquals(35000.0, upgradeManager.getTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD, 5).cost(), 0.001);
+        }
     }
 }
