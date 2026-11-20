@@ -12,7 +12,9 @@ public enum IslandUpgradeType {
     SPAWNER_LIMIT("spawner_limit", "&d&lLimit Spawnerów", Material.SPAWNER, "spawnerów"),
     CROP_GROWTH("crop_growth", "&a&lWzrost Roślin", Material.WHEAT, "% bonusu wzrostu"),
     MEMBER_LIMIT("member_limit", "&e&lLimit Członków", Material.PLAYER_HEAD, "członków"),
-    COBBLE_GENERATOR_YIELD("cobble_generator_yield", "&6&lWydajność Brukarki", Material.COBBLESTONE, "x surowca z generatora");
+    COBBLE_GENERATOR_YIELD("cobble_generator_yield", "&6&lWydajność Brukarki", Material.COBBLESTONE, "x surowca z generatora"),
+    DOUBLE_CROP_DROP("double_crop_drop", "&2&lPodwójne Plony", Material.GOLDEN_HOE, "% szansy na 2x plon"),
+    MOB_DROP_BONUS("mob_drop_bonus", "&c&lŁupy z Mobów", Material.DIAMOND_SWORD, "% bonusu dropu i XP");
 
     private final String key;
     private final String displayName;

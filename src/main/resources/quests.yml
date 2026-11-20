@@ -1,11 +1,11 @@
-# Konfiguracja systemu Misji SkyBlock (Moduł 5: 5 etapów po 7 współdzielonych zadań na wyspę)
+# Konfiguracja systemu Misji SkyBlock (Moduł 5: 7 etapów po 7 współdzielonych zadań na wyspę)
 # Status w QuestGUI:
 # - Zielona szyba = zadanie ukończone
 # - Żółta szyba = w trakcie realizacji (z paskiem postępu w lore)
 # - Czerwona szyba = etap zablokowany (wymaga ukończenia poprzedniego etapu)
 
 settings:
-  gui-title: "&8» &6Misje Wyspy &8(&eEtap %stage%/5&8)"
+  gui-title: "&8» &6Misje Wyspy &8(&eEtap %stage%/7&8)"
   progress-bar:
     length: 10
     symbol: "■"
@@ -644,3 +644,261 @@ stages:
           money: 60000.0
           items:
             - "TRIDENT:1"
+
+  stage_6:
+    stage: 6
+    name: "&b&lEtap VI: Potęga Przemysłu"
+    description: "&7Wykorzystaj zaawansowane brukarki, farmy i fabryki wyspy."
+    unlock-reward-money: 150000.0
+    quests:
+      mining_6:
+        slot: 10
+        type: "BLOCK_BREAK"
+        icon: "EMERALD_ORE"
+        name: "&a&lKról Generatora"
+        lore:
+          - "&7Wydobądź ogromne złoża z ulepszonej brukarki:"
+          - "&8• &fRuda diamentu: &e%progress_DIAMOND_ORE%&8/&a256"
+          - "&8• &fRuda szmaragdu: &e%progress_EMERALD_ORE%&8/&a128"
+          - "&8• &fRuda żelaza: &e%progress_IRON_ORE%&8/&a512"
+        objectives:
+          DIAMOND_ORE: 256
+          EMERALD_ORE: 128
+          IRON_ORE: 512
+        rewards:
+          money: 45000.0
+          items:
+            - "EMERALD_BLOCK:16"
+            - "DIAMOND_BLOCK:8"
+
+      farming_6:
+        slot: 11
+        type: "COLLECT"
+        icon: "GOLDEN_HOE"
+        name: "&2&lZłote Żniwa"
+        lore:
+          - "&7Zbierz rekordowe plony dzięki ulepszeniu Podwójnych Plonów:"
+          - "&8• &fPszenica: &e%progress_WHEAT%&8/&a2048"
+          - "&8• &fBuraki (Beetroot): &e%progress_BEETROOT%&8/&a1024"
+          - "&8• &fNetherowe brodawki: &e%progress_NETHER_WART%&8/&a1024"
+        objectives:
+          WHEAT: 2048
+          BEETROOT: 1024
+          NETHER_WART: 1024
+        rewards:
+          money: 50000.0
+          items:
+            - "HAY_BLOCK:64"
+            - "GOLDEN_APPLE:16"
+
+      smelting_6:
+        slot: 12
+        type: "SMELT"
+        icon: "GOLD_INGOT"
+        name: "&6&lWielka Huta"
+        lore:
+          - "&7Przetop rudy z generatora w sztabki kruszców:"
+          - "&8• &fSztabki żelaza: &e%progress_IRON_INGOT%&8/&a1024"
+          - "&8• &fSztabki złota: &e%progress_GOLD_INGOT%&8/&a512"
+        objectives:
+          IRON_INGOT: 1024
+          GOLD_INGOT: 512
+        rewards:
+          money: 40000.0
+          items:
+            - "GOLD_BLOCK:12"
+            - "BLAST_FURNACE:4"
+
+      economy_6:
+        slot: 13
+        type: "BALANCE_REACH"
+        icon: "DIAMOND_BLOCK"
+        name: "&e&lBankier SkyBlocka"
+        lore:
+          - "&7Zgromadź na koncie fortunę pod najwyższe ulepszenia:"
+          - "&8• &fStan konta: &e%progress_BALANCE%&8/&a350000$"
+        objectives:
+          BALANCE: 350000
+        rewards:
+          money: 75000.0
+          items:
+            - "NETHERITE_INGOT:4"
+
+      island_level_6:
+        slot: 14
+        type: "ISLAND_LEVEL"
+        icon: "BEACON"
+        name: "&b&lArchitekt Imperium"
+        lore:
+          - "&7Rozwiń wyspę do imponującego poziomu 25000:"
+          - "&8• &fPoziom wyspy: &e%progress_ISLAND_LEVEL%&8/&a25000"
+        objectives:
+          ISLAND_LEVEL: 25000
+        rewards:
+          money: 80000.0
+          items:
+            - "BEACON:1"
+            - "DIAMOND_BLOCK:16"
+
+      slayer_6:
+        slot: 15
+        type: "ENTITY_KILL"
+        icon: "CREEPER_HEAD"
+        name: "&c&lRzeźnia Mobów"
+        lore:
+          - "&7Oczyść farmy spawnerów na wyspie:"
+          - "&8• &fCreepery: &e%progress_CREEPER%&8/&a250"
+          - "&8• &fPłomyki (Blaze): &e%progress_BLAZE%&8/&a250"
+          - "&8• &fŻelazne Golemy: &e%progress_IRON_GOLEM%&8/&a200"
+        objectives:
+          CREEPER: 250
+          BLAZE: 250
+          IRON_GOLEM: 200
+        rewards:
+          money: 85000.0
+          items:
+            - "SPAWNER:1"
+            - "ENCHANTED_GOLDEN_APPLE:2"
+
+      fishing_6:
+        slot: 16
+        type: "FISH_CATCH"
+        icon: "NAUTILUS_SHELL"
+        name: "&9&lPoławiacz Skarbów"
+        lore:
+          - "&7Wyłów morskie okazy i zaginione skarby:"
+          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a1500"
+          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a40"
+        objectives:
+          ANY_FISH: 1500
+          TREASURE: 40
+        rewards:
+          money: 60000.0
+          items:
+            - "HEART_OF_THE_SEA:2"
+
+  stage_7:
+    stage: 7
+    name: "&4&lEtap VII: Imperium Aradium"
+    description: "&7Mistrzowskie wyzwania końcowe dla największych wysp na serwerze."
+    unlock-reward-money: 300000.0
+    quests:
+      mining_7:
+        slot: 10
+        type: "BLOCK_AND_CRAFT"
+        icon: "ANCIENT_DEBRIS"
+        name: "&4&lWładca Pradawnych Złóż"
+        lore:
+          - "&7Wydobądź najrzadszy surowiec i wykuj najpotężniejsze bloki:"
+          - "&8• &fPradawne zgliszcza: &e%progress_ANCIENT_DEBRIS%&8/&a64"
+          - "&8• &fBloki Netheritu: &e%progress_NETHERITE_BLOCK%&8/&a8"
+        objectives:
+          ANCIENT_DEBRIS: 64
+          NETHERITE_BLOCK: 8
+        rewards:
+          money: 150000.0
+          items:
+            - "NETHERITE_BLOCK:2"
+
+      farming_7:
+        slot: 11
+        type: "COLLECT"
+        icon: "SUGAR_CANE"
+        name: "&2&lAgrarny Monopolista"
+        lore:
+          - "&7Zdominuj serwerowy rynek rolny:"
+          - "&8• &fTrzcina cukrowa: &e%progress_SUGAR_CANE%&8/&a4096"
+          - "&8• &fKaktusy: &e%progress_CACTUS%&8/&a4096"
+          - "&8• &fMarchewki: &e%progress_CARROT%&8/&a4096"
+        objectives:
+          SUGAR_CANE: 4096
+          CACTUS: 4096
+          CARROT: 4096
+        rewards:
+          money: 120000.0
+          items:
+            - "EMERALD_BLOCK:32"
+
+      alchemy_7:
+        slot: 12
+        type: "BREW"
+        icon: "DRAGON_BREATH"
+        name: "&d&lArcymistrz Alchemii"
+        lore:
+          - "&7Uwarz setkę wzmocnionych eliksirów poziomu II:"
+          - "&8• &fMikstury poziomu II: &e%progress_POTION_TIER_2%&8/&a100"
+        objectives:
+          POTION_TIER_2: 100
+        rewards:
+          money: 110000.0
+          items:
+            - "BLAZE_ROD:64"
+            - "EXPERIENCE_BOTTLE:64"
+
+      economy_7:
+        slot: 13
+        type: "BALANCE_REACH"
+        icon: "NETHER_STAR"
+        name: "&6&lMiliarder Aradium"
+        lore:
+          - "&7Zgromadź legendarny majątek na swoim koncie:"
+          - "&8• &fStan konta: &e%progress_BALANCE%&8/&a1000000$"
+        objectives:
+          BALANCE: 1000000
+        rewards:
+          money: 250000.0
+          items:
+            - "BEACON:2"
+
+      island_level_7:
+        slot: 14
+        type: "ISLAND_LEVEL"
+        icon: "NETHERITE_BLOCK"
+        name: "&5&lBrylantowy Bastion"
+        lore:
+          - "&7Osiągnij kosmiczny poziom 50000 swojej wyspy:"
+          - "&8• &fPoziom wyspy: &e%progress_ISLAND_LEVEL%&8/&a50000"
+        objectives:
+          ISLAND_LEVEL: 50000
+        rewards:
+          money: 200000.0
+          items:
+            - "DRAGON_EGG:1"
+
+      slayer_7:
+        slot: 15
+        type: "ENTITY_KILL"
+        icon: "WITHER_ROSE"
+        name: "&4&lŁowca Bossów i Piekła"
+        lore:
+          - "&7Pokonaj najgroźniejszych przeciwników Minecrafta:"
+          - "&8• &fWither: &e%progress_WITHER%&8/&a3"
+          - "&8• &fMroczne Szkielety: &e%progress_WITHER_SKELETON%&8/&a250"
+          - "&8• &fŻelazne Golemy: &e%progress_IRON_GOLEM%&8/&a500"
+        objectives:
+          WITHER: 3
+          WITHER_SKELETON: 250
+          IRON_GOLEM: 500
+        rewards:
+          money: 200000.0
+          items:
+            - "NETHER_STAR:3"
+            - "ENCHANTED_GOLDEN_APPLE:8"
+
+      fishing_7:
+        slot: 16
+        type: "FISH_CATCH"
+        icon: "TRIDENT"
+        name: "&9&lPosejdon SkyBlocka"
+        lore:
+          - "&7Zostań absolutnym legendarnym wędkarzem:"
+          - "&8• &fDowolne ryby: &e%progress_ANY_FISH%&8/&a3000"
+          - "&8• &fSkarby (Treasure): &e%progress_TREASURE%&8/&a75"
+        objectives:
+          ANY_FISH: 3000
+          TREASURE: 75
+        rewards:
+          money: 150000.0
+          items:
+            - "TRIDENT:2"
+            - "HEART_OF_THE_SEA:4"

@@ -20,7 +20,8 @@ import java.util.TreeMap;
 import java.util.logging.Logger;
 
 /**
- * Menedżer ulepszeń wyspy (rozmiar WorldBorder, limit spawnerów, bonus wzrostu roślin, limit członków, wydajność brukarki).
+ * Menedżer ulepszeń wyspy (WorldBorder, limit spawnerów, bonus wzrostu roślin,
+ * podwójne plony, łupy z mobów, wydajność brukarki oraz limit członków).
  */
 public class IslandUpgradeManager {
 
@@ -70,7 +71,9 @@ public class IslandUpgradeManager {
                 continue;
             }
             TreeMap<Integer, UpgradeTier> parsed = new TreeMap<>();
-            int minValue = type == IslandUpgradeType.CROP_GROWTH ? 0 : 1;
+            int minValue = (type == IslandUpgradeType.CROP_GROWTH
+                    || type == IslandUpgradeType.DOUBLE_CROP_DROP
+                    || type == IslandUpgradeType.MOB_DROP_BONUS) ? 0 : 1;
             for (String tierKey : typeSec.getKeys(false)) {
                 ConfigurationSection tierSec = typeSec.getConfigurationSection(tierKey);
                 if (tierSec == null) {
@@ -110,6 +113,12 @@ public class IslandUpgradeManager {
         });
         registerDefault(IslandUpgradeType.COBBLE_GENERATOR_YIELD, new int[][]{
                 {1, 1, 0}, {2, 2, 1500}, {3, 3, 5000}, {4, 4, 15000}, {5, 5, 35000}
+        });
+        registerDefault(IslandUpgradeType.DOUBLE_CROP_DROP, new int[][]{
+                {1, 0, 0}, {2, 20, 3500}, {3, 40, 10000}, {4, 70, 24000}, {5, 100, 55000}
+        });
+        registerDefault(IslandUpgradeType.MOB_DROP_BONUS, new int[][]{
+                {1, 0, 0}, {2, 25, 5000}, {3, 50, 15000}, {4, 75, 35000}, {5, 100, 75000}
         });
     }
 
@@ -188,6 +197,22 @@ public class IslandUpgradeManager {
         );
         if (cobbleGen != null) {
             island.setCobbleGeneratorYield(cobbleGen.value());
+        }
+
+        UpgradeTier doubleCrops = getTier(
+                IslandUpgradeType.DOUBLE_CROP_DROP,
+                island.getUpgradeTier(IslandUpgradeType.DOUBLE_CROP_DROP)
+        );
+        if (doubleCrops != null) {
+            island.setDoubleCropDropChancePercent(doubleCrops.value());
+        }
+
+        UpgradeTier mobDrops = getTier(
+                IslandUpgradeType.MOB_DROP_BONUS,
+                island.getUpgradeTier(IslandUpgradeType.MOB_DROP_BONUS)
+        );
+        if (mobDrops != null) {
+            island.setMobDropBonusPercent(mobDrops.value());
         }
     }
 

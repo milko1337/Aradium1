@@ -11,17 +11,21 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
@@ -246,6 +250,65 @@ public class SpawnerLimitListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onCropHarvestDoubleDrop(BlockDropItemEvent event) {
+        if (!module.isEnabled()) {
+            return;
+        }
+        if (!(event.getBlockState().getBlockData() instanceof Ageable ageable)
+                || ageable.getAge() < ageable.getMaximumAge()) {
+            return;
+        }
+        Optional<Island> islandOpt = module.getIslandManager().getIslandAt(event.getBlock().getLocation());
+        if (islandOpt.isEmpty()) {
+            return;
+        }
+        int chancePercent = islandOpt.get().getDoubleCropDropChancePercent();
+        if (!shouldTriggerPercentBonus(chancePercent, ThreadLocalRandom.current().nextInt(100))) {
+            return;
+        }
+        for (Item itemEntity : event.getItems()) {
+            ItemStack stack = itemEntity.getItemStack();
+            if (stack.getType().isAir() || stack.getAmount() <= 0 || stack.hasItemMeta()) {
+                continue;
+            }
+            int doubled = Math.min(Math.max(1, stack.getMaxStackSize()), stack.getAmount() * 2);
+            stack.setAmount(doubled);
+            itemEntity.setItemStack(stack);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onIslandMobDeathBonus(EntityDeathEvent event) {
+        if (!module.isEnabled()) {
+            return;
+        }
+        if (event.getEntity() instanceof Player || event.getEntity() instanceof ArmorStand) {
+            return;
+        }
+        Optional<Island> islandOpt = module.getIslandManager().getIslandAt(event.getEntity().getLocation());
+        if (islandOpt.isEmpty()) {
+            return;
+        }
+        int bonusPercent = islandOpt.get().getMobDropBonusPercent();
+        if (bonusPercent <= 0) {
+            return;
+        }
+
+        event.setDroppedExp(computeBoostedMobExp(event.getDroppedExp(), bonusPercent));
+
+        if (!shouldTriggerPercentBonus(bonusPercent, ThreadLocalRandom.current().nextInt(100))) {
+            return;
+        }
+        for (ItemStack drop : event.getDrops()) {
+            if (!isEligibleMobDropForBonus(drop)) {
+                continue;
+            }
+            int doubled = Math.min(Math.max(1, drop.getMaxStackSize()), drop.getAmount() * 2);
+            drop.setAmount(doubled);
+        }
+    }
+
     public static boolean isCobbleGeneratorMaterial(Material material) {
         return material == Material.COBBLESTONE || material == Material.STONE;
     }
@@ -259,6 +322,60 @@ public class SpawnerLimitListener implements Listener {
             return 0;
         }
         return yieldMultiplier - 1;
+    }
+
+    public static boolean shouldTriggerPercentBonus(int chancePercent, int rollZeroTo99) {
+        if (chancePercent <= 0) {
+            return false;
+        }
+        if (chancePercent >= 100) {
+            return true;
+        }
+        return rollZeroTo99 >= 0 && rollZeroTo99 < chancePercent;
+    }
+
+    public static int computeBoostedMobExp(int baseExp, int bonusPercent) {
+        if (baseExp <= 0 || bonusPercent <= 0) {
+            return Math.max(0, baseExp);
+        }
+        return (int) Math.round(baseExp * (1.0 + (bonusPercent / 100.0)));
+    }
+
+    public static boolean isEligibleMobDropForBonus(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
+        return isEligibleMobDropForBonus(stack.getType(), stack.getAmount(), stack.hasItemMeta());
+    }
+
+    public static boolean isEligibleMobDropForBonus(Material mat, int amount, boolean hasItemMeta) {
+        if (mat == null
+                || mat == Material.AIR
+                || mat == Material.CAVE_AIR
+                || mat == Material.VOID_AIR
+                || amount <= 0
+                || hasItemMeta) {
+            return false;
+        }
+        String name = mat.name();
+        if (name.endsWith("_SWORD")
+                || name.endsWith("_AXE")
+                || name.endsWith("_PICKAXE")
+                || name.endsWith("_SHOVEL")
+                || name.endsWith("_HOE")
+                || name.endsWith("_HELMET")
+                || name.endsWith("_CHESTPLATE")
+                || name.endsWith("_LEGGINGS")
+                || name.endsWith("_BOOTS")) {
+            return false;
+        }
+        return mat != Material.SHIELD
+                && mat != Material.BOW
+                && mat != Material.CROSSBOW
+                && mat != Material.TRIDENT
+                && mat != Material.ELYTRA
+                && mat != Material.TOTEM_OF_UNDYING
+                && mat != Material.SPAWNER;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

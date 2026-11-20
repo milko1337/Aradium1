@@ -194,23 +194,23 @@
 
 - **`upgrades/` (`IslandUpgradeType`, `IslandUpgradeManager`, `CobbleGeneratorManager`)**
   - Ulepszenia wyspy za `$`: `WORLD_BORDER`, `SPAWNER_LIMIT`, `CROP_GROWTH`,
-    `MEMBER_LIMIT`, `COBBLE_GENERATOR_YIELD` (mnożnik `1x–5x` i losowanie rud
-    z `cobble-generator.yml` w generatorze z lawy i wody) z zapisem w `skyblock_upgrades`.
+    `DOUBLE_CROP_DROP`, `MOB_DROP_BONUS`, `COBBLE_GENERATOR_YIELD` (mnożnik `1x–5x`
+    i losowanie rud z `cobble-generator.yml`) oraz `MEMBER_LIMIT` z zapisem w `skyblock_upgrades`.
 
 - **`quests/` (`QuestType`, `QuestDefinition`, `QuestStage`, `QuestProgress`, `QuestManager`)**
-  - Obsługa 5 etapów po 7 współdzielonych misji wyspy, serializacja JSON,
+  - Obsługa 7 etapów po 7 współdzielonych misji wyspy (`49` misji), serializacja JSON,
     paski postępu `buildProgressBar`, kontrola odblokowań etapów i wypłata nagród.
 
 - **`gui/` (`SkyBlockGuiHolder`, `IslandSchematicGUI`, `IslandPanelGUI`, `IslandRolesGUI`, `IslandWarpsGUI`, `IslandUpgradesGUI`, `IslandTopGUI`, `QuestGUI`)**
-  - Komplet menu wyspy (w tym `IslandUpgradesGUI` z 5 symetrycznymi ikonami ulepszeń
-    i listą procentową surowców oraz `QuestGUI` z zieloną/żółtą/czerwoną szybą i paskiem postępu)
+  - Komplet menu wyspy (w tym `IslandUpgradesGUI` z 7 symetrycznymi ikonami ulepszeń
+    oraz `QuestGUI` z zakładkami etapów `1–7`, zieloną/żółtą/czerwoną szybą i paskiem postępu)
     chronionych przez `SkyBlockGuiHolder`.
 
 - **`listeners/` (`IslandProtectionListener`, `SpawnerLimitListener`, `QuestProgressListener`)**
   - Ochrona wyspy, limit spawnerów, przyspieszony wzrost roślin (`BlockGrowEvent`),
-    generator surowców i mnożnik wydajności (`BlockFormEvent` z losowaniem rud z `cobble-generator.yml`
-    + `BlockBreakEvent` z blokadą duplikacji przy ręcznym stawianiu, tłokach, wybuchach
-    i `Silk Touch`), czyszczenie `TRUSTED` przy wyjściu i zliczanie wszystkich 11 typów celów misji.
+    szansa na podwójne plony z dojrzałych upraw (`BlockDropItemEvent`), bonus XP/łupu z mobów
+    (`EntityDeathEvent` z filtrem Anti-Dupe), generator surowców i mnożnik wydajności (`BlockFormEvent`
+    + `BlockBreakEvent`), czyszczenie `TRUSTED` przy wyjściu oraz zliczanie wszystkich 11 typów celów misji.
 
 - **`commands/IslandCommand.java`**
   - Obsługa `/is`: `create`, `home`, `sethome`, `panel`, `quests`, `level`, `top`,
@@ -237,7 +237,7 @@
 
 ---
 
-### 1.7. Testy automatyczne (`AradiumAuditTest.java` — 18/18 zaliczonych)
+### 1.7. Testy automatyczne (`AradiumAuditTest.java` — 19/19 zaliczonych)
 
 1. `cuboidRegionNormalizesMinMaxAndChecksBoundaries` — granice regionów rud.
 
@@ -265,10 +265,12 @@
 
 13. `skyblockIslandsRolesPermissionsAndGridWorkCorrectly` — siatka wysp, role i uprawnienia.
 
-14. `skyblockLevelsTopAndUpgradesWorkCorrectly` — `blocks-value.yml`, `/is top`, ulepszenia.
+14. `skyblockLevelsTopAndUpgradesWorkCorrectly` — `blocks-value.yml`, `/is top` oraz wszystkie
+    `7` ulepszeń wyspy (`WORLD_BORDER`, `SPAWNER_LIMIT`, `CROP_GROWTH`, `MEMBER_LIMIT`,
+    `COBBLE_GENERATOR_YIELD`, `DOUBLE_CROP_DROP`, `MOB_DROP_BONUS`).
 
-15. `skyblockQuestsAllFiveStagesProgressAndGuiWorkCorrectly` — 5 etapów misji, JSON,
-    paski postępu i cele `BLOCK_AND_CRAFT`.
+15. `skyblockQuestsAllFiveStagesProgressAndGuiWorkCorrectly` — 7 etapów misji (`49` zadań),
+    JSON, paski postępu, odblokowania etapów `1–7` i cele `BLOCK_AND_CRAFT`.
 
 16. `allShopCategoriesLoadCleanlyWithValidMaterialsAndPagination` — walidacja wszystkich 17 plików
     `shops/*.yml`, materiałów Paper `26.3`, powiązań `parent-shop`/`target-shop`, indeksowania
@@ -283,6 +285,10 @@
     (`5` tierów, wagi sumujące się do `100%`, losowanie rud `COAL_ORE`–`ANCIENT_DEBRIS`,
     synchronizacja z `IslandUpgradeManager`), obliczeń mnożnika dropu `1x–5x`
     oraz blokady duplikacji dla ręcznie postawionych bloków i kilofów z `Silk Touch`.
+
+19. `doubleCropAndMobDropBonusUpgradesWorkCorrectly` — weryfikacja szans procentowych,
+    przeliczania bonusu XP z mobów oraz filtra Anti-Dupe wykluczającego ekwipunek,
+    totemy i niestandardowe przedmioty.
 
 ---
 
@@ -336,6 +342,26 @@ Aktualna lista zadań pozostałych do realizacji znajduje się w pliku [`PLAN.md
 ---
 
 ## 4. Historia zmian (Changelog)
+
+### 2026-11-20 — Etap 5 (Punkt 6): Rozbudowa misji (`Etapy VI–VII`) oraz ulepszeń wysp (`DOUBLE_CROP_DROP`, `MOB_DROP_BONUS`) (`2.0.0-SNAPSHOT`)
+
+- Dodano dwa nowe ulepszenia wysp w `IslandUpgradeType`, `Island`, `IslandUpgradeManager`
+  i `config.yml`: `DOUBLE_CROP_DROP` (`0%–100%` szansy na 2x plon za `0$–55 000$`)
+  oraz `MOB_DROP_BONUS` (`0%–100%` bonusu dropu i XP za `0$–75 000$`).
+
+- Przebudowano `IslandUpgradesGUI` pod symetryczny układ `7` ulepszeń (`sloty 10–16`)
+  oraz zaimplementowano w `SpawnerLimitListener` bezpieczne podwajanie plonów dojrzałych
+  upraw (`BlockDropItemEvent`, `Ageable` MAX) i premię XP/łupów z mobów (`EntityDeathEvent`)
+  z ochroną przed duplikacją ekwipunku, totemów i przedmiotów z metadanymi.
+
+- Rozbudowano `quests.yml`, `QuestManager` i `QuestGUI` o **Etap VI (Potęga Przemysłu)**
+  i **Etap VII (Imperium Aradium)** — łącznie `7` etapów po `7` zadań (`49` misji),
+  zakładki na slotach `1–7` oraz zbalansowane nagrody pod najwyższe ulepszenia wyspy;
+  dodano normalizację rud deep-slate miedzi/lazurytu/redstone i wsparcie buraków w `QuestProgressListener`.
+
+- Zaktualizowano testy #14 i #15 oraz dodano test #19 (`doubleCropAndMobDropBonusUpgradesWorkCorrectly`),
+  uzyskując `81` klas głównych bez ostrzeżeń kompilacji, `19/19` zaliczonych testów
+  i wdrożono zmiany na serwer testowy.
 
 ### 2026-11-20 — Etap 4 (Punkt 11): Ulepszenie wyspy — generator surowców z lawy i wody (`cobble-generator.yml`) (`2.0.0-SNAPSHOT`)
 

@@ -58,11 +58,11 @@
 
 ---
 
-### 6. Rozbudowa misji oraz ulepszeń wysp
+### 6. Rozbudowa misji oraz ulepszeń wysp — ✅ UKOŃCZONO (Etap 5)
 
-- [ ] Dodać nowe misje oraz ulepszenia wysp (np. szansa na podwójny drop z roślin i inne).
+- [x] Dodać nowe misje oraz ulepszenia wysp (`DOUBLE_CROP_DROP`, `MOB_DROP_BONUS`, Etapy VI i VII).
 
-- [ ] Zrównoważyć nagrody z misji oraz ulepszeń wysp z ekonomią SkyBlocka.
+- [x] Zrównoważyć nagrody z misji oraz ulepszeń wysp z ekonomią SkyBlocka.
 
 ---
 
@@ -197,20 +197,20 @@
 
 ---
 
-### Etap 5 (Punkt 6): Rozbudowa misji oraz ulepszeń wysp + balans z ekonomią
+### Etap 5 (Punkt 6): Rozbudowa misji oraz ulepszeń wysp + balans z ekonomią — ✅ UKOŃCZONY
 
 - **Cel:** Rozwój rolnictwa, walk z mobami i dalszych etapów postępu wyspy w równowadze z ekonomią SkyBlocka.
 
 - **Zadania:**
-  - **Nowe ulepszenia wysp (`IslandUpgradeType` i `/is upgrades`):**
-    - **Szansa na podwójny drop z roślin (`DOUBLE_CROP_DROP`):** procentowa szansa
-      na podwojenie plonów przy zbiorze w pełni dojrzałych upraw (`Ageable` z maksymalnym `age`).
-    - **Dodatkowe ulepszenia wyspy:** m.in. bonus dropu/XP z mobów na wyspie (`MOB_DROP_BONUS`)
-      oraz ulepszenia wspierające rozwój wyspy.
-  - **Nowe misje wysp (`quests.yml` i `QuestGUI`):** dodanie nowych zadań i kolejnych
-    etapów (**Etap VI i VII**) uwzględniających nowe mechaniki i ulepszenia.
-  - **Balans ekonomii:** zrównoważenie nagród pieniężnych i przedmiotowych z misji
-    wobec kosztów wszystkich ulepszeń wysp w `/is upgrades`.
+  - [x] **Nowe ulepszenia wysp (`IslandUpgradeType` i `/is upgrades`):**
+    - **Szansa na podwójny drop z roślin (`DOUBLE_CROP_DROP`):** procentowa szansa (`0%–100%`)
+      na podwojenie plonów przy zbiorze w pełni dojrzałych upraw (`BlockDropItemEvent`, `Ageable` z maksymalnym `age`).
+    - **Bonus dropu i XP z mobów (`MOB_DROP_BONUS`):** procentowa premia (`0%–100%`)
+      XP i naturalnego dropu z mobów na wyspie (`EntityDeathEvent` z filtrem Anti-Dupe).
+  - [x] **Nowe misje wysp (`quests.yml` i `QuestGUI`):** dodano 14 nowych zadań i dwa nowe etapy
+    (**Etap VI i VII** — łącznie `49` misji w `7` etapach z zakładkami `1–7` w `QuestGUI`).
+  - [x] **Balans ekonomii:** zrównoważono nagrody pieniężne (`40k–250k` + bonusy etapów `150k/300k`)
+    oraz przedmiotowe z misji wobec kosztów ulepszeń wysp w `/is upgrades` (`19/19` testów).
 
 ---
 

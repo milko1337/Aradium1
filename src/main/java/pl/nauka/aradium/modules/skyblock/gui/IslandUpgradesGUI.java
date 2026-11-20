@@ -24,15 +24,18 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Menu GUI ulepszeń wyspy SkyBlock (WorldBorder, Limit Spawnerów, Wzrost Roślin, Limit Członków, Wydajność Brukarki).
+ * Menu GUI ulepszeń wyspy SkyBlock (WorldBorder, Limit Spawnerów, Wzrost Roślin,
+ * Podwójne Plony, Łupy z Mobów, Wydajność Brukarki, Limit Członków).
  */
 public class IslandUpgradesGUI {
 
-    private static final int SLOT_BORDER = 11;
-    private static final int SLOT_SPAWNERS = 12;
-    private static final int SLOT_CROPS = 13;
-    private static final int SLOT_MEMBERS = 14;
+    private static final int SLOT_BORDER = 10;
+    private static final int SLOT_SPAWNERS = 11;
+    private static final int SLOT_CROPS = 12;
+    private static final int SLOT_DOUBLE_CROPS = 13;
+    private static final int SLOT_MOB_DROPS = 14;
     private static final int SLOT_COBBLE_GEN = 15;
+    private static final int SLOT_MEMBERS = 16;
     private static final int SLOT_BACK = 22;
 
     private final AradiumPlugin plugin;
@@ -59,8 +62,10 @@ public class IslandUpgradesGUI {
         inventory.setItem(SLOT_BORDER, buildUpgradeIcon(player, island, IslandUpgradeType.WORLD_BORDER));
         inventory.setItem(SLOT_SPAWNERS, buildUpgradeIcon(player, island, IslandUpgradeType.SPAWNER_LIMIT));
         inventory.setItem(SLOT_CROPS, buildUpgradeIcon(player, island, IslandUpgradeType.CROP_GROWTH));
-        inventory.setItem(SLOT_MEMBERS, buildUpgradeIcon(player, island, IslandUpgradeType.MEMBER_LIMIT));
+        inventory.setItem(SLOT_DOUBLE_CROPS, buildUpgradeIcon(player, island, IslandUpgradeType.DOUBLE_CROP_DROP));
+        inventory.setItem(SLOT_MOB_DROPS, buildUpgradeIcon(player, island, IslandUpgradeType.MOB_DROP_BONUS));
         inventory.setItem(SLOT_COBBLE_GEN, buildUpgradeIcon(player, island, IslandUpgradeType.COBBLE_GENERATOR_YIELD));
+        inventory.setItem(SLOT_MEMBERS, buildUpgradeIcon(player, island, IslandUpgradeType.MEMBER_LIMIT));
 
         inventory.setItem(SLOT_BACK, createItem(
                 Material.ARROW,
@@ -87,6 +92,10 @@ public class IslandUpgradesGUI {
             lore.add("&8» &7Spawnery na wyspie: &f" + island.getPlacedSpawnersCount() + "&7/&f" + island.getSpawnerLimit());
         } else if (type == IslandUpgradeType.MEMBER_LIMIT) {
             lore.add("&8» &7Członkowie na wyspie: &f" + island.getPermanentMemberCount() + "&7/&f" + island.getMaxMembers());
+        } else if (type == IslandUpgradeType.DOUBLE_CROP_DROP) {
+            lore.add("&8» &7Dotyczy: &fW pełni dojrzałe uprawy (Ageable MAX)");
+        } else if (type == IslandUpgradeType.MOB_DROP_BONUS) {
+            lore.add("&8» &7Dotyczy: &fXP oraz naturalny łup z mobów na wyspie");
         } else if (type == IslandUpgradeType.COBBLE_GENERATOR_YIELD) {
             lore.add("&8» &7Dotyczy: &fGenerator z lawy i wody (bez Silk Touch)");
             if (module.getCobbleGeneratorManager() != null) {
@@ -135,8 +144,10 @@ public class IslandUpgradesGUI {
             case SLOT_BORDER -> IslandUpgradeType.WORLD_BORDER;
             case SLOT_SPAWNERS -> IslandUpgradeType.SPAWNER_LIMIT;
             case SLOT_CROPS -> IslandUpgradeType.CROP_GROWTH;
-            case SLOT_MEMBERS -> IslandUpgradeType.MEMBER_LIMIT;
+            case SLOT_DOUBLE_CROPS -> IslandUpgradeType.DOUBLE_CROP_DROP;
+            case SLOT_MOB_DROPS -> IslandUpgradeType.MOB_DROP_BONUS;
             case SLOT_COBBLE_GEN -> IslandUpgradeType.COBBLE_GENERATOR_YIELD;
+            case SLOT_MEMBERS -> IslandUpgradeType.MEMBER_LIMIT;
             default -> null;
         };
 

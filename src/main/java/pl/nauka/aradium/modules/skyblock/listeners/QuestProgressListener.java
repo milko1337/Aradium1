@@ -313,7 +313,10 @@ public class QuestProgressListener implements Listener {
     private static Material normalizeOreMaterial(Material type) {
         return switch (type) {
             case DEEPSLATE_COAL_ORE -> Material.COAL_ORE;
+            case DEEPSLATE_COPPER_ORE -> Material.COPPER_ORE;
             case DEEPSLATE_IRON_ORE -> Material.IRON_ORE;
+            case DEEPSLATE_LAPIS_ORE -> Material.LAPIS_ORE;
+            case DEEPSLATE_REDSTONE_ORE -> Material.REDSTONE_ORE;
             case DEEPSLATE_GOLD_ORE, NETHER_GOLD_ORE -> Material.GOLD_ORE;
             case DEEPSLATE_DIAMOND_ORE -> Material.DIAMOND_ORE;
             case DEEPSLATE_EMERALD_ORE -> Material.EMERALD_ORE;
@@ -325,6 +328,7 @@ public class QuestProgressListener implements Listener {
         return blockType == Material.WHEAT
                 || blockType == Material.POTATOES
                 || blockType == Material.CARROTS
+                || blockType == Material.BEETROOTS
                 || blockType == Material.NETHER_WART;
     }
 
@@ -333,6 +337,7 @@ public class QuestProgressListener implements Listener {
                 || dropType == Material.POTATO
                 || dropType == Material.POISONOUS_POTATO
                 || dropType == Material.CARROT
+                || dropType == Material.BEETROOT
                 || dropType == Material.NETHER_WART;
     }
 

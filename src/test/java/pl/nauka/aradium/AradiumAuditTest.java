@@ -825,7 +825,11 @@ class AradiumAuditTest {
             assertEquals(IslandUpgradeType.WORLD_BORDER, IslandUpgradeType.parse("world_border"));
             assertEquals(IslandUpgradeType.SPAWNER_LIMIT, IslandUpgradeType.parse("SPAWNER_LIMIT"));
             assertEquals(IslandUpgradeType.COBBLE_GENERATOR_YIELD, IslandUpgradeType.parse("cobble_generator_yield"));
+            assertEquals(IslandUpgradeType.DOUBLE_CROP_DROP, IslandUpgradeType.parse("double_crop_drop"));
+            assertEquals(IslandUpgradeType.MOB_DROP_BONUS, IslandUpgradeType.parse("MOB_DROP_BONUS"));
             assertEquals("3x surowca z generatora", IslandUpgradeType.COBBLE_GENERATOR_YIELD.formatValue(3));
+            assertEquals("70% szansy na 2x plon", IslandUpgradeType.DOUBLE_CROP_DROP.formatValue(70));
+            assertEquals("75% bonusu dropu i XP", IslandUpgradeType.MOB_DROP_BONUS.formatValue(75));
 
             YamlConfiguration cfgYaml = YamlConfiguration.loadConfiguration(
                     new InputStreamReader(cfgStream, StandardCharsets.UTF_8)
@@ -834,15 +838,21 @@ class AradiumAuditTest {
             upgradeManager.reload(cfgYaml);
             assertEquals(5, upgradeManager.getMaxTier(IslandUpgradeType.WORLD_BORDER));
             assertEquals(5, upgradeManager.getMaxTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD));
+            assertEquals(5, upgradeManager.getMaxTier(IslandUpgradeType.DOUBLE_CROP_DROP));
+            assertEquals(5, upgradeManager.getMaxTier(IslandUpgradeType.MOB_DROP_BONUS));
             assertEquals(32, upgradeManager.getTier(IslandUpgradeType.SPAWNER_LIMIT, 3).value());
             assertEquals(4, upgradeManager.getTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD, 4).value());
             assertEquals(15000.0, upgradeManager.getTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD, 4).cost(), 0.001);
+            assertEquals(100, upgradeManager.getTier(IslandUpgradeType.DOUBLE_CROP_DROP, 5).value());
+            assertEquals(50, upgradeManager.getTier(IslandUpgradeType.MOB_DROP_BONUS, 3).value());
 
             i1.setUpgradeTier(IslandUpgradeType.WORLD_BORDER, 4);
             i1.setUpgradeTier(IslandUpgradeType.SPAWNER_LIMIT, 3);
             i1.setUpgradeTier(IslandUpgradeType.CROP_GROWTH, 5);
             i1.setUpgradeTier(IslandUpgradeType.MEMBER_LIMIT, 2);
             i1.setUpgradeTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD, 5);
+            i1.setUpgradeTier(IslandUpgradeType.DOUBLE_CROP_DROP, 4);
+            i1.setUpgradeTier(IslandUpgradeType.MOB_DROP_BONUS, 5);
             upgradeManager.applyUpgradesToIsland(i1);
 
             assertEquals(150, i1.getBorderRadius());
@@ -850,6 +860,8 @@ class AradiumAuditTest {
             assertEquals(100, i1.getCropGrowthBonusPercent());
             assertEquals(6, i1.getMaxMembers());
             assertEquals(5, i1.getCobbleGeneratorYield());
+            assertEquals(70, i1.getDoubleCropDropChancePercent());
+            assertEquals(100, i1.getMobDropBonusPercent());
         }
     }
 
@@ -865,15 +877,16 @@ class AradiumAuditTest {
             manager.reload(questsYaml);
 
             Map<Integer, QuestStage> stages = manager.getStagesSnapshot();
-            assertEquals(5, stages.size());
+            assertEquals(7, stages.size());
+            assertEquals(7, manager.getMaxStageNumber());
             int totalQuests = 0;
-            for (int stageNum = 1; stageNum <= 5; stageNum++) {
+            for (int stageNum = 1; stageNum <= 7; stageNum++) {
                 QuestStage stage = stages.get(stageNum);
                 assertNotNull(stage, "Brak etapu " + stageNum);
                 assertEquals(7, stage.getQuests().size(), "Etap " + stageNum + " powinien mieć 7 zadań");
                 totalQuests += stage.getQuests().size();
             }
-            assertEquals(35, totalQuests);
+            assertEquals(49, totalQuests);
 
             // Weryfikacja JSON roundtrip oraz paska postępu
             QuestProgress rawProgress = new QuestProgress("mining_1", 1, Map.of("COBBLESTONE", 64, "COAL_ORE", 16), false, 0L);
@@ -947,6 +960,24 @@ class AradiumAuditTest {
             manager.recordProgress(null, island, QuestType.BLOCK_BREAK, "COBBLESTONE", 2048);
             manager.recordProgress(null, island, QuestType.CRAFT, "NETHERITE_INGOT", 16);
             assertTrue(island.getQuestProgress("mining_5").isCompleted());
+
+            // Odblokowanie pozostałych misji Etapu 5 odblokowuje Etap 6 i Etap 7
+            for (QuestDefinition q : manager.getStage(5).getQuests()) {
+                island.getOrCreateQuestProgress(q.id(), 5).markCompleted(System.currentTimeMillis());
+            }
+            assertTrue(manager.isStageUnlocked(island, 6));
+            assertFalse(manager.isStageUnlocked(island, 7));
+            assertEquals(6, manager.getHighestUnlockedStage(island));
+
+            for (QuestDefinition q : manager.getStage(6).getQuests()) {
+                island.getOrCreateQuestProgress(q.id(), 6).markCompleted(System.currentTimeMillis());
+            }
+            assertTrue(manager.isStageUnlocked(island, 7));
+            assertEquals(7, manager.getHighestUnlockedStage(island));
+
+            manager.recordProgress(null, island, QuestType.BLOCK_BREAK, "ANCIENT_DEBRIS", 64);
+            manager.recordProgress(null, island, QuestType.CRAFT, "NETHERITE_BLOCK", 8);
+            assertTrue(island.getQuestProgress("mining_7").isCompleted());
         }
     }
 
@@ -1011,5 +1042,31 @@ class AradiumAuditTest {
             assertEquals(5, upgradeManager.getTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD, 5).value());
             assertEquals(35000.0, upgradeManager.getTier(IslandUpgradeType.COBBLE_GENERATOR_YIELD, 5).cost(), 0.001);
         }
+    }
+
+    @Test
+    void doubleCropAndMobDropBonusUpgradesWorkCorrectly() {
+        assertFalse(SpawnerLimitListener.shouldTriggerPercentBonus(0, 0));
+        assertTrue(SpawnerLimitListener.shouldTriggerPercentBonus(100, 99));
+        assertTrue(SpawnerLimitListener.shouldTriggerPercentBonus(40, 39));
+        assertFalse(SpawnerLimitListener.shouldTriggerPercentBonus(40, 40));
+
+        assertEquals(10, SpawnerLimitListener.computeBoostedMobExp(10, 0));
+        assertEquals(15, SpawnerLimitListener.computeBoostedMobExp(10, 50));
+        assertEquals(20, SpawnerLimitListener.computeBoostedMobExp(10, 100));
+
+        // Zwykłe łupy kwalifikują się do bonusu
+        assertTrue(SpawnerLimitListener.isEligibleMobDropForBonus(Material.ROTTEN_FLESH, 2, false));
+        assertTrue(SpawnerLimitListener.isEligibleMobDropForBonus(Material.BLAZE_ROD, 1, false));
+
+        // Ekwipunek, totemy, przedmioty z ItemMeta i puste itemy są blokowane przed duplikacją
+        assertFalse(SpawnerLimitListener.isEligibleMobDropForBonus(null));
+        assertFalse(SpawnerLimitListener.isEligibleMobDropForBonus(Material.AIR, 1, false));
+        assertFalse(SpawnerLimitListener.isEligibleMobDropForBonus(Material.ROTTEN_FLESH, 1, true));
+        assertFalse(SpawnerLimitListener.isEligibleMobDropForBonus(Material.DIAMOND_SWORD, 1, false));
+        assertFalse(SpawnerLimitListener.isEligibleMobDropForBonus(Material.IRON_CHESTPLATE, 1, false));
+        assertFalse(SpawnerLimitListener.isEligibleMobDropForBonus(Material.BOW, 1, false));
+        assertFalse(SpawnerLimitListener.isEligibleMobDropForBonus(Material.TOTEM_OF_UNDYING, 1, false));
+        assertFalse(SpawnerLimitListener.isEligibleMobDropForBonus(Material.SPAWNER, 1, false));
     }
 }

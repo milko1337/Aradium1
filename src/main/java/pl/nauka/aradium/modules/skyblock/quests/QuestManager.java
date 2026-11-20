@@ -27,7 +27,7 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
- * Menedżer współdzielonych misji wyspy (5 etapów po 7 zadań):
+ * Menedżer współdzielonych misji wyspy (7 etapów po 7 zadań):
  * ładowanie quests.yml, aktualizacje postępu, odblokowania etapów oraz wypłata nagród.
  */
 public class QuestManager {
@@ -37,7 +37,7 @@ public class QuestManager {
     private final File questsFile;
     private final Logger logger;
 
-    private String guiTitleTemplate = "&8» &6Misje Wyspy &8(&eEtap %stage%/5&8)";
+    private String guiTitleTemplate = "&8» &6Misje Wyspy &8(&eEtap %stage%/7&8)";
     private int barLength = 10;
     private String barSymbol = "■";
     private String barCompletedColor = "&a";
@@ -74,7 +74,7 @@ public class QuestManager {
             this.stagesByNumber = Collections.emptyMap();
             return;
         }
-        this.guiTitleTemplate = config.getString("settings.gui-title", "&8» &6Misje Wyspy &8(&eEtap %stage%/5&8)");
+        this.guiTitleTemplate = config.getString("settings.gui-title", "&8» &6Misje Wyspy &8(&eEtap %stage%/7&8)");
         this.barLength = Math.clamp(config.getInt("settings.progress-bar.length", 10), 4, 30);
         this.barSymbol = config.getString("settings.progress-bar.symbol", "■");
         this.barCompletedColor = config.getString("settings.progress-bar.completed-color", "&a");
@@ -208,6 +208,19 @@ public class QuestManager {
 
     public synchronized QuestStage getStage(int stageNumber) {
         return stagesByNumber.get(stageNumber);
+    }
+
+    public synchronized int getMaxStageNumber() {
+        if (stagesByNumber.isEmpty()) {
+            return 1;
+        }
+        int max = 1;
+        for (int num : stagesByNumber.keySet()) {
+            if (num > max) {
+                max = num;
+            }
+        }
+        return max;
     }
 
     public synchronized boolean isStageCompleted(Island island, int stageNumber) {

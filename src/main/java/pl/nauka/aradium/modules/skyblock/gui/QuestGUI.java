@@ -25,14 +25,14 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Menu GUI współdzielonych misji wyspy (5 etapów po 7 zadań, paski postępu, status zablokowany/w trakcie/ukończony).
+ * Menu GUI współdzielonych misji wyspy (7 etapów po 7 zadań, paski postępu, status zablokowany/w trakcie/ukończony).
  */
 public class QuestGUI {
 
     private static final int SIZE = 27;
-    private static final int STAGE_TAB_OFFSET = 1; // Etap 1..5 -> sloty 2..6
-    private static final int SLOT_STAGE_FIRST = 2;
-    private static final int SLOT_STAGE_LAST = 6;
+    private static final int STAGE_TAB_OFFSET = 0; // Etap 1..7 -> sloty 1..7
+    private static final int SLOT_STAGE_FIRST = 1;
+    private static final int SLOT_STAGE_LAST = 7;
     private static final int SLOT_BACK = 22;
 
     private final AradiumPlugin plugin;
@@ -59,7 +59,8 @@ public class QuestGUI {
         }
         questManager.syncDynamicQuests(player, island);
 
-        int stageNum = Math.clamp(requestedStage, 1, 5);
+        int maxStage = Math.clamp(questManager.getMaxStageNumber(), 1, 7);
+        int stageNum = Math.clamp(requestedStage, 1, maxStage);
         SkyBlockGuiHolder holder = new SkyBlockGuiHolder(
                 SkyBlockGuiHolder.GuiType.QUESTS_MENU,
                 island.getIslandId(),
@@ -75,7 +76,7 @@ public class QuestGUI {
             inventory.setItem(i, filler);
         }
 
-        for (int s = 1; s <= 5; s++) {
+        for (int s = 1; s <= maxStage; s++) {
             int slot = STAGE_TAB_OFFSET + s;
             inventory.setItem(slot, buildStageTab(questManager, island, s, s == stageNum));
         }
@@ -112,7 +113,9 @@ public class QuestGUI {
             return;
         }
 
-        if (slot >= SLOT_STAGE_FIRST && slot <= SLOT_STAGE_LAST) {
+        QuestManager questManager = module.getQuestManager();
+        int maxStage = questManager != null ? Math.clamp(questManager.getMaxStageNumber(), 1, 7) : 7;
+        if (slot >= SLOT_STAGE_FIRST && slot <= Math.min(SLOT_STAGE_LAST, STAGE_TAB_OFFSET + maxStage)) {
             int clickedStage = slot - STAGE_TAB_OFFSET;
             plugin.getServer().getScheduler().runTask(plugin, () -> open(player, island, clickedStage));
             return;

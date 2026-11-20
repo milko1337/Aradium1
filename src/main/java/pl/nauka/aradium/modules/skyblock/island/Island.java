@@ -44,6 +44,8 @@ public class Island {
     private int spawnerLimit;
     private int cropGrowthBonusPercent = 0;
     private int cobbleGeneratorYield = 1;
+    private int doubleCropDropChancePercent = 0;
+    private int mobDropBonusPercent = 0;
     private int placedSpawnersCount = 0;
 
     private final Map<UUID, IslandRole> members = new ConcurrentHashMap<>();
@@ -233,6 +235,22 @@ public class Island {
 
     public void setCobbleGeneratorYield(int cobbleGeneratorYield) {
         this.cobbleGeneratorYield = Math.max(1, cobbleGeneratorYield);
+    }
+
+    public int getDoubleCropDropChancePercent() {
+        return doubleCropDropChancePercent;
+    }
+
+    public void setDoubleCropDropChancePercent(int doubleCropDropChancePercent) {
+        this.doubleCropDropChancePercent = Math.max(0, doubleCropDropChancePercent);
+    }
+
+    public int getMobDropBonusPercent() {
+        return mobDropBonusPercent;
+    }
+
+    public void setMobDropBonusPercent(int mobDropBonusPercent) {
+        this.mobDropBonusPercent = Math.max(0, mobDropBonusPercent);
     }
 
     public int getPlacedSpawnersCount() {
