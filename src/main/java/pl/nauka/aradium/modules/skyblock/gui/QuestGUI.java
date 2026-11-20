@@ -26,7 +26,7 @@ import java.util.Objects;
 
 /**
  * Menu GUI współdzielonych misji wyspy (45 slotów, etapy w górnym rzędzie 1..7 jako surowce,
- * dwa rzędy misji 10..16 oraz 19..25, przerwa z szarego szkła 27..35 i powrót na slocie 40).
+ * przerwa z szarego szkła 9..17, dwa rzędy misji 19..25 oraz 28..34 i powrót na slocie 40).
  */
 public class QuestGUI {
 
@@ -34,10 +34,10 @@ public class QuestGUI {
     public static final int STAGE_TAB_OFFSET = 0; // Etap 1..7 -> sloty 1..7 (sama góra)
     public static final int SLOT_STAGE_FIRST = 1;
     public static final int SLOT_STAGE_LAST = 7;
-    public static final int SLOT_QUEST_ROW1_FIRST = 10; // 1. rząd misji (10..16)
-    public static final int SLOT_QUEST_ROW1_LAST = 16;
-    public static final int SLOT_QUEST_ROW2_FIRST = 19; // 2. rząd misji (19..25)
-    public static final int SLOT_QUEST_ROW2_LAST = 25;
+    public static final int SLOT_QUEST_ROW1_FIRST = 19; // 1. rząd misji (19..25)
+    public static final int SLOT_QUEST_ROW1_LAST = 25;
+    public static final int SLOT_QUEST_ROW2_FIRST = 28; // 2. rząd misji (28..34)
+    public static final int SLOT_QUEST_ROW2_LAST = 34;
     public static final int SLOT_QUEST_FIRST = SLOT_QUEST_ROW1_FIRST;
     public static final int SLOT_QUEST_LAST = SLOT_QUEST_ROW2_LAST;
     public static final int SLOT_BACK = 40;
@@ -51,8 +51,8 @@ public class QuestGUI {
     }
 
     public static int resolveQuestSlot(int configuredSlot) {
-        if (configuredSlot >= 28 && configuredSlot <= 34) {
-            return configuredSlot - 18;
+        if (configuredSlot >= 10 && configuredSlot <= 16) {
+            return configuredSlot + 9;
         }
         return configuredSlot;
     }

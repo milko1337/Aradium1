@@ -205,7 +205,7 @@
 - **`gui/` (`SkyBlockGuiHolder`, `IslandSchematicGUI`, `IslandPanelGUI`, `IslandRolesGUI`, `IslandWarpsGUI`, `IslandUpgradesGUI`, `IslandTopGUI`, `QuestGUI`)**
   - Komplet menu wyspy (w tym `IslandUpgradesGUI` z 7 symetrycznymi ikonami ulepszeń
     oraz `QuestGUI` o rozmiarze `45` slotów z zakładkami etapów `1–7` w formie surowców na samej górze
-    `1–7`, dwoma rzędami tematycznych misji `10–16` i `19–25`, przerwą z szarego szkła `27–35`,
+    `1–7`, przerwą z szarego szkła `9–17`, dwoma rzędami tematycznych misji `19–25` i `28–34`,
     powrotem na slocie `40` i paskiem postępu) chronionych przez `SkyBlockGuiHolder`.
 
 - **`listeners/` (`IslandProtectionListener`, `SpawnerLimitListener`, `QuestProgressListener`)**
@@ -275,7 +275,7 @@
 15. `skyblockQuestsAllFiveStagesProgressAndGuiWorkCorrectly` — 7 etapów misji (`86` zadań
     z `QUESTY_LISTA.md`, w tym `SPAWNER_MOB_UNLOCK`, `ISLAND_UPGRADE`, `EQUIP_ARMOR`,
     `SPAWNER_UPGRADE` i `BREED`), JSON, paski postępu, układ `QuestGUI` (etapy `1–7`,
-    misje `10–16`/`19–25`) i cele `BLOCK_AND_CRAFT`.
+    przerwa `9–17`, misje `19–25`/`28–34`) i cele `BLOCK_AND_CRAFT`.
 
 16. `allShopCategoriesLoadCleanlyWithValidMaterialsAndPagination` — walidacja wszystkich 17 plików
     `shops/*.yml`, materiałów Paper `26.3`, powiązań `parent-shop`/`target-shop`, indeksowania
@@ -347,6 +347,13 @@ Aktualna lista zadań pozostałych do realizacji znajduje się w pliku [`PLAN.md
 ---
 
 ## 4. Historia zmian (Changelog)
+
+### 2026-11-20 — Obniżenie wierszy misji w `QuestGUI` o jedną linię (`2.0.0-SNAPSHOT`)
+
+- Przesunięto oba wiersze misji w `QuestGUI` oraz wszystkich `86` wpisów `slot:` w `quests.yml`
+  o `+9` slotów (z `10–16`/`19–25` na `19–25`/`28–34`), pozostawiając przerwę z szarego szkła
+  w rzędzie `2` (`9–17`) pomiędzy zakładkami etapów (`1–7`) a pierwszą linią misji, wraz z
+  aktualizacją `QuestGUI#resolveQuestSlot` (`10–16 -> +9`) i testu #15 w `AradiumAuditTest`.
 
 ### 2026-11-20 — Pełna rozpiska 86 misji z `QUESTY_LISTA.md` (Etapy I–VII) (`2.0.0-SNAPSHOT`)
 

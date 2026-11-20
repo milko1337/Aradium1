@@ -897,10 +897,13 @@ class AradiumAuditTest {
             assertEquals(45, QuestGUI.SIZE);
             assertEquals(0, QuestGUI.STAGE_TAB_OFFSET);
             assertEquals(40, QuestGUI.SLOT_BACK);
-            assertEquals(10, QuestGUI.resolveQuestSlot(10));
-            assertEquals(10, QuestGUI.resolveQuestSlot(28));
-            assertTrue(QuestGUI.isValidQuestSlot(10));
+            assertEquals(19, QuestGUI.resolveQuestSlot(10));
+            assertEquals(19, QuestGUI.resolveQuestSlot(19));
+            assertTrue(QuestGUI.isValidQuestSlot(19));
             assertTrue(QuestGUI.isValidQuestSlot(25));
+            assertTrue(QuestGUI.isValidQuestSlot(28));
+            assertTrue(QuestGUI.isValidQuestSlot(34));
+            assertFalse(QuestGUI.isValidQuestSlot(10));
             assertFalse(QuestGUI.isValidQuestSlot(27));
 
             int[] expectedCounts = {0, 9, 11, 13, 14, 13, 13, 13};

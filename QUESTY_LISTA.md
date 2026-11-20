@@ -1,6 +1,6 @@
 # Lista Misji SkyBlock (Aradium) — Planer Etapów I–VII (✅ Wdrożono 86 misji w `quests.yml`)
 
-Ten plik zawiera zestawienie wszystkich aktualnych i proponowanych misji wyspy (`/is quests`) w układzie GUI (`45` slotów: etapy `1–7` na samej górze, dwa rzędy misji `10–16` oraz `19–25`, szary pas `27–35`, powrót `40`).
+Ten plik zawiera zestawienie wszystkich aktualnych i proponowanych misji wyspy (`/is quests`) w układzie GUI (`45` slotów: etapy `1–7` na samej górze, przerwa `9–17`, dwa rzędy misji `19–25` oraz `28–34`, powrót `40`).
 
 Możesz na dole tego pliku (w sekcji **4. Twoje modyfikacje i przypisanie do etapów**) opisać dokładnie, które questy chcesz przenieść, usunąć, zmodyfikować lub dodać na poszczególnych etapach.
 
@@ -9,9 +9,9 @@ Możesz na dole tego pliku (w sekcji **4. Twoje modyfikacje i przypisanie do eta
 ## 1. Układ slotów w GUI (`/is quests`)
 
 - **Rząd 1 (sama góra, `sloty 1–7`):** zakładki Etapów I–VII (`COAL` -> `COPPER_INGOT` -> `IRON_INGOT` -> `GOLD_INGOT` -> `DIAMOND` -> `EMERALD` -> `NETHERITE_INGOT`)
-- **Rząd 2 (`sloty 10–16`):** 1. rząd misji wybranego etapu (7 miejsc)
-- **Rząd 3 (`sloty 19–25`):** 2. rząd misji wybranego etapu (7 miejsc — łącznie do **14 misji na etap**)
-- **Rząd 4 (`sloty 27–35`):** przerwa z szarych paneli szkła
+- **Rząd 2 (`sloty 9–17`):** przerwa z szarych paneli szkła
+- **Rząd 3 (`sloty 19–25`):** 1. rząd misji wybranego etapu (7 miejsc)
+- **Rząd 4 (`sloty 28–34`):** 2. rząd misji wybranego etapu (7 miejsc — łącznie do **14 misji na etap**)
 - **Rząd 5 (`sloty 36–44`):** dolna ramka z przyciskiem powrotu na slocie **`40`**
 
 ---

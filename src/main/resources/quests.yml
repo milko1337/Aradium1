@@ -1,9 +1,9 @@
 # Konfiguracja systemu Misji SkyBlock (Moduł 5: 7 etapów, 86 współdzielonych zadań na wyspę)
 # Menu GUI (45 slotów):
 # - Rząd 1 (sloty 1..7): zakładki etapów I–VII na samej górze w formie surowców (Coal -> Netherite Ingot)
-# - Rząd 2 (sloty 10..16): pierwszy rząd misji wybranego etapu (tematyczne przedmioty)
-# - Rząd 3 (sloty 19..25): drugi rząd misji wybranego etapu
-# - Rząd 4 (sloty 27..35): przerwa z szarego szkła
+# - Rząd 2 (sloty 9..17): przerwa z szarego szkła
+# - Rząd 3 (sloty 19..25): pierwszy rząd misji wybranego etapu (tematyczne przedmioty)
+# - Rząd 4 (sloty 28..34): drugi rząd misji wybranego etapu
 # - Rząd 5 (sloty 36..44): dolna linia z przyciskiem powrotu na slocie 40
 
 settings:
@@ -23,7 +23,7 @@ stages:
     unlock-reward-money: 2500.0
     quests:
       mining_1:
-        slot: 10
+        slot: 19
         type: "BLOCK_BREAK"
         icon: "COBBLESTONE"
         name: "&7&lGórnik"
@@ -43,7 +43,7 @@ stages:
             - "IRON_PICKAXE:1"
 
       woodcutting_1:
-        slot: 11
+        slot: 20
         type: "BLOCK_BREAK"
         icon: "OAK_LOG"
         name: "&6&lDrwal"
@@ -59,7 +59,7 @@ stages:
             - "IRON_AXE:1"
 
       farming_1:
-        slot: 12
+        slot: 21
         type: "COLLECT"
         icon: "WHEAT"
         name: "&e&lRolnik / Zbieracz"
@@ -81,7 +81,7 @@ stages:
             - "BONE_MEAL:32"
 
       slayer_1:
-        slot: 13
+        slot: 22
         type: "ENTITY_KILL"
         icon: "IRON_SWORD"
         name: "&c&lŁowca Mobów"
@@ -101,7 +101,7 @@ stages:
             - "GOLDEN_APPLE:2"
 
       fishing_1:
-        slot: 14
+        slot: 23
         type: "FISH_CATCH"
         icon: "COD"
         name: "&9&lWędkarz"
@@ -116,7 +116,7 @@ stages:
             - "PRISMARINE_SHARD:8"
 
       breeding_1:
-        slot: 15
+        slot: 24
         type: "BREED"
         icon: "CARROT"
         name: "&a&lMistrz Hodowli"
@@ -134,7 +134,7 @@ stages:
             - "CARROT:16"
 
       crafting_1:
-        slot: 16
+        slot: 25
         type: "CRAFT"
         icon: "CRAFTING_TABLE"
         name: "&e&lRzemieślnik"
@@ -153,7 +153,7 @@ stages:
             - "IRON_INGOT:8"
 
       economy_1:
-        slot: 19
+        slot: 28
         type: "BALANCE_REACH"
         icon: "GOLD_NUGGET"
         name: "&a&lMistrz Ekonomii"
@@ -168,7 +168,7 @@ stages:
             - "EMERALD:4"
 
       island_level_1:
-        slot: 20
+        slot: 29
         type: "ISLAND_LEVEL"
         icon: "GRASS_BLOCK"
         name: "&b&lBudowniczy"
@@ -190,7 +190,7 @@ stages:
     unlock-reward-money: 6000.0
     quests:
       mining_2:
-        slot: 10
+        slot: 19
         type: "BLOCK_BREAK"
         icon: "IRON_ORE"
         name: "&7&lGórnik"
@@ -212,7 +212,7 @@ stages:
             - "COAL:32"
 
       woodcutting_2:
-        slot: 11
+        slot: 20
         type: "BLOCK_BREAK"
         icon: "SPRUCE_LOG"
         name: "&6&lDrwal"
@@ -227,7 +227,7 @@ stages:
             - "SPRUCE_SAPLING:8"
 
       farming_2:
-        slot: 12
+        slot: 21
         type: "COLLECT"
         icon: "POISONOUS_POTATO"
         name: "&e&lRolnik / Zbieracz"
@@ -246,7 +246,7 @@ stages:
             - "GOLDEN_CARROT:16"
 
       slayer_2:
-        slot: 13
+        slot: 22
         type: "ENTITY_KILL"
         icon: "DIAMOND_SWORD"
         name: "&c&lŁowca Mobów"
@@ -265,7 +265,7 @@ stages:
             - "GOLDEN_APPLE:4"
 
       fishing_2:
-        slot: 14
+        slot: 23
         type: "FISH_CATCH"
         icon: "SALMON"
         name: "&9&lWędkarz"
@@ -282,7 +282,7 @@ stages:
             - "COOKED_SALMON:16"
 
       breeding_2:
-        slot: 15
+        slot: 24
         type: "BREED"
         icon: "HAY_BLOCK"
         name: "&e&lMistrz Hodowli"
@@ -300,7 +300,7 @@ stages:
             - "LEATHER:16"
 
       smelting_2:
-        slot: 16
+        slot: 25
         type: "SMELT"
         icon: "FURNACE"
         name: "&6&lHutnik"
@@ -316,7 +316,7 @@ stages:
             - "BLAST_FURNACE:1"
 
       crafting_2:
-        slot: 19
+        slot: 28
         type: "CRAFT"
         icon: "HOPPER"
         name: "&e&lRzemieślnik"
@@ -335,7 +335,7 @@ stages:
             - "REDSTONE:32"
 
       economy_2:
-        slot: 20
+        slot: 29
         type: "BALANCE_REACH"
         icon: "GOLD_BLOCK"
         name: "&a&lMistrz Ekonomii"
@@ -350,7 +350,7 @@ stages:
             - "EMERALD:8"
 
       island_level_2:
-        slot: 21
+        slot: 30
         type: "ISLAND_LEVEL"
         icon: "IRON_BLOCK"
         name: "&b&lBudowniczy"
@@ -365,7 +365,7 @@ stages:
             - "IRON_BLOCK:2"
 
       armor_gornik_2:
-        slot: 22
+        slot: 31
         type: "EQUIP_ARMOR"
         icon: "IRON_CHESTPLATE"
         name: "&6&lMistrz Magii i Zbroi: Górnik T1"
@@ -387,7 +387,7 @@ stages:
     unlock-reward-money: 15000.0
     quests:
       mining_3:
-        slot: 10
+        slot: 19
         type: "BLOCK_BREAK"
         icon: "DIAMOND_ORE"
         name: "&b&lGórnik"
@@ -406,7 +406,7 @@ stages:
             - "DIAMOND:8"
 
       woodcutting_3:
-        slot: 11
+        slot: 20
         type: "BLOCK_BREAK"
         icon: "DARK_OAK_LOG"
         name: "&6&lDrwal"
@@ -421,7 +421,7 @@ stages:
             - "DARK_OAK_SAPLING:8"
 
       farming_3:
-        slot: 12
+        slot: 21
         type: "COLLECT"
         icon: "CARROT"
         name: "&e&lRolnik / Zbieracz"
@@ -441,7 +441,7 @@ stages:
             - "BONE_BLOCK:8"
 
       slayer_3:
-        slot: 13
+        slot: 22
         type: "ENTITY_KILL"
         icon: "IRON_GOLEM_SPAWN_EGG"
         name: "&c&lŁowca Mobów"
@@ -456,7 +456,7 @@ stages:
             - "IRON_BLOCK:8"
 
       fishing_3:
-        slot: 14
+        slot: 23
         type: "FISH_CATCH"
         icon: "PUFFERFISH"
         name: "&9&lWędkarz"
@@ -475,7 +475,7 @@ stages:
             - "NAUTILUS_SHELL:2"
 
       breeding_3:
-        slot: 15
+        slot: 24
         type: "BREED"
         icon: "RABBIT_FOOT"
         name: "&6&lMistrz Hodowli"
@@ -492,7 +492,7 @@ stages:
             - "GOLDEN_CARROT:32"
 
       smelting_3:
-        slot: 16
+        slot: 25
         type: "SMELT"
         icon: "BLAST_FURNACE"
         name: "&6&lHutnik"
@@ -509,7 +509,7 @@ stages:
             - "COAL_BLOCK:12"
 
       crafting_3:
-        slot: 19
+        slot: 28
         type: "CRAFT"
         icon: "ANVIL"
         name: "&e&lRzemieślnik"
@@ -528,7 +528,7 @@ stages:
             - "REDSTONE_BLOCK:8"
 
       trading_3:
-        slot: 20
+        slot: 29
         type: "VILLAGER_TRADE"
         icon: "EMERALD"
         name: "&a&lKupiec Wioski"
@@ -543,7 +543,7 @@ stages:
             - "EMERALD_BLOCK:2"
 
       economy_3:
-        slot: 21
+        slot: 30
         type: "BALANCE_REACH"
         icon: "EMERALD_BLOCK"
         name: "&a&lMistrz Ekonomii"
@@ -558,7 +558,7 @@ stages:
             - "DIAMOND:6"
 
       island_level_3:
-        slot: 22
+        slot: 31
         type: "ISLAND_LEVEL"
         icon: "DIAMOND_BLOCK"
         name: "&b&lBudowniczy"
@@ -573,7 +573,7 @@ stages:
             - "DIAMOND_BLOCK:1"
 
       spawner_explorer_3:
-        slot: 23
+        slot: 32
         type: "SPAWNER_MOB_UNLOCK"
         icon: "PIG_SPAWN_EGG"
         name: "&d&lOdkrywca Spawnerów"
@@ -588,7 +588,7 @@ stages:
             - "EXPERIENCE_BOTTLE:32"
 
       armor_handlarz_3:
-        slot: 24
+        slot: 33
         type: "EQUIP_ARMOR"
         icon: "GOLDEN_CHESTPLATE"
         name: "&a&lMistrz Magii i Zbroi: Handlarz T2"
@@ -610,7 +610,7 @@ stages:
     unlock-reward-money: 40000.0
     quests:
       mining_4:
-        slot: 10
+        slot: 19
         type: "BLOCK_BREAK"
         icon: "OBSIDIAN"
         name: "&5&lGórnik"
@@ -632,7 +632,7 @@ stages:
             - "DIAMOND_BLOCK:4"
 
       farming_4:
-        slot: 11
+        slot: 20
         type: "COLLECT"
         icon: "NETHER_WART"
         name: "&e&lRolnik / Zbieracz"
@@ -650,7 +650,7 @@ stages:
             - "SOUL_SAND:32"
 
       slayer_4:
-        slot: 12
+        slot: 21
         type: "ENTITY_KILL"
         icon: "BLAZE_ROD"
         name: "&c&lŁowca Mobów"
@@ -670,7 +670,7 @@ stages:
             - "ENCHANTED_GOLDEN_APPLE:1"
 
       fishing_4:
-        slot: 13
+        slot: 22
         type: "FISH_CATCH"
         icon: "TROPICAL_FISH"
         name: "&9&lWędkarz"
@@ -689,7 +689,7 @@ stages:
             - "HEART_OF_THE_SEA:1"
 
       breeding_4:
-        slot: 14
+        slot: 23
         type: "BREED"
         icon: "GOLDEN_CARROT"
         name: "&d&lMistrz Hodowli"
@@ -709,7 +709,7 @@ stages:
             - "COD:32"
 
       smelting_4:
-        slot: 15
+        slot: 24
         type: "SMELT"
         icon: "GLASS"
         name: "&6&lHutnik"
@@ -726,7 +726,7 @@ stages:
             - "IRON_BLOCK:6"
 
       crafting_4:
-        slot: 16
+        slot: 25
         type: "CRAFT"
         icon: "ENCHANTING_TABLE"
         name: "&e&lRzemieślnik"
@@ -743,7 +743,7 @@ stages:
             - "LAPIS_BLOCK:8"
 
       trading_4:
-        slot: 19
+        slot: 28
         type: "VILLAGER_TRADE"
         icon: "EMERALD"
         name: "&a&lKupiec Wioski"
@@ -758,7 +758,7 @@ stages:
             - "EMERALD_BLOCK:6"
 
       alchemy_4:
-        slot: 20
+        slot: 29
         type: "BREW"
         icon: "BREWING_STAND"
         name: "&d&lMistrz Alchemii"
@@ -774,7 +774,7 @@ stages:
             - "GLOWSTONE_DUST:32"
 
       economy_4:
-        slot: 21
+        slot: 30
         type: "BALANCE_REACH"
         icon: "NETHERITE_SCRAP"
         name: "&a&lMistrz Ekonomii"
@@ -789,7 +789,7 @@ stages:
             - "NETHERITE_SCRAP:4"
 
       island_level_4:
-        slot: 22
+        slot: 31
         type: "ISLAND_LEVEL"
         icon: "BEACON"
         name: "&b&lBudowniczy"
@@ -804,7 +804,7 @@ stages:
             - "EMERALD_BLOCK:8"
 
       spawner_explorer_4:
-        slot: 23
+        slot: 32
         type: "SPAWNER_MOB_UNLOCK"
         icon: "COW_SPAWN_EGG"
         name: "&d&lOdkrywca Spawnerów"
@@ -819,7 +819,7 @@ stages:
             - "DIAMOND:8"
 
       island_upgrade_4:
-        slot: 24
+        slot: 33
         type: "ISLAND_UPGRADE"
         icon: "EXPERIENCE_BOTTLE"
         name: "&6&lMistrz Ulepszeń Wyspy"
@@ -834,7 +834,7 @@ stages:
             - "GOLD_BLOCK:8"
 
       armor_lotnika_4:
-        slot: 25
+        slot: 34
         type: "EQUIP_ARMOR"
         icon: "LEATHER_BOOTS"
         name: "&f&lMistrz Magii i Zbroi: Buty Lotnika"
@@ -856,7 +856,7 @@ stages:
     unlock-reward-money: 100000.0
     quests:
       mining_5:
-        slot: 10
+        slot: 19
         type: "BLOCK_AND_CRAFT"
         icon: "NETHERITE_INGOT"
         name: "&4&lGórnik"
@@ -874,7 +874,7 @@ stages:
             - "DIAMOND_BLOCK:16"
 
       farming_5:
-        slot: 11
+        slot: 20
         type: "COLLECT"
         icon: "CACTUS"
         name: "&2&lRolnik / Zbieracz"
@@ -889,7 +889,7 @@ stages:
             - "HOPPER:32"
 
       slayer_5:
-        slot: 12
+        slot: 21
         type: "ENTITY_KILL"
         icon: "WITHER_SKELETON_SKULL"
         name: "&4&lŁowca Mobów"
@@ -907,7 +907,7 @@ stages:
             - "ENCHANTED_GOLDEN_APPLE:4"
 
       fishing_5:
-        slot: 13
+        slot: 22
         type: "FISH_CATCH"
         icon: "HEART_OF_THE_SEA"
         name: "&9&lWędkarz"
@@ -924,7 +924,7 @@ stages:
             - "TRIDENT:1"
 
       breeding_5:
-        slot: 14
+        slot: 23
         type: "BREED"
         icon: "HONEYCOMB"
         name: "&5&lMistrz Hodowli"
@@ -943,7 +943,7 @@ stages:
             - "HONEY_BLOCK:16"
 
       smelting_5:
-        slot: 15
+        slot: 24
         type: "SMELT"
         icon: "RAW_IRON_BLOCK"
         name: "&6&lHutnik"
@@ -960,7 +960,7 @@ stages:
             - "GOLD_BLOCK:8"
 
       crafting_5:
-        slot: 16
+        slot: 25
         type: "CRAFT"
         icon: "BEACON"
         name: "&b&lRzemieślnik"
@@ -975,7 +975,7 @@ stages:
             - "NETHERITE_BLOCK:1"
 
       trading_5:
-        slot: 19
+        slot: 28
         type: "VILLAGER_TRADE"
         icon: "EMERALD_BLOCK"
         name: "&a&lKupiec Wioski"
@@ -990,7 +990,7 @@ stages:
             - "EMERALD_BLOCK:16"
 
       alchemy_5:
-        slot: 20
+        slot: 29
         type: "BREW"
         icon: "SPLASH_POTION"
         name: "&d&lMistrz Alchemii"
@@ -1005,7 +1005,7 @@ stages:
             - "BLAZE_ROD:32"
 
       economy_5:
-        slot: 21
+        slot: 30
         type: "BALANCE_REACH"
         icon: "RAW_GOLD_BLOCK"
         name: "&a&lMistrz Ekonomii"
@@ -1020,7 +1020,7 @@ stages:
             - "EMERALD_BLOCK:32"
 
       island_level_5:
-        slot: 22
+        slot: 31
         type: "ISLAND_LEVEL"
         icon: "DRAGON_EGG"
         name: "&b&lBudowniczy"
@@ -1035,7 +1035,7 @@ stages:
             - "NETHERITE_INGOT:8"
 
       spawner_explorer_5:
-        slot: 23
+        slot: 32
         type: "SPAWNER_MOB_UNLOCK"
         icon: "BLAZE_SPAWN_EGG"
         name: "&d&lOdkrywca Spawnerów"
@@ -1050,7 +1050,7 @@ stages:
             - "DIAMOND_BLOCK:8"
 
       island_upgrade_5:
-        slot: 24
+        slot: 33
         type: "ISLAND_UPGRADE"
         icon: "NETHER_STAR"
         name: "&6&lMistrz Ulepszeń Wyspy"
@@ -1072,7 +1072,7 @@ stages:
     unlock-reward-money: 150000.0
     quests:
       mining_6:
-        slot: 10
+        slot: 19
         type: "BLOCK_BREAK"
         icon: "EMERALD_ORE"
         name: "&a&lGórnik"
@@ -1092,7 +1092,7 @@ stages:
             - "DIAMOND_BLOCK:8"
 
       farming_6:
-        slot: 11
+        slot: 20
         type: "COLLECT"
         icon: "GOLDEN_HOE"
         name: "&2&lRolnik / Zbieracz"
@@ -1112,7 +1112,7 @@ stages:
             - "GOLDEN_APPLE:16"
 
       slayer_6:
-        slot: 12
+        slot: 21
         type: "ENTITY_KILL"
         icon: "CREEPER_HEAD"
         name: "&c&lŁowca Mobów"
@@ -1132,7 +1132,7 @@ stages:
             - "ENCHANTED_GOLDEN_APPLE:2"
 
       fishing_6:
-        slot: 13
+        slot: 22
         type: "FISH_CATCH"
         icon: "NAUTILUS_SHELL"
         name: "&9&lWędkarz"
@@ -1149,7 +1149,7 @@ stages:
             - "HEART_OF_THE_SEA:2"
 
       breeding_6:
-        slot: 14
+        slot: 23
         type: "BREED"
         icon: "TURTLE_SCUTE"
         name: "&b&lMistrz Hodowli"
@@ -1168,7 +1168,7 @@ stages:
             - "TURTLE_SCUTE:16"
 
       crafting_6:
-        slot: 15
+        slot: 24
         type: "CRAFT"
         icon: "SHULKER_BOX"
         name: "&e&lRzemieślnik"
@@ -1185,7 +1185,7 @@ stages:
             - "SHULKER_SHELL:8"
 
       trading_6:
-        slot: 16
+        slot: 25
         type: "VILLAGER_TRADE"
         icon: "EMERALD_ORE"
         name: "&a&lKupiec Wioski"
@@ -1200,7 +1200,7 @@ stages:
             - "EMERALD_BLOCK:24"
 
       alchemy_6:
-        slot: 19
+        slot: 28
         type: "BREW"
         icon: "LINGERING_POTION"
         name: "&d&lMistrz Alchemii"
@@ -1215,7 +1215,7 @@ stages:
             - "GLOWSTONE:64"
 
       economy_6:
-        slot: 20
+        slot: 29
         type: "BALANCE_REACH"
         icon: "DIAMOND_BLOCK"
         name: "&a&lMistrz Ekonomii"
@@ -1230,7 +1230,7 @@ stages:
             - "NETHERITE_INGOT:4"
 
       island_level_6:
-        slot: 21
+        slot: 30
         type: "ISLAND_LEVEL"
         icon: "BEACON"
         name: "&b&lBudowniczy"
@@ -1246,7 +1246,7 @@ stages:
             - "DIAMOND_BLOCK:16"
 
       spawner_collector_6:
-        slot: 22
+        slot: 31
         type: "SPAWNER_UPGRADE"
         icon: "SPAWNER"
         name: "&d&lKolekcjoner Spawnerów"
@@ -1261,7 +1261,7 @@ stages:
             - "SPAWNER:1"
 
       spawner_explorer_6:
-        slot: 23
+        slot: 32
         type: "SPAWNER_MOB_UNLOCK"
         icon: "CREEPER_SPAWN_EGG"
         name: "&d&lOdkrywca Spawnerów"
@@ -1276,7 +1276,7 @@ stages:
             - "SPAWNER:1"
 
       island_upgrade_6:
-        slot: 24
+        slot: 33
         type: "ISLAND_UPGRADE"
         icon: "ENCHANTED_GOLDEN_APPLE"
         name: "&6&lMistrz Ulepszeń Wyspy"
@@ -1298,7 +1298,7 @@ stages:
     unlock-reward-money: 300000.0
     quests:
       mining_7:
-        slot: 10
+        slot: 19
         type: "BLOCK_AND_CRAFT"
         icon: "ANCIENT_DEBRIS"
         name: "&4&lGórnik"
@@ -1315,7 +1315,7 @@ stages:
             - "NETHERITE_BLOCK:2"
 
       farming_7:
-        slot: 11
+        slot: 20
         type: "COLLECT"
         icon: "SUGAR_CANE"
         name: "&2&lRolnik / Zbieracz"
@@ -1334,7 +1334,7 @@ stages:
             - "EMERALD_BLOCK:32"
 
       slayer_7:
-        slot: 12
+        slot: 21
         type: "ENTITY_KILL"
         icon: "WITHER_ROSE"
         name: "&4&lŁowca Mobów"
@@ -1354,7 +1354,7 @@ stages:
             - "ENCHANTED_GOLDEN_APPLE:8"
 
       fishing_7:
-        slot: 13
+        slot: 22
         type: "FISH_CATCH"
         icon: "TRIDENT"
         name: "&9&lWędkarz"
@@ -1372,7 +1372,7 @@ stages:
             - "HEART_OF_THE_SEA:4"
 
       breeding_7:
-        slot: 14
+        slot: 23
         type: "BREED"
         icon: "SNIFFER_EGG"
         name: "&4&lMistrz Hodowli"
@@ -1391,7 +1391,7 @@ stages:
             - "ENCHANTED_GOLDEN_APPLE:4"
 
       crafting_7:
-        slot: 15
+        slot: 24
         type: "CRAFT"
         icon: "NETHERITE_INGOT"
         name: "&b&lRzemieślnik"
@@ -1408,7 +1408,7 @@ stages:
             - "NETHERITE_BLOCK:2"
 
       trading_7:
-        slot: 16
+        slot: 25
         type: "VILLAGER_TRADE"
         icon: "EMERALD_BLOCK"
         name: "&a&lKupiec Wioski"
@@ -1423,7 +1423,7 @@ stages:
             - "EMERALD_BLOCK:64"
 
       alchemy_7:
-        slot: 19
+        slot: 28
         type: "BREW"
         icon: "DRAGON_BREATH"
         name: "&d&lMistrz Alchemii"
@@ -1439,7 +1439,7 @@ stages:
             - "EXPERIENCE_BOTTLE:64"
 
       economy_7:
-        slot: 20
+        slot: 29
         type: "BALANCE_REACH"
         icon: "NETHER_STAR"
         name: "&a&lMistrz Ekonomii"
@@ -1454,7 +1454,7 @@ stages:
             - "BEACON:2"
 
       island_level_7:
-        slot: 21
+        slot: 30
         type: "ISLAND_LEVEL"
         icon: "NETHERITE_BLOCK"
         name: "&b&lBudowniczy"
@@ -1469,7 +1469,7 @@ stages:
             - "DRAGON_EGG:1"
 
       spawner_collector_7:
-        slot: 22
+        slot: 31
         type: "SPAWNER_UPGRADE"
         icon: "SPAWNER"
         name: "&d&lKolekcjoner Spawnerów"
@@ -1485,7 +1485,7 @@ stages:
             - "NETHERITE_INGOT:8"
 
       spawner_explorer_7:
-        slot: 23
+        slot: 32
         type: "SPAWNER_MOB_UNLOCK"
         icon: "VILLAGER_SPAWN_EGG"
         name: "&d&lOdkrywca Spawnerów"
@@ -1500,7 +1500,7 @@ stages:
             - "SPAWNER:2"
 
       island_upgrade_7:
-        slot: 24
+        slot: 33
         type: "ISLAND_UPGRADE"
         icon: "TOTEM_OF_UNDYING"
         name: "&6&lMistrz Ulepszeń Wyspy"
