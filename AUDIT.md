@@ -203,8 +203,9 @@
 
 - **`gui/` (`SkyBlockGuiHolder`, `IslandSchematicGUI`, `IslandPanelGUI`, `IslandRolesGUI`, `IslandWarpsGUI`, `IslandUpgradesGUI`, `IslandTopGUI`, `QuestGUI`)**
   - Komplet menu wyspy (w tym `IslandUpgradesGUI` z 7 symetrycznymi ikonami ulepszeń
-    oraz `QuestGUI` z zakładkami etapów `1–7`, zieloną/żółtą/czerwoną szybą i paskiem postępu)
-    chronionych przez `SkyBlockGuiHolder`.
+    oraz `QuestGUI` o rozmiarze `45` slotów z pełną obramówką z szarego szkła, zakładkami etapów `1–7`
+    w formie surowców w 2. linii `10–16`, tematycznymi ikonami misji z połyskiem w 4. linii `28–34`
+    i paskiem postępu) chronionych przez `SkyBlockGuiHolder`.
 
 - **`listeners/` (`IslandProtectionListener`, `SpawnerLimitListener`, `QuestProgressListener`)**
   - Ochrona wyspy, limit spawnerów, przyspieszony wzrost roślin (`BlockGrowEvent`),
@@ -342,6 +343,17 @@ Aktualna lista zadań pozostałych do realizacji znajduje się w pliku [`PLAN.md
 ---
 
 ## 4. Historia zmian (Changelog)
+
+### 2026-11-20 — Odświeżenie `QuestGUI` (45 slotów, ikony surowców etapów i przedmiotów misji) (`2.0.0-SNAPSHOT`)
+
+- Przebudowano `QuestGUI` na `45` slotów z pełną obramówką z szarego szkła
+  (`GRAY_STAINED_GLASS_PANE`), przenosząc zakładki Etapów I–VII na 2. linię (`sloty 10–16`),
+  przycisk powrotu na slot `40`, a wszystkie `49` misji na 4. linię (`sloty 28–34`).
+
+- Dodano obsługę ikon etapów w `QuestStage` / `QuestManager` (`COAL`, `COPPER_INGOT`,
+  `IRON_INGOT`, `GOLD_INGOT`, `DIAMOND`, `EMERALD`, `NETHERITE_INGOT`) oraz zamieniono
+  kolorowe szyby misji na tematyczne przedmioty z `quests.yml` (np. `COD` dla łowienia ryb)
+  wraz z efektem połysku dla wybranego etapu i ukończonych zadań.
 
 ### 2026-11-20 — Etap 5 (Punkt 6): Rozbudowa misji (`Etapy VI–VII`) oraz ulepszeń wysp (`DOUBLE_CROP_DROP`, `MOB_DROP_BONUS`) (`2.0.0-SNAPSHOT`)
 

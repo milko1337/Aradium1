@@ -103,6 +103,17 @@ public class QuestManager {
             }
             String stageName = stageSec.getString("name", "&eEtap " + stageNum);
             String stageDesc = stageSec.getString("description", "");
+            Material stageIcon = QuestStage.defaultIconForStage(stageNum);
+            String stageIconRaw = stageSec.getString("icon");
+            if (stageIconRaw != null && !stageIconRaw.isBlank()) {
+                try {
+                    stageIcon = Material.valueOf(stageIconRaw.trim().toUpperCase(Locale.ROOT));
+                } catch (IllegalArgumentException ignored) {
+                    if (logger != null) {
+                        logger.warning("Nieznana ikona etapu '" + stageIconRaw + "' w " + stageKey + " — użyto domyślnego surowca.");
+                    }
+                }
+            }
             double unlockReward = Math.max(0.0, stageSec.getDouble("unlock-reward-money", 0.0));
 
             Map<String, QuestDefinition> questsMap = new LinkedHashMap<>();
@@ -153,7 +164,7 @@ public class QuestManager {
                 }
             }
 
-            stages.put(stageNum, new QuestStage(stageNum, stageKey, stageName, stageDesc, unlockReward, questsMap));
+            stages.put(stageNum, new QuestStage(stageNum, stageKey, stageName, stageDesc, stageIcon, unlockReward, questsMap));
         }
         return stages;
     }

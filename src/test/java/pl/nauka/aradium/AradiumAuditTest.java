@@ -24,6 +24,7 @@ import pl.nauka.aradium.modules.skyblock.island.Island;
 import pl.nauka.aradium.modules.skyblock.island.IslandManager;
 import pl.nauka.aradium.modules.skyblock.island.IslandPermission;
 import pl.nauka.aradium.modules.skyblock.island.IslandRole;
+import pl.nauka.aradium.modules.skyblock.gui.QuestGUI;
 import pl.nauka.aradium.modules.skyblock.level.BlockValueManager;
 import pl.nauka.aradium.modules.skyblock.level.IslandLevelCalculator;
 import pl.nauka.aradium.modules.skyblock.level.IslandTopCache;
@@ -879,14 +880,33 @@ class AradiumAuditTest {
             Map<Integer, QuestStage> stages = manager.getStagesSnapshot();
             assertEquals(7, stages.size());
             assertEquals(7, manager.getMaxStageNumber());
+            assertEquals(Material.COAL, stages.get(1).icon());
+            assertEquals(Material.COPPER_INGOT, stages.get(2).icon());
+            assertEquals(Material.IRON_INGOT, stages.get(3).icon());
+            assertEquals(Material.GOLD_INGOT, stages.get(4).icon());
+            assertEquals(Material.DIAMOND, stages.get(5).icon());
+            assertEquals(Material.EMERALD, stages.get(6).icon());
+            assertEquals(Material.NETHERITE_INGOT, stages.get(7).icon());
+            assertEquals(45, QuestGUI.SIZE);
+            assertEquals(28, QuestGUI.resolveQuestSlot(10));
+            assertEquals(34, QuestGUI.resolveQuestSlot(34));
+
             int totalQuests = 0;
             for (int stageNum = 1; stageNum <= 7; stageNum++) {
                 QuestStage stage = stages.get(stageNum);
                 assertNotNull(stage, "Brak etapu " + stageNum);
                 assertEquals(7, stage.getQuests().size(), "Etap " + stageNum + " powinien mieć 7 zadań");
+                for (QuestDefinition q : stage.getQuests()) {
+                    assertFalse(q.icon().name().endsWith("_STAINED_GLASS_PANE"),
+                            "Misja " + q.id() + " powinna mieć tematyczny przedmiot zamiast szyby");
+                    int resolvedSlot = QuestGUI.resolveQuestSlot(q.slot());
+                    assertTrue(resolvedSlot >= QuestGUI.SLOT_QUEST_FIRST && resolvedSlot <= QuestGUI.SLOT_QUEST_LAST,
+                            "Nieprawidłowy slot misji " + q.id() + ": " + resolvedSlot);
+                }
                 totalQuests += stage.getQuests().size();
             }
             assertEquals(49, totalQuests);
+            assertEquals(Material.COD, stages.get(1).questsById().get("fishing_1").icon());
 
             // Weryfikacja JSON roundtrip oraz paska postępu
             QuestProgress rawProgress = new QuestProgress("mining_1", 1, Map.of("COBBLESTONE", 64, "COAL_ORE", 16), false, 0L);

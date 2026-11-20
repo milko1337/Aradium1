@@ -1,8 +1,8 @@
 # Konfiguracja systemu Misji SkyBlock (Moduł 5: 7 etapów po 7 współdzielonych zadań na wyspę)
-# Status w QuestGUI:
-# - Zielona szyba = zadanie ukończone
-# - Żółta szyba = w trakcie realizacji (z paskiem postępu w lore)
-# - Czerwona szyba = etap zablokowany (wymaga ukończenia poprzedniego etapu)
+# Menu GUI (45 slotów):
+# - Rząd 1 i 3 i 5 + boki: obramówka z szarego szkła
+# - Rząd 2 (sloty 10..16): zakładki etapów I–VII w formie surowców (Coal -> Netherite Ingot)
+# - Rząd 4 (sloty 28..34): misje z tematycznymi ikonami przedmiotów (połysk = ukończono / wybrano)
 
 settings:
   gui-title: "&8» &6Misje Wyspy &8(&eEtap %stage%/7&8)"
@@ -15,12 +15,13 @@ settings:
 stages:
   stage_1:
     stage: 1
+    icon: "COAL"
     name: "&a&lEtap I: Początki na Wyspie"
     description: "&7Ukończ wszystkie 7 podstawowych wyzwań, aby odblokować Etap II."
     unlock-reward-money: 2500.0
     quests:
       mining_1:
-        slot: 10
+        slot: 28
         type: "BLOCK_BREAK"
         icon: "COBBLESTONE"
         name: "&7&lGórnik z Wyspy"
@@ -40,7 +41,7 @@ stages:
             - "IRON_PICKAXE:1"
 
       farming_1:
-        slot: 11
+        slot: 29
         type: "COLLECT"
         icon: "WHEAT"
         name: "&e&lPierwsze Plony i Hodowla"
@@ -62,7 +63,7 @@ stages:
             - "BONE_MEAL:32"
 
       woodcutting_1:
-        slot: 12
+        slot: 30
         type: "BLOCK_BREAK"
         icon: "OAK_LOG"
         name: "&6&lDrwal"
@@ -78,9 +79,9 @@ stages:
             - "IRON_AXE:1"
 
       economy_1:
-        slot: 13
+        slot: 31
         type: "BALANCE_REACH"
-        icon: "GOLD_INGOT"
+        icon: "GOLD_NUGGET"
         name: "&a&lPierwszy Kapitał"
         lore:
           - "&7Zgromadź na koncie odpowiednią kwotę:"
@@ -93,7 +94,7 @@ stages:
             - "EMERALD:4"
 
       island_level_1:
-        slot: 14
+        slot: 32
         type: "ISLAND_LEVEL"
         icon: "GRASS_BLOCK"
         name: "&b&lRozbudowa Terenu"
@@ -108,7 +109,7 @@ stages:
             - "DIRT:32"
 
       slayer_1:
-        slot: 15
+        slot: 33
         type: "ENTITY_KILL"
         icon: "IRON_SWORD"
         name: "&c&lObrońca Nocy"
@@ -128,9 +129,9 @@ stages:
             - "GOLDEN_APPLE:2"
 
       fishing_1:
-        slot: 16
+        slot: 34
         type: "FISH_CATCH"
-        icon: "FISHING_ROD"
+        icon: "COD"
         name: "&9&lCierpliwy Wędkarz"
         lore:
           - "&7Złów ryby z wody na swojej wyspie:"
@@ -144,12 +145,13 @@ stages:
 
   stage_2:
     stage: 2
+    icon: "COPPER_INGOT"
     name: "&e&lEtap II: Rozwój Wyspy"
     description: "&7Ukończ wszystkie 7 zadań Etapu II, aby odblokować Etap III."
     unlock-reward-money: 6000.0
     quests:
       mining_2:
-        slot: 10
+        slot: 28
         type: "BLOCK_BREAK"
         icon: "IRON_ORE"
         name: "&7&lZaawansowany Górnik"
@@ -171,7 +173,7 @@ stages:
             - "COAL:32"
 
       farming_2:
-        slot: 11
+        slot: 29
         type: "COLLECT"
         icon: "POISONOUS_POTATO"
         name: "&e&lWielka Farma"
@@ -190,7 +192,7 @@ stages:
             - "GOLDEN_CARROT:16"
 
       smelting_2:
-        slot: 12
+        slot: 30
         type: "SMELT"
         icon: "FURNACE"
         name: "&6&lHutnik Wyspy"
@@ -206,7 +208,7 @@ stages:
             - "BLAST_FURNACE:1"
 
       economy_2:
-        slot: 13
+        slot: 31
         type: "BALANCE_REACH"
         icon: "GOLD_BLOCK"
         name: "&a&lRosnący Skarbiec"
@@ -221,7 +223,7 @@ stages:
             - "EMERALD:8"
 
       island_level_2:
-        slot: 14
+        slot: 32
         type: "ISLAND_LEVEL"
         icon: "IRON_BLOCK"
         name: "&b&lArchitekt Poziomu II"
@@ -236,7 +238,7 @@ stages:
             - "IRON_BLOCK:2"
 
       slayer_2:
-        slot: 15
+        slot: 33
         type: "ENTITY_KILL"
         icon: "DIAMOND_SWORD"
         name: "&c&lŁowca Wiedźm"
@@ -255,7 +257,7 @@ stages:
             - "GOLDEN_APPLE:4"
 
       fishing_2:
-        slot: 16
+        slot: 34
         type: "FISH_CATCH"
         icon: "SALMON"
         name: "&9&lPołów Łososia"
@@ -273,12 +275,13 @@ stages:
 
   stage_3:
     stage: 3
+    icon: "IRON_INGOT"
     name: "&6&lEtap III: Mistrz Rzemiosła"
     description: "&7Ukończ wszystkie 7 zadań Etapu III, aby odblokować Etap IV."
     unlock-reward-money: 15000.0
     quests:
       mining_3:
-        slot: 10
+        slot: 28
         type: "BLOCK_BREAK"
         icon: "DIAMOND_ORE"
         name: "&b&lDiamentowa Żyła"
@@ -297,7 +300,7 @@ stages:
             - "DIAMOND:8"
 
       farming_3:
-        slot: 11
+        slot: 29
         type: "COLLECT"
         icon: "CARROT"
         name: "&e&lOgrodnik Ekspert"
@@ -317,7 +320,7 @@ stages:
             - "BONE_BLOCK:8"
 
       trading_3:
-        slot: 12
+        slot: 30
         type: "VILLAGER_TRADE"
         icon: "EMERALD"
         name: "&a&lKupiec Wioski"
@@ -332,7 +335,7 @@ stages:
             - "EMERALD_BLOCK:2"
 
       economy_3:
-        slot: 13
+        slot: 31
         type: "BALANCE_REACH"
         icon: "EMERALD_BLOCK"
         name: "&a&lKrezus SkyBlocka"
@@ -347,7 +350,7 @@ stages:
             - "DIAMOND:6"
 
       island_level_3:
-        slot: 14
+        slot: 32
         type: "ISLAND_LEVEL"
         icon: "DIAMOND_BLOCK"
         name: "&b&lTysiąc Poziomu"
@@ -362,9 +365,9 @@ stages:
             - "DIAMOND_BLOCK:1"
 
       slayer_3:
-        slot: 15
+        slot: 33
         type: "ENTITY_KILL"
-        icon: "IRON_BLOCK"
+        icon: "IRON_GOLEM_SPAWN_EGG"
         name: "&c&lPogromca Golemów"
         lore:
           - "&7Pokonaj potężnych żelaznych strażników:"
@@ -377,7 +380,7 @@ stages:
             - "IRON_BLOCK:8"
 
       fishing_3:
-        slot: 16
+        slot: 34
         type: "FISH_CATCH"
         icon: "PUFFERFISH"
         name: "&9&lPoszukiwacz Skarbów"
@@ -397,12 +400,13 @@ stages:
 
   stage_4:
     stage: 4
+    icon: "GOLD_INGOT"
     name: "&d&lEtap IV: Władca Wymiarów"
     description: "&7Ukończ wszystkie 7 zadań Etapu IV, aby odblokować finałowy Etap V."
     unlock-reward-money: 40000.0
     quests:
       mining_4:
-        slot: 10
+        slot: 28
         type: "BLOCK_BREAK"
         icon: "OBSIDIAN"
         name: "&5&lObsydianowy Kolos"
@@ -424,7 +428,7 @@ stages:
             - "DIAMOND_BLOCK:4"
 
       farming_4:
-        slot: 11
+        slot: 29
         type: "COLLECT"
         icon: "NETHER_WART"
         name: "&e&lPlantator Trzciny i Brodawek"
@@ -442,7 +446,7 @@ stages:
             - "SOUL_SAND:32"
 
       alchemy_4:
-        slot: 12
+        slot: 30
         type: "BREW"
         icon: "BREWING_STAND"
         name: "&d&lMistrz Alchemii"
@@ -458,7 +462,7 @@ stages:
             - "GLOWSTONE_DUST:32"
 
       economy_4:
-        slot: 13
+        slot: 31
         type: "BALANCE_REACH"
         icon: "NETHERITE_SCRAP"
         name: "&a&lMagnat Finansowy"
@@ -473,7 +477,7 @@ stages:
             - "NETHERITE_SCRAP:4"
 
       island_level_4:
-        slot: 14
+        slot: 32
         type: "ISLAND_LEVEL"
         icon: "BEACON"
         name: "&b&lCytadela w Chmurach"
@@ -488,7 +492,7 @@ stages:
             - "EMERALD_BLOCK:8"
 
       slayer_4:
-        slot: 15
+        slot: 33
         type: "ENTITY_KILL"
         icon: "BLAZE_ROD"
         name: "&c&lZabójca Netheru i Endu"
@@ -508,7 +512,7 @@ stages:
             - "ENCHANTED_GOLDEN_APPLE:1"
 
       fishing_4:
-        slot: 16
+        slot: 34
         type: "FISH_CATCH"
         icon: "TROPICAL_FISH"
         name: "&9&lKapitan Głębin"
@@ -528,12 +532,13 @@ stages:
 
   stage_5:
     stage: 5
+    icon: "DIAMOND"
     name: "&5&lEtap V: Legenda SkyBlocka"
     description: "&7Najtrudniejsze wyzwania końcowe dla najlepszych wysp."
     unlock-reward-money: 100000.0
     quests:
       mining_5:
-        slot: 10
+        slot: 28
         type: "BLOCK_AND_CRAFT"
         icon: "NETHERITE_INGOT"
         name: "&4&lMistrz Wydobycia i Netheritu"
@@ -551,7 +556,7 @@ stages:
             - "DIAMOND_BLOCK:16"
 
       farming_5:
-        slot: 11
+        slot: 29
         type: "COLLECT"
         icon: "CACTUS"
         name: "&2&lKaktusowe Imperium"
@@ -566,7 +571,7 @@ stages:
             - "HOPPER:32"
 
       crafting_5:
-        slot: 12
+        slot: 30
         type: "CRAFT"
         icon: "BEACON"
         name: "&b&lTwórca Magicznej Latarni"
@@ -581,9 +586,9 @@ stages:
             - "NETHERITE_BLOCK:1"
 
       economy_5:
-        slot: 13
+        slot: 31
         type: "BALANCE_REACH"
-        icon: "NETHERITE_BLOCK"
+        icon: "RAW_GOLD_BLOCK"
         name: "&a&lMilioner Wysp"
         lore:
           - "&7Zgromadź fortunę na swoim koncie:"
@@ -596,7 +601,7 @@ stages:
             - "EMERALD_BLOCK:32"
 
       island_level_5:
-        slot: 14
+        slot: 32
         type: "ISLAND_LEVEL"
         icon: "DRAGON_EGG"
         name: "&d&lForteca Legendy"
@@ -611,7 +616,7 @@ stages:
             - "NETHERITE_INGOT:8"
 
       slayer_5:
-        slot: 15
+        slot: 33
         type: "ENTITY_KILL"
         icon: "WITHER_SKELETON_SKULL"
         name: "&4&lPogromca Withera"
@@ -629,7 +634,7 @@ stages:
             - "ENCHANTED_GOLDEN_APPLE:4"
 
       fishing_5:
-        slot: 16
+        slot: 34
         type: "FISH_CATCH"
         icon: "HEART_OF_THE_SEA"
         name: "&9&lWładca Oceanów"
@@ -647,12 +652,13 @@ stages:
 
   stage_6:
     stage: 6
+    icon: "EMERALD"
     name: "&b&lEtap VI: Potęga Przemysłu"
     description: "&7Wykorzystaj zaawansowane brukarki, farmy i fabryki wyspy."
     unlock-reward-money: 150000.0
     quests:
       mining_6:
-        slot: 10
+        slot: 28
         type: "BLOCK_BREAK"
         icon: "EMERALD_ORE"
         name: "&a&lKról Generatora"
@@ -672,7 +678,7 @@ stages:
             - "DIAMOND_BLOCK:8"
 
       farming_6:
-        slot: 11
+        slot: 29
         type: "COLLECT"
         icon: "GOLDEN_HOE"
         name: "&2&lZłote Żniwa"
@@ -692,7 +698,7 @@ stages:
             - "GOLDEN_APPLE:16"
 
       smelting_6:
-        slot: 12
+        slot: 30
         type: "SMELT"
         icon: "GOLD_INGOT"
         name: "&6&lWielka Huta"
@@ -710,7 +716,7 @@ stages:
             - "BLAST_FURNACE:4"
 
       economy_6:
-        slot: 13
+        slot: 31
         type: "BALANCE_REACH"
         icon: "DIAMOND_BLOCK"
         name: "&e&lBankier SkyBlocka"
@@ -725,7 +731,7 @@ stages:
             - "NETHERITE_INGOT:4"
 
       island_level_6:
-        slot: 14
+        slot: 32
         type: "ISLAND_LEVEL"
         icon: "BEACON"
         name: "&b&lArchitekt Imperium"
@@ -741,7 +747,7 @@ stages:
             - "DIAMOND_BLOCK:16"
 
       slayer_6:
-        slot: 15
+        slot: 33
         type: "ENTITY_KILL"
         icon: "CREEPER_HEAD"
         name: "&c&lRzeźnia Mobów"
@@ -761,7 +767,7 @@ stages:
             - "ENCHANTED_GOLDEN_APPLE:2"
 
       fishing_6:
-        slot: 16
+        slot: 34
         type: "FISH_CATCH"
         icon: "NAUTILUS_SHELL"
         name: "&9&lPoławiacz Skarbów"
@@ -779,12 +785,13 @@ stages:
 
   stage_7:
     stage: 7
+    icon: "NETHERITE_INGOT"
     name: "&4&lEtap VII: Imperium Aradium"
     description: "&7Mistrzowskie wyzwania końcowe dla największych wysp na serwerze."
     unlock-reward-money: 300000.0
     quests:
       mining_7:
-        slot: 10
+        slot: 28
         type: "BLOCK_AND_CRAFT"
         icon: "ANCIENT_DEBRIS"
         name: "&4&lWładca Pradawnych Złóż"
@@ -801,7 +808,7 @@ stages:
             - "NETHERITE_BLOCK:2"
 
       farming_7:
-        slot: 11
+        slot: 29
         type: "COLLECT"
         icon: "SUGAR_CANE"
         name: "&2&lAgrarny Monopolista"
@@ -820,7 +827,7 @@ stages:
             - "EMERALD_BLOCK:32"
 
       alchemy_7:
-        slot: 12
+        slot: 30
         type: "BREW"
         icon: "DRAGON_BREATH"
         name: "&d&lArcymistrz Alchemii"
@@ -836,7 +843,7 @@ stages:
             - "EXPERIENCE_BOTTLE:64"
 
       economy_7:
-        slot: 13
+        slot: 31
         type: "BALANCE_REACH"
         icon: "NETHER_STAR"
         name: "&6&lMiliarder Aradium"
@@ -851,7 +858,7 @@ stages:
             - "BEACON:2"
 
       island_level_7:
-        slot: 14
+        slot: 32
         type: "ISLAND_LEVEL"
         icon: "NETHERITE_BLOCK"
         name: "&5&lBrylantowy Bastion"
@@ -866,7 +873,7 @@ stages:
             - "DRAGON_EGG:1"
 
       slayer_7:
-        slot: 15
+        slot: 33
         type: "ENTITY_KILL"
         icon: "WITHER_ROSE"
         name: "&4&lŁowca Bossów i Piekła"
@@ -886,7 +893,7 @@ stages:
             - "ENCHANTED_GOLDEN_APPLE:8"
 
       fishing_7:
-        slot: 16
+        slot: 34
         type: "FISH_CATCH"
         icon: "TRIDENT"
         name: "&9&lPosejdon SkyBlocka"

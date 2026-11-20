@@ -25,15 +25,18 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Menu GUI współdzielonych misji wyspy (7 etapów po 7 zadań, paski postępu, status zablokowany/w trakcie/ukończony).
+ * Menu GUI współdzielonych misji wyspy (45 slotów, szara obramówka ze szkła,
+ * 7 etapów w formie surowców w 2. linii oraz tematyczne ikony misji w 4. linii).
  */
 public class QuestGUI {
 
-    private static final int SIZE = 27;
-    private static final int STAGE_TAB_OFFSET = 0; // Etap 1..7 -> sloty 1..7
-    private static final int SLOT_STAGE_FIRST = 1;
-    private static final int SLOT_STAGE_LAST = 7;
-    private static final int SLOT_BACK = 22;
+    public static final int SIZE = 45;
+    public static final int STAGE_TAB_OFFSET = 9; // Etap 1..7 -> sloty 10..16 (2. linia)
+    public static final int SLOT_STAGE_FIRST = 10;
+    public static final int SLOT_STAGE_LAST = 16;
+    public static final int SLOT_QUEST_FIRST = 28; // Misje 1..7 -> sloty 28..34 (4. linia)
+    public static final int SLOT_QUEST_LAST = 34;
+    public static final int SLOT_BACK = 40;
 
     private final AradiumPlugin plugin;
     private final SkyBlockModule module;
@@ -41,6 +44,13 @@ public class QuestGUI {
     public QuestGUI(AradiumPlugin plugin, SkyBlockModule module) {
         this.plugin = Objects.requireNonNull(plugin, "plugin");
         this.module = Objects.requireNonNull(module, "module");
+    }
+
+    public static int resolveQuestSlot(int configuredSlot) {
+        if (configuredSlot >= 10 && configuredSlot <= 16) {
+            return configuredSlot + 18;
+        }
+        return configuredSlot;
     }
 
     public void open(Player player, Island island) {
@@ -71,7 +81,7 @@ public class QuestGUI {
         Inventory inventory = Bukkit.createInventory(holder, SIZE, ChatUtils.component(rawTitle));
         holder.setInventory(inventory);
 
-        ItemStack filler = createItem(Material.GRAY_STAINED_GLASS_PANE, " ", List.of());
+        ItemStack filler = createItem(Material.GRAY_STAINED_GLASS_PANE, " ", List.of(), false);
         for (int i = 0; i < SIZE; i++) {
             inventory.setItem(i, filler);
         }
@@ -85,7 +95,7 @@ public class QuestGUI {
         boolean stageUnlocked = questManager.isStageUnlocked(island, stageNum);
         if (currentStage != null) {
             for (QuestDefinition quest : currentStage.getQuests()) {
-                int slot = quest.slot();
+                int slot = resolveQuestSlot(quest.slot());
                 if (slot >= 0 && slot < SIZE) {
                     inventory.setItem(slot, buildQuestItem(questManager, island, stageNum, stageUnlocked, quest));
                 }
@@ -95,7 +105,8 @@ public class QuestGUI {
         inventory.setItem(SLOT_BACK, createItem(
                 Material.ARROW,
                 "&c&lPowrót do Panelu",
-                List.of("&7Kliknij, aby wrócić do głównego menu wyspy.")
+                List.of("&7Kliknij, aby wrócić do głównego menu wyspy."),
+                false
         ));
 
         player.openInventory(inventory);
@@ -121,7 +132,7 @@ public class QuestGUI {
             return;
         }
 
-        if (slot >= 10 && slot <= 16) {
+        if (slot >= SLOT_QUEST_FIRST && slot <= SLOT_QUEST_LAST) {
             int currentStage = holder.getSelectedStage();
             plugin.getServer().getScheduler().runTask(plugin, () -> open(player, island, currentStage));
         }
@@ -132,10 +143,7 @@ public class QuestGUI {
         boolean completed = questManager.isStageCompleted(island, stageNum);
         boolean unlocked = questManager.isStageUnlocked(island, stageNum);
 
-        Material pane = completed
-                ? Material.LIME_STAINED_GLASS_PANE
-                : (unlocked ? Material.YELLOW_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE);
-
+        Material icon = stage != null ? stage.icon() : QuestStage.defaultIconForStage(stageNum);
         String displayName = stage != null ? stage.name() : ("&eEtap " + stageNum);
         List<String> lore = new ArrayList<>();
         if (stage != null && !stage.description().isBlank()) {
@@ -168,7 +176,7 @@ public class QuestGUI {
         }
         lore.add(selected ? "&b▸ Aktualnie przeglądany etap" : "&eKliknij, aby otworzyć Etap " + stageNum + "!");
 
-        return createItem(pane, displayName, lore);
+        return createItem(icon, displayName, lore, selected);
     }
 
     private static ItemStack buildQuestItem(
@@ -180,15 +188,6 @@ public class QuestGUI {
     ) {
         QuestProgress progress = island.getQuestProgress(quest.id());
         boolean completed = progress != null && progress.isCompleted();
-
-        Material paneMaterial;
-        if (!stageUnlocked) {
-            paneMaterial = Material.RED_STAINED_GLASS_PANE;
-        } else if (completed) {
-            paneMaterial = Material.LIME_STAINED_GLASS_PANE;
-        } else {
-            paneMaterial = Material.YELLOW_STAINED_GLASS_PANE;
-        }
 
         List<String> lore = new ArrayList<>();
         for (String line : quest.lore()) {
@@ -228,7 +227,8 @@ public class QuestGUI {
             lore.add("&e&l⌛ W TRAKCIE REALIZACJI");
         }
 
-        return createItem(paneMaterial, quest.name(), lore);
+        String displayTitle = (!stageUnlocked ? "&c✖ " : (completed ? "&a✔ " : "&e")) + quest.name();
+        return createItem(quest.icon(), displayTitle, lore, completed);
     }
 
     private static String formatRewardSpec(String spec) {
@@ -262,7 +262,7 @@ public class QuestGUI {
         return sb.toString();
     }
 
-    private static ItemStack createItem(Material material, String name, List<String> loreLines) {
+    private static ItemStack createItem(Material material, String name, List<String> loreLines, boolean glint) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
@@ -271,6 +271,9 @@ public class QuestGUI {
                 meta.lore(loreLines.stream()
                         .map(line -> line.isEmpty() ? Component.empty() : ChatUtils.itemComponent(line))
                         .toList());
+            }
+            if (glint) {
+                meta.setEnchantmentGlintOverride(Boolean.TRUE);
             }
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             item.setItemMeta(meta);
