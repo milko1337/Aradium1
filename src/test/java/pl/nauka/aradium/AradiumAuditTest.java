@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -16,6 +17,9 @@ import pl.nauka.aradium.modules.armor.ArmorSetDefinition;
 import pl.nauka.aradium.modules.armor.ArmorTierBonus;
 import pl.nauka.aradium.modules.customitems.AntiMobTorchDefinition;
 import pl.nauka.aradium.modules.customitems.CustomItemModule;
+import pl.nauka.aradium.modules.customitems.CustomRecipeDefinition;
+import pl.nauka.aradium.modules.customitems.CustomRecipeGUI;
+import pl.nauka.aradium.modules.customitems.CustomRecipeManager;
 import pl.nauka.aradium.modules.customitems.GeneratorDefinition;
 import pl.nauka.aradium.modules.customitems.UpgradeScrollDefinition;
 import pl.nauka.aradium.modules.economy.EconomyManager;
@@ -1218,8 +1222,6 @@ class AradiumAuditTest {
         Map<String, GeneratorDefinition> generators = customItems.getGeneratorsSnapshot();
         assertEquals(4, generators.size());
         for (GeneratorDefinition gen : generators.values()) {
-            assertNotNull(gen.recipe());
-            assertTrue(gen.recipe().isValid(), "Niepoprawna receptura generatora: " + gen.id());
             assertEquals(100.0, gen.totalWeight(), 0.001, "Suma wag != 100% dla " + gen.id());
             assertFalse(gen.formatDropsLore(Map.of()).isEmpty());
         }
@@ -1231,8 +1233,6 @@ class AradiumAuditTest {
         AntiMobTorchDefinition torch = customItems.getAntiMobTorch();
         assertNotNull(torch);
         assertEquals(32, torch.radius());
-        assertNotNull(torch.recipe());
-        assertTrue(torch.recipe().isValid());
         assertTrue(torch.isPlacedTorchMaterial(Material.SOUL_TORCH));
         assertTrue(torch.isPlacedTorchMaterial(Material.SOUL_WALL_TORCH));
         assertTrue(torch.blocksReason(CreatureSpawnEvent.SpawnReason.NATURAL));
@@ -1248,31 +1248,36 @@ class AradiumAuditTest {
         assertFalse(customItems.shouldBlockMobSpawn(true, CreatureSpawnEvent.SpawnReason.SPAWNER, "skyblock_world", 10, 100, 10));
         assertFalse(customItems.shouldBlockMobSpawn(true, CreatureSpawnEvent.SpawnReason.NATURAL, "world_nether", 10, 100, 10));
 
-        // 3. Zwoje i runy ulepszeń + walidacja kompatybilności i limitów
+        // 3. Mechaniczne zwoje i runy ulepszeń (2x2, 3x3, Hutnik, Drwal, Żniwiarz 3x3, Wampiryzm, Piorun, Double Jump, Awans Zbroi)
         Map<String, UpgradeScrollDefinition> scrolls = customItems.getUpgradeScrollsSnapshot();
-        assertEquals(6, scrolls.size());
-        for (UpgradeScrollDefinition scroll : scrolls.values()) {
-            assertNotNull(scroll.recipe());
-            assertTrue(scroll.recipe().isValid(), "Niepoprawna receptura zwoju: " + scroll.id());
-        }
+        assertEquals(9, scrolls.size());
 
-        UpgradeScrollDefinition sharpScroll = scrolls.get("zwoj_ostrosci");
-        assertTrue(sharpScroll.isCompatibleMaterial(Material.DIAMOND_SWORD));
-        assertTrue(sharpScroll.isCompatibleMaterial(Material.NETHERITE_AXE));
-        assertFalse(sharpScroll.isCompatibleMaterial(Material.DIAMOND_PICKAXE));
-        assertTrue(sharpScroll.evaluateEnchantmentUpgrade(Material.DIAMOND_SWORD, 5, false).success());
-        assertEquals(6, sharpScroll.evaluateEnchantmentUpgrade(Material.DIAMOND_SWORD, 5, false).nextLevel());
-        assertFalse(sharpScroll.evaluateEnchantmentUpgrade(Material.DIAMOND_SWORD, 6, false).success());
+        UpgradeScrollDefinition mine2x2 = scrolls.get("zwoj_kopanie_2x2");
+        UpgradeScrollDefinition mine3x3 = scrolls.get("zwoj_kopanie_3x3");
+        assertNotNull(mine2x2);
+        assertNotNull(mine3x3);
+        assertTrue(mine2x2.isCompatibleMaterial(Material.DIAMOND_PICKAXE));
+        assertTrue(mine2x2.isCompatibleMaterial(Material.DIAMOND_SHOVEL));
+        assertFalse(mine2x2.isCompatibleMaterial(Material.DIAMOND_SWORD));
+        assertTrue(mine2x2.evaluateApplication(Material.DIAMOND_PICKAXE, Set.of()).success());
+        assertFalse(mine2x2.evaluateApplication(Material.DIAMOND_PICKAXE,
+                Set.of(UpgradeScrollDefinition.CustomUpgradeAbility.MINING_3X3)).success());
+        assertFalse(mine3x3.evaluateApplication(Material.DIAMOND_PICKAXE,
+                Set.of(UpgradeScrollDefinition.CustomUpgradeAbility.MINING_2X2)).success());
+        assertFalse(mine3x3.evaluateApplication(Material.DIAMOND_PICKAXE,
+                Set.of(UpgradeScrollDefinition.CustomUpgradeAbility.MINING_3X3)).success());
 
-        UpgradeScrollDefinition fortuneScroll = scrolls.get("zwoj_fortuny");
-        assertTrue(fortuneScroll.isCompatibleMaterial(Material.DIAMOND_PICKAXE));
-        assertFalse(fortuneScroll.evaluateEnchantmentUpgrade(Material.DIAMOND_PICKAXE, 1, true).success());
-        assertTrue(fortuneScroll.evaluateEnchantmentUpgrade(Material.DIAMOND_PICKAXE, 3, false).success());
-        assertFalse(fortuneScroll.evaluateEnchantmentUpgrade(Material.DIAMOND_PICKAXE, 4, false).success());
+        UpgradeScrollDefinition vampScroll = scrolls.get("zwoj_wampiryzm");
+        assertNotNull(vampScroll);
+        assertEquals(0.3333, vampScroll.value(), 0.001);
+        assertTrue(vampScroll.isCompatibleMaterial(Material.NETHERITE_SWORD));
+        assertTrue(vampScroll.isCompatibleMaterial(Material.DIAMOND_AXE));
+        assertFalse(vampScroll.isCompatibleMaterial(Material.DIAMOND_HOE));
 
-        UpgradeScrollDefinition unbreakingScroll = scrolls.get("runa_niezniszczalnosci");
-        assertTrue(unbreakingScroll.isCompatibleMaterial(Material.BOW));
-        assertTrue(unbreakingScroll.isCompatibleMaterial(Material.DIAMOND_CHESTPLATE));
+        UpgradeScrollDefinition doubleJumpScroll = scrolls.get("zwoj_double_jump");
+        assertNotNull(doubleJumpScroll);
+        assertTrue(doubleJumpScroll.isCompatibleMaterial(Material.DIAMOND_BOOTS));
+        assertFalse(doubleJumpScroll.isCompatibleMaterial(Material.DIAMOND_CHESTPLATE));
         assertEquals(ArmorPieceType.CHESTPLATE, CustomItemModule.resolveArmorPieceType(Material.DIAMOND_CHESTPLATE));
 
         ArmorSetDefinition gornikSet = new ArmorSetDefinition(
@@ -1382,7 +1387,7 @@ class AradiumAuditTest {
             }
         }
 
-        assertEquals(11, customShopEntries);
+        assertEquals(14, customShopEntries);
         for (Map.Entry<Material, Double> sellEntry : maxSellByMat.entrySet()) {
             Double minBuy = minBuyByMat.get(sellEntry.getKey());
             if (minBuy != null) {
@@ -1392,5 +1397,134 @@ class AradiumAuditTest {
                 );
             }
         }
+    }
+
+    @Test
+    void recipesYamlGuiEditorMatrixTrimmingAndMechanicalUpgradesWorkCorrectly() throws Exception {
+        List<String> warnings = new ArrayList<>();
+        Logger strictLogger = Logger.getLogger("RecipesStrictTest");
+        strictLogger.setUseParentHandlers(false);
+        Handler capture = new Handler() {
+            @Override
+            public void publish(LogRecord record) {
+                if (record.getLevel().intValue() >= Level.WARNING.intValue()) {
+                    warnings.add(record.getMessage());
+                }
+            }
+
+            @Override
+            public void flush() {
+            }
+
+            @Override
+            public void close() {
+            }
+        };
+        strictLogger.addHandler(capture);
+
+        try (InputStream customStream = getClass().getClassLoader().getResourceAsStream("custom-items.yml");
+             InputStream recipesStream = getClass().getClassLoader().getResourceAsStream("recipes.yml")) {
+            assertNotNull(customStream);
+            assertNotNull(recipesStream);
+
+            CustomItemModule customModule = new CustomItemModule(strictLogger);
+            customModule.reload(YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(customStream, StandardCharsets.UTF_8)
+            ));
+
+            CustomRecipeManager recipeManager = new CustomRecipeManager(customModule, strictLogger);
+            recipeManager.reload(YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(recipesStream, StandardCharsets.UTF_8)
+            ));
+            assertTrue(warnings.isEmpty(), "Ostrzeżenia parsowania recipes.yml: " + warnings);
+
+            assertEquals(16, recipeManager.getAllRecipes().size());
+            assertEquals(4, recipeManager.getRecipesByCategory(CustomRecipeDefinition.RecipeCategory.GENERATORS, true).size());
+            assertEquals(9, recipeManager.getRecipesByCategory(CustomRecipeDefinition.RecipeCategory.SCROLLS, true).size());
+            assertEquals(1, recipeManager.getRecipesByCategory(CustomRecipeDefinition.RecipeCategory.ARMOR, true).size());
+            assertEquals(1, recipeManager.getRecipesByCategory(CustomRecipeDefinition.RecipeCategory.MAGIC, true).size());
+            assertEquals(1, recipeManager.getRecipesByCategory(CustomRecipeDefinition.RecipeCategory.MISC, true).size());
+
+            // Przełączanie enabled oraz CRUD receptur
+            assertTrue(recipeManager.toggleEnabled("cobble_generator"));
+            assertEquals(3, recipeManager.getRecipesByCategory(CustomRecipeDefinition.RecipeCategory.GENERATORS, true).size());
+            assertEquals(4, recipeManager.getRecipesByCategory(CustomRecipeDefinition.RecipeCategory.GENERATORS, false).size());
+
+            String newId = recipeManager.nextAutoRecipeId(Material.BEACON);
+            assertTrue(newId.startsWith("custom_beacon_"));
+            CustomRecipeDefinition custom2x2 = new CustomRecipeDefinition(
+                    newId,
+                    "&bTestowa Latarnia",
+                    CustomRecipeDefinition.RecipeCategory.MISC,
+                    true,
+                    Map.of(
+                            0, new CustomRecipeDefinition.RecipeSlotIngredient(Material.DIAMOND, null, null),
+                            1, new CustomRecipeDefinition.RecipeSlotIngredient(Material.DIAMOND, null, null),
+                            3, new CustomRecipeDefinition.RecipeSlotIngredient(Material.GLASS, null, null),
+                            4, new CustomRecipeDefinition.RecipeSlotIngredient(Material.GLASS, null, null)
+                    ),
+                    new CustomRecipeDefinition.RecipeResultSpec(
+                            null, null, null, 1, Material.BEACON, 1, null, null
+                    )
+            );
+            recipeManager.saveRecipe(custom2x2, false);
+            assertTrue(recipeManager.getRecipe(newId).isPresent());
+            assertEquals(List.of("AB", "DE"), CustomRecipeManager.computeTrimmedShape(custom2x2.matrixSlots()));
+            assertTrue(recipeManager.deleteRecipe(newId));
+            assertTrue(recipeManager.getRecipe(newId).isEmpty());
+        } finally {
+            strictLogger.removeHandler(capture);
+        }
+
+        // Walidacja odblokowanych slotów w kreatorze Admin GUI (Anti-Dupe)
+        for (int slot : CustomRecipeGUI.GRID_SLOTS) {
+            assertTrue(CustomRecipeGUI.isUnlockedEditorSlot(slot));
+        }
+        assertTrue(CustomRecipeGUI.isUnlockedEditorSlot(CustomRecipeGUI.SLOT_RESULT));
+        assertFalse(CustomRecipeGUI.isUnlockedEditorSlot(CustomRecipeGUI.SLOT_BENCH));
+        assertFalse(CustomRecipeGUI.isUnlockedEditorSlot(CustomRecipeGUI.SLOT_EDITOR_CATEGORY));
+        assertFalse(CustomRecipeGUI.isUnlockedEditorSlot(CustomRecipeGUI.SLOT_EDITOR_ENABLED));
+        assertFalse(CustomRecipeGUI.isUnlockedEditorSlot(CustomRecipeGUI.SLOT_EDITOR_SAVE));
+        assertFalse(CustomRecipeGUI.isUnlockedEditorSlot(CustomRecipeGUI.SLOT_EDITOR_DELETE));
+        assertFalse(CustomRecipeGUI.isUnlockedEditorSlot(CustomRecipeGUI.SLOT_EDITOR_BACK));
+
+        // Walidacja mechanik ulepszeń (2x2, 3x3, Hutnik Auto-Smelt, Wampiryzm, Żniwiarz 3x3, Double Jump)
+        List<int[]> area2x2 = CustomItemModule.computeAreaMiningOffsets(BlockFace.NORTH, false);
+        assertEquals(4, area2x2.size());
+        List<int[]> area3x3 = CustomItemModule.computeAreaMiningOffsets(BlockFace.UP, true);
+        assertEquals(9, area3x3.size());
+        for (int[] off : area3x3) {
+            assertEquals(0, off[1]);
+        }
+
+        assertEquals(Material.IRON_INGOT, CustomItemModule.smeltDropMaterial(Material.RAW_IRON));
+        assertEquals(Material.GOLD_INGOT, CustomItemModule.smeltDropMaterial(Material.RAW_GOLD));
+        assertEquals(Material.COPPER_INGOT, CustomItemModule.smeltDropMaterial(Material.RAW_COPPER));
+        assertEquals(Material.NETHERITE_SCRAP, CustomItemModule.smeltDropMaterial(Material.ANCIENT_DEBRIS));
+        assertEquals(Material.STONE, CustomItemModule.smeltDropMaterial(Material.COBBLESTONE));
+        assertEquals(Material.GLASS, CustomItemModule.smeltDropMaterial(Material.SAND));
+        assertNull(CustomItemModule.smeltDropMaterial(Material.DIAMOND));
+
+        assertEquals(14.0, CustomItemModule.computeVampirismHeal(12.0, 1.0 / 3.0, 10.0, 20.0), 0.01);
+        assertEquals(20.0, CustomItemModule.computeVampirismHeal(30.0, 1.0 / 3.0, 15.0, 20.0), 0.01);
+
+        assertEquals(Material.WHEAT_SEEDS, CustomItemModule.resolveCropSeedMaterial(Material.WHEAT));
+        assertEquals(Material.CARROT, CustomItemModule.resolveCropSeedMaterial(Material.CARROTS));
+        assertEquals(Material.POTATO, CustomItemModule.resolveCropSeedMaterial(Material.POTATOES));
+        assertEquals(Material.BEETROOT_SEEDS, CustomItemModule.resolveCropSeedMaterial(Material.BEETROOTS));
+        assertEquals(Material.NETHER_WART, CustomItemModule.resolveCropSeedMaterial(Material.NETHER_WART));
+
+        assertTrue(CustomItemModule.shouldAllowDoubleJump(GameMode.SURVIVAL, false, true, false));
+        assertFalse(CustomItemModule.shouldAllowDoubleJump(GameMode.SURVIVAL, false, true, true));
+        assertFalse(CustomItemModule.shouldAllowDoubleJump(GameMode.SURVIVAL, true, true, false));
+        assertFalse(CustomItemModule.shouldAllowDoubleJump(GameMode.CREATIVE, false, true, false));
+
+        Set<UpgradeScrollDefinition.CustomUpgradeAbility> encoded = Set.of(
+                UpgradeScrollDefinition.CustomUpgradeAbility.MINING_3X3,
+                UpgradeScrollDefinition.CustomUpgradeAbility.AUTO_SMELT
+        );
+        Set<UpgradeScrollDefinition.CustomUpgradeAbility> decoded =
+                CustomItemModule.parseAppliedUpgrades(CustomItemModule.serializeAppliedUpgrades(encoded));
+        assertEquals(encoded, decoded);
     }
 }

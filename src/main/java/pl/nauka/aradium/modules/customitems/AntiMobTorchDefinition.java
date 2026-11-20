@@ -19,8 +19,7 @@ public record AntiMobTorchDefinition(
         Material material,
         int radius,
         List<String> lore,
-        Set<CreatureSpawnEvent.SpawnReason> blockedSpawnReasons,
-        RecipeDefinition recipe
+        Set<CreatureSpawnEvent.SpawnReason> blockedSpawnReasons
 ) {
 
     public static final Set<CreatureSpawnEvent.SpawnReason> DEFAULT_BLOCKED_REASONS = Collections.unmodifiableSet(

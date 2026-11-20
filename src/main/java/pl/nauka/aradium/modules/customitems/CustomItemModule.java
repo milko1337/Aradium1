@@ -1,14 +1,14 @@
 package pl.nauka.aradium.modules.customitems;
 
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,12 +19,12 @@ import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Hoglin;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Phantom;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
 import org.bukkit.entity.Slime;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -53,14 +53,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Moduł dodatkowych funkcji (Etap 6): stawiane generatory cobla i rud,
- * pochodnia anty-mob, własne receptury craftingu oraz zwoje/runy ulepszeń ekwipunku.
+ * pochodnia anty-mob, nietypowe ulepszenia mechaniczne (2x2/3x3, Hutnik, Drwal,
+ * Żniwiarz 3x3, Wampiryzm, Piorun, Double Jump, Awans Zbroi) oraz system Custom Recipes (recipes.yml).
  */
 public class CustomItemModule extends AbstractModule {
 
@@ -109,16 +109,20 @@ public class CustomItemModule extends AbstractModule {
     private final NamespacedKey generatorIdKey;
     private final NamespacedKey antiMobRadiusKey;
     private final NamespacedKey scrollIdKey;
+    private final NamespacedKey appliedUpgradesKey;
 
     private final EnumMap<Material, String> materialNames = new EnumMap<>(Material.class);
     private final Map<String, GeneratorDefinition> generators = new LinkedHashMap<>();
     private AntiMobTorchDefinition antiMobTorch;
     private final Map<String, UpgradeScrollDefinition> upgradeScrolls = new LinkedHashMap<>();
-    private final List<NamespacedKey> registeredRecipeKeys = new ArrayList<>();
 
     private final Map<BlockPos, String> placedGenerators = new HashMap<>();
     private final Map<BlockPos, Integer> placedAntiMobTorches = new HashMap<>();
     private final Map<BlockPos, BukkitTask> pendingGeneratorTasks = new HashMap<>();
+
+    private CustomRecipeManager recipeManager;
+    private CustomRecipeGUI recipeGUI;
+    private CustomItemListener listener;
 
     private File configFile;
     private File blocksDataFile;
@@ -130,6 +134,7 @@ public class CustomItemModule extends AbstractModule {
         this.generatorIdKey = new NamespacedKey(plugin, "generator_id");
         this.antiMobRadiusKey = new NamespacedKey(plugin, "anti_mob_radius");
         this.scrollIdKey = new NamespacedKey(plugin, "scroll_id");
+        this.appliedUpgradesKey = new NamespacedKey(plugin, "custom_upgrades");
     }
 
     /**
@@ -142,6 +147,7 @@ public class CustomItemModule extends AbstractModule {
         this.generatorIdKey = null;
         this.antiMobRadiusKey = null;
         this.scrollIdKey = null;
+        this.appliedUpgradesKey = null;
     }
 
     @Override
@@ -149,16 +155,37 @@ public class CustomItemModule extends AbstractModule {
         saveDefaultCustomItemsConfig();
         reload();
         loadPlacedBlocks();
-        registerRecipes();
+
+        this.recipeManager = new CustomRecipeManager(plugin, this);
+        this.recipeManager.saveDefaultRecipesFile();
+        this.recipeManager.reload();
+        this.recipeGUI = new CustomRecipeGUI(plugin, this, recipeManager);
+
         resumePlacedGenerators();
+        this.listener = new CustomItemListener(plugin, this);
         registerCommand("customitem", new CustomItemCommand(plugin, this));
-        registerListener(new CustomItemListener(plugin, this));
+        registerCommand("recipes", new CustomRecipeCommand(plugin, this));
+        registerListener(listener);
+
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            listener.syncDoubleJumpState(online);
+        }
     }
 
     @Override
     protected void onDisable() {
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            if (online.getOpenInventory().getTopInventory().getHolder() instanceof CustomRecipeGuiHolder) {
+                online.closeInventory();
+            }
+            if (listener != null) {
+                listener.clearDoubleJumpOnDisable(online);
+            }
+        }
         cancelAllPendingGeneratorTasks();
-        unregisterRecipes();
+        if (recipeManager != null) {
+            recipeManager.unregisterAllRecipes();
+        }
         savePlacedBlocks();
         placedGenerators.clear();
         placedAntiMobTorches.clear();
@@ -166,6 +193,8 @@ public class CustomItemModule extends AbstractModule {
         upgradeScrolls.clear();
         materialNames.clear();
         antiMobTorch = null;
+        recipeGUI = null;
+        listener = null;
     }
 
     private void saveDefaultCustomItemsConfig() {
@@ -243,10 +272,7 @@ public class CustomItemModule extends AbstractModule {
                     totalWeight = 100.0;
                 }
 
-                RecipeDefinition recipe = RecipeDefinition.parse(
-                        sec.getConfigurationSection("recipe"), "generators." + rawId, logger
-                );
-                generators.put(id, new GeneratorDefinition(id, name, material, delayTicks, lore, drops, totalWeight, recipe));
+                generators.put(id, new GeneratorDefinition(id, name, material, delayTicks, lore, drops, totalWeight));
             }
         }
 
@@ -270,10 +296,7 @@ public class CustomItemModule extends AbstractModule {
                     logger.warning("Nieznany SpawnReason '" + rawReason + "' w anti_mob_torch.blocked-spawn-reasons.");
                 }
             }
-            RecipeDefinition recipe = RecipeDefinition.parse(
-                    torchSec.getConfigurationSection("recipe"), "anti_mob_torch", logger
-            );
-            this.antiMobTorch = new AntiMobTorchDefinition(id, name, mat, radius, lore, blockedReasons, recipe);
+            this.antiMobTorch = new AntiMobTorchDefinition(id, name, mat, radius, lore, blockedReasons);
         }
 
         ConfigurationSection scrollsSec = yaml.getConfigurationSection("upgrade_scrolls");
@@ -285,6 +308,7 @@ public class CustomItemModule extends AbstractModule {
                 }
                 String id = rawId.toLowerCase(Locale.ROOT);
                 String name = sec.getString("name", rawId);
+                String displayTag = sec.getString("display-tag");
                 String matName = sec.getString("material", "PAPER");
                 Material material = Material.matchMaterial(matName.trim().toUpperCase(Locale.ROOT));
                 if (RecipeDefinition.isAirMaterial(material) || material.isLegacy()) {
@@ -292,25 +316,28 @@ public class CustomItemModule extends AbstractModule {
                     continue;
                 }
                 UpgradeScrollDefinition.TargetCategory targetCategory = UpgradeScrollDefinition.TargetCategory.parse(
-                        sec.getString("target-category"), UpgradeScrollDefinition.TargetCategory.BREAKABLE
+                        sec.getString("target-category"), UpgradeScrollDefinition.TargetCategory.ANY_TOOL
                 );
-                UpgradeScrollDefinition.UpgradeMode upgradeMode = UpgradeScrollDefinition.UpgradeMode.parse(
-                        sec.getString("upgrade-mode"), UpgradeScrollDefinition.UpgradeMode.ENCHANTMENT
-                );
-                String enchantmentKey = sec.getString("enchantment");
-                int maxLevel = Math.max(1, sec.getInt("max-level", 5));
-                Set<String> blocked = new LinkedHashSet<>();
-                for (String blockedName : sec.getStringList("blocked-enchantments")) {
-                    if (blockedName != null && !blockedName.isBlank()) {
-                        blocked.add(blockedName.trim().toUpperCase(Locale.ROOT));
+                UpgradeScrollDefinition.CustomUpgradeAbility ability =
+                        UpgradeScrollDefinition.CustomUpgradeAbility.parse(sec.getString("ability"));
+                if (ability == null) {
+                    logger.warning("Nieznana zdolność ulepszenia '" + sec.getString("ability") + "' w upgrade_scrolls." + rawId);
+                    continue;
+                }
+                double value = sec.getDouble("value", 1.0);
+                int maxLevel = Math.max(1, sec.getInt("max-level", 1));
+                Set<UpgradeScrollDefinition.CustomUpgradeAbility> incompatible =
+                        EnumSet.noneOf(UpgradeScrollDefinition.CustomUpgradeAbility.class);
+                for (String incRaw : sec.getStringList("incompatible-abilities")) {
+                    UpgradeScrollDefinition.CustomUpgradeAbility parsed =
+                            UpgradeScrollDefinition.CustomUpgradeAbility.parse(incRaw);
+                    if (parsed != null) {
+                        incompatible.add(parsed);
                     }
                 }
                 List<String> lore = sec.getStringList("lore");
-                RecipeDefinition recipe = RecipeDefinition.parse(
-                        sec.getConfigurationSection("recipe"), "upgrade_scrolls." + rawId, logger
-                );
                 upgradeScrolls.put(id, new UpgradeScrollDefinition(
-                        id, name, material, targetCategory, upgradeMode, enchantmentKey, maxLevel, blocked, lore, recipe
+                        id, name, displayTag, material, targetCategory, ability, value, maxLevel, incompatible, lore
                 ));
             }
         }
@@ -414,44 +441,62 @@ public class CustomItemModule extends AbstractModule {
         return stack;
     }
 
-    private void registerRecipes() {
-        unregisterRecipes();
-        for (GeneratorDefinition gen : generators.values()) {
-            registerSingleRecipe("gen_" + gen.id(), gen.recipe(), createGeneratorItem(gen.id(), 1));
+    public Set<UpgradeScrollDefinition.CustomUpgradeAbility> getAppliedUpgrades(ItemStack item) {
+        if (item == null || RecipeDefinition.isAirMaterial(item.getType()) || !item.hasItemMeta() || appliedUpgradesKey == null) {
+            return Set.of();
         }
-        if (antiMobTorch != null) {
-            registerSingleRecipe("torch_" + antiMobTorch.id(), antiMobTorch.recipe(), createAntiMobTorchItem(1));
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return Set.of();
+        }
+        String serialized = meta.getPersistentDataContainer().get(appliedUpgradesKey, PersistentDataType.STRING);
+        return parseAppliedUpgrades(serialized);
+    }
+
+    public boolean hasUpgrade(ItemStack item, UpgradeScrollDefinition.CustomUpgradeAbility ability) {
+        return ability != null && getAppliedUpgrades(item).contains(ability);
+    }
+
+    public static Set<UpgradeScrollDefinition.CustomUpgradeAbility> parseAppliedUpgrades(String serialized) {
+        if (serialized == null || serialized.isBlank()) {
+            return Set.of();
+        }
+        EnumSet<UpgradeScrollDefinition.CustomUpgradeAbility> result =
+                EnumSet.noneOf(UpgradeScrollDefinition.CustomUpgradeAbility.class);
+        for (String token : serialized.split(",")) {
+            UpgradeScrollDefinition.CustomUpgradeAbility ability =
+                    UpgradeScrollDefinition.CustomUpgradeAbility.parse(token);
+            if (ability != null) {
+                result.add(ability);
+            }
+        }
+        return result;
+    }
+
+    public static String serializeAppliedUpgrades(Set<UpgradeScrollDefinition.CustomUpgradeAbility> abilities) {
+        if (abilities == null || abilities.isEmpty()) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (UpgradeScrollDefinition.CustomUpgradeAbility ability : abilities) {
+            if (sb.length() > 0) {
+                sb.append(',');
+            }
+            sb.append(ability.name());
+        }
+        return sb.toString();
+    }
+
+    public double getAbilityValue(UpgradeScrollDefinition.CustomUpgradeAbility ability, double fallback) {
+        if (ability == null) {
+            return fallback;
         }
         for (UpgradeScrollDefinition scroll : upgradeScrolls.values()) {
-            registerSingleRecipe("scroll_" + scroll.id(), scroll.recipe(), createUpgradeScrollItem(scroll.id(), 1));
+            if (scroll.ability() == ability) {
+                return scroll.value();
+            }
         }
-    }
-
-    private void registerSingleRecipe(String keySuffix, RecipeDefinition recipeDef, ItemStack result) {
-        if (plugin == null || recipeDef == null || !recipeDef.isValid() || result == null) {
-            return;
-        }
-        NamespacedKey key = new NamespacedKey(plugin, "custom_" + keySuffix);
-        Bukkit.removeRecipe(key);
-        ShapedRecipe shaped = new ShapedRecipe(key, result);
-        shaped.shape(recipeDef.shape().toArray(String[]::new));
-        for (Map.Entry<Character, Material> entry : recipeDef.ingredients().entrySet()) {
-            shaped.setIngredient(entry.getKey(), entry.getValue());
-        }
-        if (Bukkit.addRecipe(shaped)) {
-            registeredRecipeKeys.add(key);
-        }
-    }
-
-    private void unregisterRecipes() {
-        if (plugin == null) {
-            registeredRecipeKeys.clear();
-            return;
-        }
-        for (NamespacedKey key : registeredRecipeKeys) {
-            Bukkit.removeRecipe(key);
-        }
-        registeredRecipeKeys.clear();
+        return fallback;
     }
 
     public ScrollApplyOutcome applyUpgradeScroll(ItemStack scrollItem, ItemStack targetItem) {
@@ -461,90 +506,96 @@ public class CustomItemModule extends AbstractModule {
         }
         UpgradeScrollDefinition scroll = getUpgradeScroll(scrollId);
         if (scroll == null) {
-            return new ScrollApplyOutcome(false, null, "&cTen zwój/runa nie jest już skonfigurowany!");
+            return new ScrollApplyOutcome(false, null, ChatUtils.color("&cTen zwój/runa nie jest już skonfigurowany!"));
         }
-        if (targetItem == null || targetItem.getType().isAir()) {
-            return new ScrollApplyOutcome(false, null, "&cMusisz wskazać przedmiot do ulepszenia!");
+        if (targetItem == null || RecipeDefinition.isAirMaterial(targetItem.getType())) {
+            return new ScrollApplyOutcome(false, null, ChatUtils.color("&cMusisz wskazać przedmiot do ulepszenia!"));
         }
         if (isCustomItem(targetItem) || getScrollId(targetItem) != null) {
-            return new ScrollApplyOutcome(false, null, "&cNie można ulepszać zwojów, run ani specjalnych bloków!");
+            return new ScrollApplyOutcome(false, null, ChatUtils.color("&cNie można ulepszać zwojów, run ani specjalnych bloków!"));
         }
 
-        if (scroll.upgradeMode() == UpgradeScrollDefinition.UpgradeMode.ARMOR_TIER) {
+        Set<UpgradeScrollDefinition.CustomUpgradeAbility> existingUpgrades = getAppliedUpgrades(targetItem);
+        UpgradeScrollDefinition.ScrollEvalResult eval = scroll.evaluateApplication(targetItem.getType(), existingUpgrades);
+        if (!eval.success()) {
+            return new ScrollApplyOutcome(false, null, ChatUtils.color(eval.errorMessage()));
+        }
+
+        if (scroll.ability() == UpgradeScrollDefinition.CustomUpgradeAbility.ARMOR_TIER) {
             return applyArmorTierRune(scroll, targetItem);
         }
-        return applyEnchantmentScroll(scroll, targetItem);
-    }
 
-    private ScrollApplyOutcome applyEnchantmentScroll(UpgradeScrollDefinition scroll, ItemStack targetItem) {
-        Enchantment targetEnchant = resolveEnchantment(scroll.enchantmentKey());
-        if (targetEnchant == null) {
-            return new ScrollApplyOutcome(false, null, "&cNieznane zaklęcie w konfiguracji zwoju: " + scroll.enchantmentKey());
+        if (targetItem.getAmount() != 1) {
+            return new ScrollApplyOutcome(false, null, ChatUtils.color("&cUlepszaj pojedynczy przedmiot!"));
         }
 
         ItemStack copy = targetItem.clone();
         ItemMeta meta = copy.getItemMeta();
         if (meta == null) {
-            return new ScrollApplyOutcome(false, null, "&cTen przedmiot nie może przyjąć zaklęć!");
+            return new ScrollApplyOutcome(false, null, ChatUtils.color("&cTen przedmiot nie obsługuje ulepszeń!"));
         }
 
-        boolean hasBlockedConflict = false;
-        for (String blockedKey : scroll.blockedEnchantments()) {
-            Enchantment blocked = resolveEnchantment(blockedKey);
-            if (blocked != null && meta.getEnchantLevel(blocked) > 0) {
-                hasBlockedConflict = true;
-                break;
-            }
+        EnumSet<UpgradeScrollDefinition.CustomUpgradeAbility> updatedSet =
+                EnumSet.noneOf(UpgradeScrollDefinition.CustomUpgradeAbility.class);
+        updatedSet.addAll(existingUpgrades);
+        updatedSet.add(scroll.ability());
+
+        if (appliedUpgradesKey != null) {
+            meta.getPersistentDataContainer().set(
+                    appliedUpgradesKey,
+                    PersistentDataType.STRING,
+                    serializeAppliedUpgrades(updatedSet)
+            );
         }
 
-        int currentLevel = meta.getEnchantLevel(targetEnchant);
-        UpgradeScrollDefinition.ScrollEvalResult eval =
-                scroll.evaluateEnchantmentUpgrade(copy.getType(), currentLevel, hasBlockedConflict);
-        if (!eval.success()) {
-            return new ScrollApplyOutcome(false, null, eval.errorMessage());
-        }
-
-        meta.addEnchant(targetEnchant, eval.nextLevel(), true);
+        List<Component> lore = meta.hasLore() && meta.lore() != null
+                ? new ArrayList<>(meta.lore())
+                : new ArrayList<>();
+        lore.add(ChatUtils.itemComponent(scroll.displayTag()));
+        meta.lore(lore);
         copy.setItemMeta(meta);
-        String msg = ChatUtils.color("&aNałożono " + scroll.name() + " &8(&ePoziom " + eval.nextLevel() + "/" + scroll.maxLevel() + "&8)&a!");
+
+        String msg = ChatUtils.color("&aNałożono ulepszenie " + scroll.name() + " &ana wybrany przedmiot!");
         return new ScrollApplyOutcome(true, copy, msg);
     }
 
     private ScrollApplyOutcome applyArmorTierRune(UpgradeScrollDefinition scroll, ItemStack targetItem) {
         if (targetItem.getAmount() != 1) {
-            return new ScrollApplyOutcome(false, null, "&cUlepszaj pojedynczy element zbroi!");
+            return new ScrollApplyOutcome(false, null, ChatUtils.color("&cUlepszaj pojedynczy element zbroi!"));
         }
         ArmorModule armorModule = plugin != null
                 ? plugin.getArmorModule().filter(PluginModule::isEnabled).orElse(null)
                 : null;
         if (armorModule == null) {
-            return new ScrollApplyOutcome(false, null, "&cModuł magicznych zbroi jest wyłączony!");
+            return new ScrollApplyOutcome(false, null, ChatUtils.color("&cModuł magicznych zbroi jest wyłączony!"));
         }
 
         ItemMeta targetMeta = targetItem.getItemMeta();
         if (targetMeta == null) {
-            return new ScrollApplyOutcome(false, null, "&cTa runa działa wyłącznie na elementach magicznych zbroi!");
+            return new ScrollApplyOutcome(false, null, ChatUtils.color("&cTa runa działa wyłącznie na elementach magicznych zbroi!"));
         }
         String setId = armorModule.getArmorSetId(targetMeta);
         Integer currentTier = armorModule.getArmorTier(targetMeta);
         if (setId == null || currentTier == null) {
-            return new ScrollApplyOutcome(false, null, "&cTa runa działa wyłącznie na elementach magicznych zbroi (Górnik/Handlarz/Wojownik)!");
+            return new ScrollApplyOutcome(false, null,
+                    ChatUtils.color("&cTa runa działa wyłącznie na elementach magicznych zbroi (Górnik/Handlarz/Wojownik)!"));
         }
 
         ArmorSetDefinition def = armorModule.getDefinition(setId);
         int nextTier = computeNextArmorTier(def, currentTier, scroll.maxLevel());
         if (nextTier < 0) {
-            return new ScrollApplyOutcome(false, null, "&eTen element zbroi osiągnął już maksymalny Tier (&6" + currentTier + "&e)!");
+            return new ScrollApplyOutcome(false, null,
+                    ChatUtils.color("&eTen element zbroi osiągnął już maksymalny Tier (&6" + currentTier + "&e)!"));
         }
 
         ArmorPieceType pieceType = resolveArmorPieceType(targetItem.getType());
         if (pieceType == null) {
-            return new ScrollApplyOutcome(false, null, "&cNie rozpoznano typu elementu zbroi!");
+            return new ScrollApplyOutcome(false, null, ChatUtils.color("&cNie rozpoznano typu elementu zbroi!"));
         }
 
         ItemStack upgraded = armorModule.createArmorPiece(setId, nextTier, pieceType);
         if (upgraded == null) {
-            return new ScrollApplyOutcome(false, null, "&cNie udało się utworzyć kolejnego tieru tej zbroi!");
+            return new ScrollApplyOutcome(false, null, ChatUtils.color("&cNie udało się utworzyć kolejnego tieru tej zbroi!"));
         }
 
         ItemMeta upgradedMeta = upgraded.getItemMeta();
@@ -561,11 +612,37 @@ public class CustomItemModule extends AbstractModule {
             if (targetMeta instanceof Damageable oldDmg && upgradedMeta instanceof Damageable newDmg && oldDmg.hasDamage()) {
                 newDmg.setDamage(oldDmg.getDamage());
             }
+
+            // Zachowanie nietypowych ulepszeń mechanicznych (np. Double Jump na butach)
+            Set<UpgradeScrollDefinition.CustomUpgradeAbility> existingCustom = getAppliedUpgrades(targetItem);
+            if (!existingCustom.isEmpty() && appliedUpgradesKey != null) {
+                upgradedMeta.getPersistentDataContainer().set(
+                        appliedUpgradesKey,
+                        PersistentDataType.STRING,
+                        serializeAppliedUpgrades(existingCustom)
+                );
+                List<Component> lore = upgradedMeta.hasLore() && upgradedMeta.lore() != null
+                        ? new ArrayList<>(upgradedMeta.lore())
+                        : new ArrayList<>();
+                for (UpgradeScrollDefinition.CustomUpgradeAbility ability : existingCustom) {
+                    lore.add(ChatUtils.itemComponent(findAbilityDisplayTag(ability)));
+                }
+                upgradedMeta.lore(lore);
+            }
             upgraded.setItemMeta(upgradedMeta);
         }
 
         String msg = ChatUtils.color("&aAwansowano &e" + def.displayName() + " &az &7Tier " + currentTier + " &ana &6Tier " + nextTier + "&a!");
         return new ScrollApplyOutcome(true, upgraded, msg);
+    }
+
+    private String findAbilityDisplayTag(UpgradeScrollDefinition.CustomUpgradeAbility ability) {
+        for (UpgradeScrollDefinition scroll : upgradeScrolls.values()) {
+            if (scroll.ability() == ability) {
+                return scroll.displayTag();
+            }
+        }
+        return "&d✦ Ulepszenie: &f" + ability.getLabel();
     }
 
     public static int computeNextArmorTier(ArmorSetDefinition def, int currentTier, int scrollMaxTier) {
@@ -589,15 +666,133 @@ public class CustomItemModule extends AbstractModule {
         return null;
     }
 
-    public static Enchantment resolveEnchantment(String enchantmentKey) {
-        if (enchantmentKey == null || enchantmentKey.isBlank() || Bukkit.getServer() == null) {
+    /**
+     * Wyznacza względne przesunięcia bloków [dx, dy, dz] dla kopania obszarowego 2x2 lub 3x3.
+     */
+    public static List<int[]> computeAreaMiningOffsets(BlockFace hitFace, boolean is3x3) {
+        return computeAreaMiningOffsets(hitFace, is3x3, 1, 1);
+    }
+
+    public static List<int[]> computeAreaMiningOffsets(BlockFace hitFace, boolean is3x3, int signU, int signV) {
+        int stepU = signU >= 0 ? 1 : -1;
+        int stepV = signV >= 0 ? 1 : -1;
+        List<int[]> offsets = new ArrayList<>();
+
+        if (hitFace == BlockFace.UP || hitFace == BlockFace.DOWN) {
+            if (is3x3) {
+                for (int dx = -1; dx <= 1; dx++) {
+                    for (int dz = -1; dz <= 1; dz++) {
+                        offsets.add(new int[]{dx, 0, dz});
+                    }
+                }
+            } else {
+                for (int ix = 0; ix <= 1; ix++) {
+                    for (int iz = 0; iz <= 1; iz++) {
+                        offsets.add(new int[]{ix * stepU, 0, iz * stepV});
+                    }
+                }
+            }
+            return offsets;
+        }
+
+        if (hitFace == BlockFace.EAST || hitFace == BlockFace.WEST) {
+            if (is3x3) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    for (int dz = -1; dz <= 1; dz++) {
+                        offsets.add(new int[]{0, dy, dz});
+                    }
+                }
+            } else {
+                for (int iy = 0; iy <= 1; iy++) {
+                    for (int iz = 0; iz <= 1; iz++) {
+                        offsets.add(new int[]{0, iy * stepV, iz * stepU});
+                    }
+                }
+            }
+            return offsets;
+        }
+
+        if (is3x3) {
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    offsets.add(new int[]{dx, dy, 0});
+                }
+            }
+        } else {
+            for (int ix = 0; ix <= 1; ix++) {
+                for (int iy = 0; iy <= 1; iy++) {
+                    offsets.add(new int[]{ix * stepU, iy * stepV, 0});
+                }
+            }
+        }
+        return offsets;
+    }
+
+    /**
+     * Mapuje wykopany blok lub surową rudę na przetopiony wynik dla ulepszenia Hutnik (Auto-Smelt).
+     */
+    public static Material smeltDropMaterial(Material input) {
+        if (input == null) {
             return null;
         }
-        NamespacedKey key = NamespacedKey.fromString(enchantmentKey.trim().toLowerCase(Locale.ROOT));
-        if (key == null) {
+        return switch (input) {
+            case RAW_IRON, IRON_ORE, DEEPSLATE_IRON_ORE -> Material.IRON_INGOT;
+            case RAW_GOLD, GOLD_ORE, DEEPSLATE_GOLD_ORE, NETHER_GOLD_ORE -> Material.GOLD_INGOT;
+            case RAW_COPPER, COPPER_ORE, DEEPSLATE_COPPER_ORE -> Material.COPPER_INGOT;
+            case ANCIENT_DEBRIS -> Material.NETHERITE_SCRAP;
+            case COBBLESTONE -> Material.STONE;
+            case SAND -> Material.GLASS;
+            case RED_SAND -> Material.RED_STAINED_GLASS;
+            case CLAY_BALL -> Material.BRICK;
+            default -> null;
+        };
+    }
+
+    /**
+     * Wylicza końcowe zdrowie po leczeniu z Wampiryzmu (domyślnie 1/3 zadanych obrażeń).
+     */
+    public static double computeVampirismHeal(double finalDamage, double ratio, double currentHealth, double maxHealth) {
+        if (finalDamage <= 0.0 || ratio <= 0.0 || currentHealth <= 0.0 || maxHealth <= 0.0) {
+            return Math.max(0.0, Math.min(maxHealth, currentHealth));
+        }
+        return Math.min(maxHealth, currentHealth + (finalDamage * ratio));
+    }
+
+    /**
+     * Zwraca materiał nasion do automatycznego sadzenia dla Żniwiarza 3x3.
+     */
+    public static Material resolveCropSeedMaterial(Material cropBlockMaterial) {
+        if (cropBlockMaterial == null) {
             return null;
         }
-        return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(key);
+        return switch (cropBlockMaterial) {
+            case WHEAT -> Material.WHEAT_SEEDS;
+            case CARROTS -> Material.CARROT;
+            case POTATOES -> Material.POTATO;
+            case BEETROOTS -> Material.BEETROOT_SEEDS;
+            case NETHER_WART -> Material.NETHER_WART;
+            default -> null;
+        };
+    }
+
+    public static boolean shouldAllowDoubleJump(
+            GameMode mode,
+            boolean hasFlightBoots,
+            boolean hasDoubleJumpBoots,
+            boolean usedInAir
+    ) {
+        if (mode == GameMode.CREATIVE || mode == GameMode.SPECTATOR || hasFlightBoots) {
+            return false;
+        }
+        return hasDoubleJumpBoots && !usedInAir;
+    }
+
+    public boolean hasDoubleJumpBootsEquipped(Player player) {
+        if (player == null) {
+            return false;
+        }
+        ItemStack boots = player.getInventory().getBoots();
+        return hasUpgrade(boots, UpgradeScrollDefinition.CustomUpgradeAbility.DOUBLE_JUMP);
     }
 
     public static boolean isHostileEntity(Entity entity) {
@@ -915,6 +1110,14 @@ public class CustomItemModule extends AbstractModule {
         }
         all.addAll(upgradeScrolls.keySet());
         return Collections.unmodifiableSet(all);
+    }
+
+    public CustomRecipeManager getRecipeManager() {
+        return recipeManager;
+    }
+
+    public CustomRecipeGUI getRecipeGUI() {
+        return recipeGUI;
     }
 
     public int getPlacedGeneratorCount() {

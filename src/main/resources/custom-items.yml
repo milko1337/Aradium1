@@ -1,5 +1,6 @@
-# Konfiguracja specjalnych przedmiotów, stawianych generatorów, pochodni anty-mob,
-# zwojów/run ulepszeń oraz własnych receptur craftingu (Etap 6 - Moduł custom_items).
+# Konfiguracja specjalnych przedmiotów, stawianych generatorów, pochodni anty-mob
+# oraz mechanicznych zwojów/run ulepszeń (Etap 6 - Moduł custom_items).
+# Uwaga: Wszystkie własne receptury craftingu znajdują się w pliku recipes.yml (oraz /receptury admin).
 
 material-names:
   COBBLESTONE: "&7Bruk"
@@ -26,16 +27,6 @@ generators:
     drops:
       COBBLESTONE: 85.0
       STONE: 15.0
-    recipe:
-      enabled: true
-      shape:
-        - "CCC"
-        - "CLC"
-        - "CWC"
-      ingredients:
-        C: "COBBLESTONE"
-        L: "LAVA_BUCKET"
-        W: "WATER_BUCKET"
 
   ore_generator_t1:
     name: "&e&lGenerator Rud &8(&7Tier I&8)"
@@ -51,16 +42,6 @@ generators:
       COPPER_ORE: 12.0
       IRON_ORE: 10.0
       GOLD_ORE: 3.0
-    recipe:
-      enabled: true
-      shape:
-        - "III"
-        - "IGI"
-        - "RRR"
-      ingredients:
-        I: "IRON_INGOT"
-        G: "GOLD_INGOT"
-        R: "REDSTONE_BLOCK"
 
   ore_generator_t2:
     name: "&b&lGenerator Rud &8(&eTier II&8)"
@@ -78,17 +59,6 @@ generators:
       REDSTONE_ORE: 8.0
       GOLD_ORE: 8.0
       DIAMOND_ORE: 4.0
-    recipe:
-      enabled: true
-      shape:
-        - "DDD"
-        - "GEG"
-        - "BBB"
-      ingredients:
-        D: "DIAMOND"
-        G: "GOLD_BLOCK"
-        E: "END_STONE"
-        B: "IRON_BLOCK"
 
   ore_generator_t3:
     name: "&d&lGenerator Rud &8(&6Tier III&8)"
@@ -107,17 +77,6 @@ generators:
       DIAMOND_ORE: 15.0
       EMERALD_ORE: 9.0
       ANCIENT_DEBRIS: 3.0
-    recipe:
-      enabled: true
-      shape:
-        - "BNB"
-        - "DED"
-        - "NNN"
-      ingredients:
-        B: "DIAMOND_BLOCK"
-        N: "NETHERITE_SCRAP"
-        D: "EMERALD_BLOCK"
-        E: "END_STONE"
 
 anti_mob_torch:
   id: "anti_mob_torch"
@@ -134,164 +93,134 @@ anti_mob_torch:
     - "&7Blokuje naturalny spawn wrogich mobów"
     - "&7w promieniu &b32 kratek &7od pochodni."
     - "&aNie blokuje mobów ze spawnerów!"
-  recipe:
-    enabled: true
-    shape:
-      - "GDG"
-      - "GTG"
-      - "BBB"
-    ingredients:
-      G: "GHAST_TEAR"
-      D: "DIAMOND"
-      T: "SOUL_TORCH"
-      B: "BLAZE_ROD"
 
 upgrade_scrolls:
-  zwoj_ostrosci:
-    name: "&c&lZwój Ostrości &7(+1)"
+  zwoj_kopanie_2x2:
+    name: "&b&lZwój Kopania &f2x2"
+    display-tag: "&d✦ Ulepszenie: &bKopanie 2x2"
+    material: "PAPER"
+    target-category: "PICKAXE_OR_SHOVEL"
+    ability: "MINING_2X2"
+    value: 2.0
+    max-level: 1
+    incompatible-abilities:
+      - "MINING_3X3"
+    lore:
+      - "&7Pozwala kilofowi lub łopacie wykopywać"
+      - "&7obszar &b2x2 &7bloków jednocześnie."
+      - "&8» &7Cel: &fKilofy, Łopaty"
+      - "&aPrzeciągnij na narzędzie lub użyj (Shift+PPM z lewej ręki)"
+
+  zwoj_kopanie_3x3:
+    name: "&3&lZwój Kopania &e3x3"
+    display-tag: "&d✦ Ulepszenie: &eKopanie 3x3"
+    material: "PAPER"
+    target-category: "PICKAXE_OR_SHOVEL"
+    ability: "MINING_3X3"
+    value: 3.0
+    max-level: 1
+    incompatible-abilities:
+      - "MINING_2X2"
+    lore:
+      - "&7Pozwala kilofowi lub łopacie wykopywać"
+      - "&7pełne okno &e3x3 &7(9 bloków jednocześnie)."
+      - "&8» &7Cel: &fKilofy, Łopaty"
+      - "&aPrzeciągnij na narzędzie lub użyj (Shift+PPM z lewej ręki)"
+
+  zwoj_hutnik:
+    name: "&6&lZwój Hutnika &8(&eAuto-Smelt&8)"
+    display-tag: "&d✦ Ulepszenie: &6Hutnik (Auto-Smelt)"
+    material: "PAPER"
+    target-category: "PICKAXE_OR_SHOVEL"
+    ability: "AUTO_SMELT"
+    value: 1.0
+    max-level: 1
+    lore:
+      - "&7Automatycznie przetapia wykopane rudy,"
+      - "&7bruk oraz piasek na gotowe sztabki/szkło."
+      - "&8» &7Cel: &fKilofy, Łopaty"
+      - "&aPrzeciągnij na narzędzie lub użyj (Shift+PPM z lewej ręki)"
+
+  zwoj_drwal:
+    name: "&2&lZwój Drwala &8(&aTreeCapitator&8)"
+    display-tag: "&d✦ Ulepszenie: &aDrwal"
+    material: "PAPER"
+    target-category: "AXE"
+    ability: "TREE_CAPITATOR"
+    value: 24.0
+    max-level: 1
+    lore:
+      - "&7Ścina cały połączony pień drzewa"
+      - "&7(do &e24 &7bloków drewna) jednym cięciem."
+      - "&8» &7Cel: &fSiekiery"
+      - "&aPrzeciągnij na siekierę lub użyj (Shift+PPM z lewej ręki)"
+
+  zwoj_zniwiarz_3x3:
+    name: "&a&lZwój Żniwiarza &e3x3"
+    display-tag: "&d✦ Ulepszenie: &aŻniwiarz 3x3"
+    material: "PAPER"
+    target-category: "HOE"
+    ability: "HARVESTER_3X3"
+    value: 3.0
+    max-level: 1
+    lore:
+      - "&7Zbiera dojrzałe plony w obszarze &e3x3"
+      - "&7i automatycznie przesadza nasiona na nowo!"
+      - "&8» &7Cel: &fMotyki"
+      - "&aPrzeciągnij na motykę lub użyj (Shift+PPM z lewej ręki)"
+
+  zwoj_wampiryzm:
+    name: "&c&lZwój Wampiryzmu &8(&41/3 Lifesteal&8)"
+    display-tag: "&d✦ Ulepszenie: &cWampiryzm (1/3 HP)"
     material: "PAPER"
     target-category: "WEAPON"
-    upgrade-mode: "ENCHANTMENT"
-    enchantment: "SHARPNESS"
-    max-level: 6
+    ability: "VAMPIRISM"
+    value: 0.3333
+    max-level: 1
     lore:
-      - "&7Zwiększa zaklęcie &cOstrość &7o &e+1"
-      - "&7(maksymalnie do poziomu &eVI&7)."
+      - "&7Każdy cios bronią przywraca Ci"
+      - "&c1/3 (33.3%) &7zadanych obrażeń do zdrowia!"
       - "&8» &7Cel: &fMiecze, Siekiery, Trójząb, Buzdygan"
-      - "&aPrzeciągnij na przedmiot lub użyj w lewej ręce (Shift+PPM)"
-    recipe:
-      enabled: true
-      shape:
-        - "BGB"
-        - "QPQ"
-        - "ISI"
-      ingredients:
-        B: "BLAZE_POWDER"
-        G: "GOLD_INGOT"
-        Q: "QUARTZ"
-        P: "PAPER"
-        I: "IRON_SWORD"
-        S: "DIAMOND"
+      - "&aPrzeciągnij na broń lub użyj (Shift+PPM z lewej ręki)"
 
-  zwoj_wydajnosci:
-    name: "&e&lZwój Wydajności &7(+1)"
+  zwoj_piorun:
+    name: "&e&lZwój Burzy &8(&bPiorun&8)"
+    display-tag: "&d✦ Ulepszenie: &eUderzenie Pioruna"
     material: "PAPER"
-    target-category: "TOOL"
-    upgrade-mode: "ENCHANTMENT"
-    enchantment: "EFFICIENCY"
-    max-level: 6
+    target-category: "WEAPON"
+    ability: "THUNDER_STRIKE"
+    value: 0.25
+    max-level: 1
     lore:
-      - "&7Zwiększa zaklęcie &eWydajność &7o &e+1"
-      - "&7(maksymalnie do poziomu &eVI&7)."
-      - "&8» &7Cel: &fKilofy, Siekiery, Łopaty, Motyki"
-      - "&aPrzeciągnij na przedmiot lub użyj w lewej ręce (Shift+PPM)"
-    recipe:
-      enabled: true
-      shape:
-        - "RGR"
-        - "APA"
-        - "RDR"
-      ingredients:
-        R: "REDSTONE_BLOCK"
-        G: "GOLD_BLOCK"
-        A: "AMETHYST_SHARD"
-        P: "PAPER"
-        D: "DIAMOND"
+      - "&7Daje &e25% &7szansy przy ataku na przywołanie"
+      - "&7pioruna i zadanie &c+4.0 &7dodatkowych obrażeń."
+      - "&8» &7Cel: &fMiecze, Siekiery, Trójząb, Buzdygan"
+      - "&aPrzeciągnij na broń lub użyj (Shift+PPM z lewej ręki)"
 
-  zwoj_fortuny:
-    name: "&b&lZwój Fortuny &7(+1)"
+  zwoj_double_jump:
+    name: "&f&lZwój Podwójnego Skoku &8(&bDouble Jump&8)"
+    display-tag: "&d✦ Ulepszenie: &bPodwójny Skok"
     material: "PAPER"
-    target-category: "TOOL"
-    upgrade-mode: "ENCHANTMENT"
-    enchantment: "FORTUNE"
-    max-level: 4
-    blocked-enchantments:
-      - "SILK_TOUCH"
+    target-category: "BOOTS"
+    ability: "DOUBLE_JUMP"
+    value: 1.0
+    max-level: 1
     lore:
-      - "&7Zwiększa zaklęcie &bSzczęście &7o &e+1"
-      - "&7(maksymalnie do poziomu &eIV&7)."
-      - "&8» &7Cel: &fKilofy, Siekiery, Łopaty, Motyki"
-      - "&cNie działa na narzędzia z Jedwabnym Dotykiem!"
-      - "&aPrzeciągnij na przedmiot lub użyj w lewej ręce (Shift+PPM)"
-    recipe:
-      enabled: true
-      shape:
-        - "EDE"
-        - "LPL"
-        - "EDE"
-      ingredients:
-        E: "EMERALD"
-        D: "DIAMOND"
-        L: "LAPIS_BLOCK"
-        P: "PAPER"
-
-  zwoj_ochrony:
-    name: "&a&lZwój Ochrony &7(+1)"
-    material: "PAPER"
-    target-category: "ARMOR"
-    upgrade-mode: "ENCHANTMENT"
-    enchantment: "PROTECTION"
-    max-level: 5
-    lore:
-      - "&7Zwiększa zaklęcie &aOchrona &7o &e+1"
-      - "&7(maksymalnie do poziomu &eV&7)."
-      - "&8» &7Cel: &fWszystkie elementy zbroi i Elytra"
-      - "&aPrzeciągnij na przedmiot lub użyj w lewej ręce (Shift+PPM)"
-    recipe:
-      enabled: true
-      shape:
-        - "IDI"
-        - "OPO"
-        - "IGI"
-      ingredients:
-        I: "IRON_BLOCK"
-        D: "DIAMOND"
-        O: "OBSIDIAN"
-        P: "PAPER"
-        G: "GOLD_BLOCK"
-
-  runa_niezniszczalnosci:
-    name: "&d&lRuna Niezniszczalności &7(+1)"
-    material: "AMETHYST_SHARD"
-    target-category: "BREAKABLE"
-    upgrade-mode: "ENCHANTMENT"
-    enchantment: "UNBREAKING"
-    max-level: 5
-    lore:
-      - "&7Zwiększa zaklęcie &dNiezniszczalność &7o &e+1"
-      - "&7(maksymalnie do poziomu &eV&7)."
-      - "&8» &7Cel: &fBroń, Narzędzia i Zbroje"
-      - "&aPrzeciągnij na przedmiot lub użyj w lewej ręce (Shift+PPM)"
-    recipe:
-      enabled: true
-      shape:
-        - "OAO"
-        - "ANA"
-        - "OAO"
-      ingredients:
-        O: "OBSIDIAN"
-        A: "AMETHYST_SHARD"
-        N: "DIAMOND"
+      - "&7Pozwala wybić się drugi raz w powietrzu"
+      - "&7bez dotykania ziemi i amortyzuje upadek!"
+      - "&8» &7Cel: &fWszystkie buty"
+      - "&aPrzeciągnij na buty lub użyj (Shift+PPM z lewej ręki)"
 
   runa_tieru_zbroi:
     name: "&6&lRuna Awansu Zbroi &7(+1 Tier)"
+    display-tag: "&6Awans Zbroi"
     material: "ECHO_SHARD"
     target-category: "MAGIC_ARMOR"
-    upgrade-mode: "ARMOR_TIER"
+    ability: "ARMOR_TIER"
+    value: 1.0
     max-level: 5
     lore:
       - "&7Awansuje część magicznej zbroi"
       - "&7(&eGórnik / Handlarz / Wojownik&7) o &6+1 Tier&7!"
-      - "&7Zachowuje dodatkowe zaklęcia na przedmiocie."
-      - "&aPrzeciągnij na zbroję lub użyj w lewej ręce (Shift+PPM)"
-    recipe:
-      enabled: true
-      shape:
-        - "DED"
-        - "ENE"
-        - "BEB"
-      ingredients:
-        D: "DIAMOND_BLOCK"
-        E: "ECHO_SHARD"
-        N: "NETHERITE_INGOT"
-        B: "EMERALD_BLOCK"
+      - "&7Zachowuje wszystkie nałożone wcześniej ulepszenia."
+      - "&aPrzeciągnij na zbroję lub użyj (Shift+PPM z lewej ręki)"

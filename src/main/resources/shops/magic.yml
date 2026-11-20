@@ -168,45 +168,69 @@ pages:
         name: "&8&lCiężki Rdzeń"
         buy-price: 14500.0
         sell-price: 2500.0
-      zwoj_ostrosci:
+      zwoj_kopanie_2x2:
         material: "PAPER"
-        custom-item: "zwoj_ostrosci"
-        name: "&c&lZwój Ostrości &7(+1)"
+        custom-item: "zwoj_kopanie_2x2"
+        name: "&b&lZwój Kopania &f2x2"
         lore:
-          - "&7Zwiększa zaklęcie &cOstrość &7o &e+1 &8(maks. VI)&7."
-        buy-price: 7500.0
-        sell-price: -1.0
-      zwoj_wydajnosci:
-        material: "PAPER"
-        custom-item: "zwoj_wydajnosci"
-        name: "&e&lZwój Wydajności &7(+1)"
-        lore:
-          - "&7Zwiększa zaklęcie &eWydajność &7o &e+1 &8(maks. VI)&7."
-        buy-price: 7500.0
-        sell-price: -1.0
-      zwoj_ochrony:
-        material: "PAPER"
-        custom-item: "zwoj_ochrony"
-        name: "&a&lZwój Ochrony &7(+1)"
-        lore:
-          - "&7Zwiększa zaklęcie &aOchrona &7o &e+1 &8(maks. V)&7."
-        buy-price: 8500.0
-        sell-price: -1.0
-      runa_niezniszczalnosci:
-        material: "AMETHYST_SHARD"
-        custom-item: "runa_niezniszczalnosci"
-        name: "&d&lRuna Niezniszczalności &7(+1)"
-        lore:
-          - "&7Zwiększa zaklęcie &dNiezniszczalność &7o &e+1 &8(maks. V)&7."
+          - "&7Kilof/łopata wykopuje obszar &b2x2&7."
         buy-price: 9500.0
         sell-price: -1.0
-      zwoj_fortuny:
+      zwoj_kopanie_3x3:
         material: "PAPER"
-        custom-item: "zwoj_fortuny"
-        name: "&b&lZwój Fortuny &7(+1)"
+        custom-item: "zwoj_kopanie_3x3"
+        name: "&3&lZwój Kopania &e3x3"
         lore:
-          - "&7Zwiększa zaklęcie &bSzczęście &7o &e+1 &8(maks. IV)&7."
-        buy-price: 15000.0
+          - "&7Kilof/łopata wykopuje obszar &e3x3&7."
+        buy-price: 28000.0
+        sell-price: -1.0
+      zwoj_hutnik:
+        material: "PAPER"
+        custom-item: "zwoj_hutnik"
+        name: "&6&lZwój Hutnika &8(&eAuto-Smelt&8)"
+        lore:
+          - "&7Automatycznie przetapia wykopane rudy, bruk i piasek."
+        buy-price: 12000.0
+        sell-price: -1.0
+      zwoj_drwal:
+        material: "PAPER"
+        custom-item: "zwoj_drwal"
+        name: "&2&lZwój Drwala &8(&aTreeCapitator&8)"
+        lore:
+          - "&7Ścina cały pień drzewa jednym ruchem siekiery."
+        buy-price: 8500.0
+        sell-price: -1.0
+      zwoj_zniwiarz_3x3:
+        material: "PAPER"
+        custom-item: "zwoj_zniwiarz_3x3"
+        name: "&a&lZwój Żniwiarza &e3x3"
+        lore:
+          - "&7Zbiór i automatyczne przesadzanie plonów &e3x3&7."
+        buy-price: 11000.0
+        sell-price: -1.0
+      zwoj_wampiryzm:
+        material: "PAPER"
+        custom-item: "zwoj_wampiryzm"
+        name: "&c&lZwój Wampiryzmu &8(&41/3 Lifesteal&8)"
+        lore:
+          - "&7Leczy właściciela o &c1/3 &7zadanych obrażeń."
+        buy-price: 22000.0
+        sell-price: -1.0
+      zwoj_piorun:
+        material: "PAPER"
+        custom-item: "zwoj_piorun"
+        name: "&e&lZwój Burzy &8(&bPiorun&8)"
+        lore:
+          - "&725% szansy na piorun i &c+4.0 &7obrażeń."
+        buy-price: 19500.0
+        sell-price: -1.0
+      zwoj_double_jump:
+        material: "PAPER"
+        custom-item: "zwoj_double_jump"
+        name: "&f&lZwój Podwójnego Skoku &8(&bDouble Jump&8)"
+        lore:
+          - "&7Dodatkowy skok w powietrzu dla dowolnych butów."
+        buy-price: 16500.0
         sell-price: -1.0
       runa_tieru_zbroi:
         material: "ECHO_SHARD"

@@ -20,8 +20,7 @@ public record GeneratorDefinition(
         int regenDelayTicks,
         List<String> lore,
         Map<Material, Double> drops,
-        double totalWeight,
-        RecipeDefinition recipe
+        double totalWeight
 ) {
 
     public GeneratorDefinition {

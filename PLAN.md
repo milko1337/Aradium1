@@ -226,8 +226,10 @@
       (`NATURAL`, `PATROL`, `JOCKEY`, `MOUNT`, `REINFORCEMENTS`) obszarowo w promieniu `32` kratek (bez blokowania spawnerów).
   - [x] **Nowe mechaniki:**
     - Własne craftingi przedmiotów (`ShapedRecipe`) dla generatorów, pochodni anty-mob oraz zwojów/run.
-    - Specjalne ulepszenia (`zwoj_ostrosci`, `zwoj_wydajnosci`, `zwoj_fortuny`, `zwoj_ochrony`,
-      `runa_niezniszczalnosci`, `runa_tieru_zbroi`) do **broni, narzędzi i zbroi** (Drag & Drop + Off-Hand `Shift+PPM`).
+    - Specjalne ulepszenia mechaniczne (`zwoj_kopanie_2x2`, `zwoj_kopanie_3x3`, `zwoj_hutnik`,
+      `zwoj_drwal`, `zwoj_zniwiarz_3x3`, `zwoj_wampiryzm`, `zwoj_piorun`, `zwoj_double_jump`,
+      `runa_tieru_zbroi`) oraz pełny katalog `100` propozycji w `ULEPSZENIA_I_RECEPTURY.md`
+      + system `recipes.yml` z GUI gracza i kreatorem admina (`/receptury [admin]`).
   - [x] **Wyłączanie poszczególnych modułów z `config.yml`:**
     - Sekcja `modules:` (`custom_items`, `economy`, `skyblock`, `shop`, `spawners`, `armor`,
       `magic_items`, `ore_regions`, `moderation`, `ranks`) w `config.yml`, metody `ModuleManager#setModuleEnabled`
@@ -235,7 +237,7 @@
   - [x] **Zrównoważenie funkcji z ekonomią SkyBlocka:**
     - Usunięto arbitraż cenowy między kategoriami sklepu (`shops/blocks.yml`, `shops/natural.yml`)
       oraz podpięto nowe generatory, pochodnię anty-mob i zwoje/runy do `/shop` (`magic.yml`, `misc.yml`)
-      w cenach `2500$–65000$` (`20/20` testów).
+      w cenach `2500$–65000$` (`21/21` testów).
 
 ---
 

@@ -1,0 +1,276 @@
+# Konfiguracja wszystkich własnych receptur craftingu (Custom Recipes)
+# Edytuj tutaj lub w kreatorze w grze pod komendą: /receptury admin
+# Kategorie: GENERATORS, SCROLLS, ARMOR, MAGIC, MISC
+
+recipes:
+  cobble_generator:
+    name: "&7&lGenerator Bruku"
+    category: "GENERATORS"
+    enabled: true
+    shape:
+      - "CCC"
+      - "CLC"
+      - "CWC"
+    ingredients:
+      C: "COBBLESTONE"
+      L: "LAVA_BUCKET"
+      W: "WATER_BUCKET"
+    result-custom-item: "cobble_generator"
+    result-amount: 1
+
+  ore_generator_t1:
+    name: "&e&lGenerator Rud &8(&7Tier I&8)"
+    category: "GENERATORS"
+    enabled: true
+    shape:
+      - "III"
+      - "IGI"
+      - "RRR"
+    ingredients:
+      I: "IRON_INGOT"
+      G: "GOLD_INGOT"
+      R: "REDSTONE_BLOCK"
+    result-custom-item: "ore_generator_t1"
+    result-amount: 1
+
+  ore_generator_t2:
+    name: "&b&lGenerator Rud &8(&eTier II&8)"
+    category: "GENERATORS"
+    enabled: true
+    shape:
+      - "DDD"
+      - "GEG"
+      - "BBB"
+    ingredients:
+      D: "DIAMOND"
+      G: "GOLD_BLOCK"
+      E: "END_STONE"
+      B: "IRON_BLOCK"
+    result-custom-item: "ore_generator_t2"
+    result-amount: 1
+
+  ore_generator_t3:
+    name: "&d&lGenerator Rud &8(&6Tier III&8)"
+    category: "GENERATORS"
+    enabled: true
+    shape:
+      - "BNB"
+      - "DED"
+      - "NNN"
+    ingredients:
+      B: "DIAMOND_BLOCK"
+      N: "NETHERITE_SCRAP"
+      D: "EMERALD_BLOCK"
+      E: "END_STONE"
+    result-custom-item: "ore_generator_t3"
+    result-amount: 1
+
+  zwoj_kopanie_2x2:
+    name: "&b&lZwój Kopania &f2x2"
+    category: "SCROLLS"
+    enabled: true
+    shape:
+      - "IDI"
+      - "QPQ"
+      - "IRI"
+    ingredients:
+      I: "IRON_BLOCK"
+      D: "DIAMOND_PICKAXE"
+      Q: "QUARTZ"
+      P: "PAPER"
+      R: "REDSTONE_BLOCK"
+    result-custom-item: "zwoj_kopanie_2x2"
+    result-amount: 1
+
+  zwoj_kopanie_3x3:
+    name: "&3&lZwój Kopania &e3x3"
+    category: "SCROLLS"
+    enabled: true
+    shape:
+      - "BGB"
+      - "DPD"
+      - "BNB"
+    ingredients:
+      B: "DIAMOND_BLOCK"
+      G: "EMERALD_BLOCK"
+      D: "DIAMOND_PICKAXE"
+      P: "PAPER"
+      N: "NETHERITE_SCRAP"
+    result-custom-item: "zwoj_kopanie_3x3"
+    result-amount: 1
+
+  zwoj_hutnik:
+    name: "&6&lZwój Hutnika &8(&eAuto-Smelt&8)"
+    category: "SCROLLS"
+    enabled: true
+    shape:
+      - "BGB"
+      - "FPF"
+      - "CLC"
+    ingredients:
+      B: "BLAZE_ROD"
+      G: "GOLD_BLOCK"
+      F: "BLAST_FURNACE"
+      P: "PAPER"
+      C: "COAL_BLOCK"
+      L: "LAVA_BUCKET"
+    result-custom-item: "zwoj_hutnik"
+    result-amount: 1
+
+  zwoj_drwal:
+    name: "&2&lZwój Drwala &8(&aTreeCapitator&8)"
+    category: "SCROLLS"
+    enabled: true
+    shape:
+      - "OAO"
+      - "IPI"
+      - "OEO"
+    ingredients:
+      O: "OAK_LOG"
+      A: "DIAMOND_AXE"
+      I: "IRON_BLOCK"
+      P: "PAPER"
+      E: "EMERALD"
+    result-custom-item: "zwoj_drwal"
+    result-amount: 1
+
+  zwoj_zniwiarz_3x3:
+    name: "&a&lZwój Żniwiarza &e3x3"
+    category: "SCROLLS"
+    enabled: true
+    shape:
+      - "WHW"
+      - "BPB"
+      - "EME"
+    ingredients:
+      W: "HAY_BLOCK"
+      H: "DIAMOND_HOE"
+      B: "BONE_BLOCK"
+      P: "PAPER"
+      E: "EMERALD"
+      M: "GOLD_INGOT"
+    result-custom-item: "zwoj_zniwiarz_3x3"
+    result-amount: 1
+
+  zwoj_wampiryzm:
+    name: "&c&lZwój Wampiryzmu &8(&41/3 Lifesteal&8)"
+    category: "SCROLLS"
+    enabled: true
+    shape:
+      - "RGR"
+      - "SPS"
+      - "QDQ"
+    ingredients:
+      R: "REDSTONE_BLOCK"
+      G: "GHAST_TEAR"
+      S: "DIAMOND_SWORD"
+      P: "PAPER"
+      Q: "GOLD_BLOCK"
+      D: "GLISTERING_MELON_SLICE"
+    result-custom-item: "zwoj_wampiryzm"
+    result-amount: 1
+
+  zwoj_piorun:
+    name: "&e&lZwój Burzy &8(&bPiorun&8)"
+    category: "SCROLLS"
+    enabled: true
+    shape:
+      - "LCL"
+      - "BPB"
+      - "GDG"
+    ingredients:
+      L: "LIGHTNING_ROD"
+      C: "COPPER_BLOCK"
+      B: "BREEZE_ROD"
+      P: "PAPER"
+      G: "GOLD_BLOCK"
+      D: "DIAMOND"
+    result-custom-item: "zwoj_piorun"
+    result-amount: 1
+
+  zwoj_double_jump:
+    name: "&f&lZwój Podwójnego Skoku &8(&bDouble Jump&8)"
+    category: "SCROLLS"
+    enabled: true
+    shape:
+      - "FRF"
+      - "BPE"
+      - "SSS"
+    ingredients:
+      F: "FEATHER"
+      R: "RABBIT_FOOT"
+      B: "WIND_CHARGE"
+      P: "PAPER"
+      E: "PHANTOM_MEMBRANE"
+      S: "SLIME_BLOCK"
+    result-custom-item: "zwoj_double_jump"
+    result-amount: 1
+
+  runa_tieru_zbroi:
+    name: "&6&lRuna Awansu Zbroi &7(+1 Tier)"
+    category: "SCROLLS"
+    enabled: true
+    shape:
+      - "DED"
+      - "ENE"
+      - "BEB"
+    ingredients:
+      D: "DIAMOND_BLOCK"
+      E: "ECHO_SHARD"
+      N: "NETHERITE_INGOT"
+      B: "EMERALD_BLOCK"
+    result-custom-item: "runa_tieru_zbroi"
+    result-amount: 1
+
+  buty_lotnika:
+    name: "&e&lButy Lotnika"
+    category: "ARMOR"
+    enabled: true
+    shape:
+      - "FEF"
+      - "DBD"
+      - "PNP"
+    ingredients:
+      F: "FEATHER"
+      E: "ELYTRA"
+      D: "DIAMOND_BLOCK"
+      B: "DIAMOND_BOOTS"
+      P: "PHANTOM_MEMBRANE"
+      N: "NETHER_STAR"
+    result-special-armor: "buty_lotnika"
+    result-amount: 1
+
+  magiczny_duch:
+    name: "&f&lDuch &8(&7Magiczny Przedmiot&8)"
+    category: "MAGIC"
+    enabled: true
+    shape:
+      - "ESE"
+      - "PMP"
+      - "GAG"
+    ingredients:
+      E: "ENDER_EYE"
+      S: "SOUL_SAND"
+      P: "PHANTOM_MEMBRANE"
+      M: "NETHER_STAR"
+      G: "GHAST_TEAR"
+      A: "AMETHYST_SHARD"
+    result-magic-item: "duch"
+    result-magic-level: 1
+    result-amount: 1
+
+  anti_mob_torch:
+    name: "&b&lPochodnia Anty-Mob"
+    category: "MISC"
+    enabled: true
+    shape:
+      - "GDG"
+      - "GTG"
+      - "BBB"
+    ingredients:
+      G: "GHAST_TEAR"
+      D: "DIAMOND"
+      T: "SOUL_TORCH"
+      B: "BLAZE_ROD"
+    result-custom-item: "anti_mob_torch"
+    result-amount: 1

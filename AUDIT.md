@@ -33,10 +33,10 @@
 - **Architektura:** Modularna (`core` + moduły w `modules/*`), sterowana przez
   `ModuleManager` oraz sekcję `modules:` w `config.yml`
 
-- **Skala projektu:** `88` głównych klas Java w `src/main/java` (`0` ostrzeżeń `javac`)
-  oraz `26` plików zasobów w `src/main/resources`
+- **Skala projektu:** `93` głównych klas Java w `src/main/java` (`0` ostrzeżeń `javac`)
+  oraz `27` plików zasobów w `src/main/resources`
 
-- **Testy automatyczne:** `20/20` testów JUnit 5 (`org.junit.jupiter:junit-jupiter:5.11.4`)
+- **Testy automatyczne:** `21/21` testów JUnit 5 (`org.junit.jupiter:junit-jupiter:5.11.4`)
   w `src/test/java/pl/nauka/aradium/AradiumAuditTest.java`
 
 - **Artefakt wdrożeniowy:** `target/Aradium.jar` (kopiowany na serwer do
@@ -53,8 +53,8 @@
 - **`src/main/resources/plugin.yml`**
   - Metadane (`api-version: '26.3'`) oraz uprawnienia `aradium.admin`, `aradium.player`.
   - Rejestracja komend: `/aradium <reload|modules|enable|disable|toggle>`, `/customitem`
-    (`/citem`, `/specjalnyitem`), `/magicitem`, `/magicarmor`, `/oreregion`,
-    `/money`, `/pay`, `/eco`, `/shop`, `/sellall` (`/sprzedajwszystko`),
+    (`/citem`, `/specjalnyitem`), `/recipes` (`/receptury`, `/kraftingi`), `/magicitem`,
+    `/magicarmor`, `/oreregion`, `/money`, `/pay`, `/eco`, `/shop`, `/sellall` (`/sprzedajwszystko`),
     `/sellgui` (`/sprzedaj`), `/spawner`, `/island` (`/is`, `/wyspa`).
 
 - **`src/main/resources/config.yml`**
@@ -82,8 +82,14 @@
 
 - **`src/main/resources/custom-items.yml`**
   - Konfiguracja `4` stawianych generatorów (`cobble_generator`, `ore_generator_t1..t3`),
-    `Pochodni Anty-Mob` (`anti_mob_torch`, promień `32` kratek), `6` zwojów/run ulepszeń
-    oraz własnych receptur craftingu (`ShapedRecipe`).
+    `Pochodni Anty-Mob` (`anti_mob_torch`, promień `32` kratek) oraz `9` mechanicznych zwojów/run
+    ulepszeń (`zwoj_kopanie_2x2`, `zwoj_kopanie_3x3`, `zwoj_hutnik`, `zwoj_drwal`,
+    `zwoj_zniwiarz_3x3`, `zwoj_wampiryzm`, `zwoj_piorun`, `zwoj_double_jump`, `runa_tieru_zbroi`).
+
+- **`src/main/resources/recipes.yml`**
+  - Wydzielona konfiguracja `16` własnych receptur craftingu (`GENERATORS`, `SCROLLS`,
+    `ARMOR`, `MAGIC`, `MISC`) z obsługą zapisu graficznego (`slots.0..8` i pełnych `ItemStack`),
+    edycji i usuwania w kreatorze GUI (`/receptury admin`).
 
 - **`src/main/resources/quests.yml`**
   - Pełne 7 etapów (`86` współdzielonych zadań wyspy zgodnie z `QUESTY_LISTA.md`),
@@ -249,18 +255,20 @@
   - Strefy odnawialnych rud z migracją `regions.yml`, niemutowalnym `BlockKey`,
     trwałą kolejką `pending_regens` po restarcie/crashu i komendą `/oreregion`.
 
-- **`customitems/` (`CustomItemModule`, `CustomItemListener`, `CustomItemCommand`, `GeneratorDefinition`, `AntiMobTorchDefinition`, `UpgradeScrollDefinition`, `RecipeDefinition`)**
+- **`customitems/` (`CustomItemModule`, `CustomItemListener`, `CustomItemCommand`, `GeneratorDefinition`, `AntiMobTorchDefinition`, `UpgradeScrollDefinition`, `CustomRecipeManager`, `CustomRecipeDefinition`, `CustomRecipeGUI`, `CustomRecipeGuiHolder`, `CustomRecipeCommand`, `RecipeDefinition`)**
   - Stawiane generatory bloków (`cobble_generator`, `ore_generator_t1..t3`) generujące
     surowce `1` kratkę wyżej z trwałym zapisem w `custom_blocks_data.yml` i ochroną
     przed tłokami/wybuchami, `Pochodnia Anty-Mob` (`anti_mob_torch`, promień `32` kratek
-    blokujący naturalny spawn potworów bez blokowania spawnerów), własne receptury
-    `ShapedRecipe`, `6` zwojów/run ulepszeń (`SHARPNESS`, `EFFICIENCY`, `FORTUNE`,
-    `PROTECTION`, `UNBREAKING` oraz `runa_tieru_zbroi` dla `ArmorModule`) nakładanych
-    przez Drag & Drop bądź `Off-Hand + Shift + PPM` oraz komenda `/customitem`.
+    blokujący naturalny spawn potworów bez blokowania spawnerów), system własnych receptur
+    w `recipes.yml` z kreatorem/edytorem GUI Admina (`/receptury admin`) i przeglądarką
+    kategorii dla graczy (`/receptury`), oraz `9` nietypowych ulepszeń mechanicznych
+    (`Kopanie 2x2`, `Kopanie 3x3`, `Hutnik Auto-Smelt`, `Drwal`, `Żniwiarz 3x3`, `Wampiryzm 1/3 HP`,
+    `Uderzenie Pioruna`, `Podwójny Skok Double Jump`, `Awans Tieru Zbroi`) zapisywanych w PDC
+    i nakładanych przez Drag & Drop bądź `Off-Hand + Shift + PPM`.
 
 ---
 
-### 1.7. Testy automatyczne (`AradiumAuditTest.java` — 20/20 zaliczonych)
+### 1.7. Testy automatyczne (`AradiumAuditTest.java` — 21/21 zaliczonych)
 
 1. `cuboidRegionNormalizesMinMaxAndChecksBoundaries` — granice regionów rud.
 
@@ -316,10 +324,15 @@
     totemy i niestandardowe przedmioty.
 
 20. `customItemsRecipesAntiMobTorchScrollsModuleTogglesAndShopBalanceWorkCorrectly` — walidacja
-    `custom-items.yml` (`4` generatory, `Pochodnia Anty-Mob` `32` kratki, `6` zwojów/run i receptur
-    `ShapedRecipe`), ochrony przed spawnowaniem bez blokowania spawnerów, reguł ulepszeń broni,
-    narzędzi i zbroi, dynamicznego przełączania modułów w `ModuleManager` oraz braku arbitrażu
-    cenowego we wszystkich `17` kategoriach `/shop`.
+    `custom-items.yml` (`4` generatory, `Pochodnia Anty-Mob` `32` kratki, `9` mechanicznych zwojów/run),
+    ochrony przed spawnowaniem bez blokowania spawnerów, reguł ulepszeń mechanicznych i wykluczeń
+    (`2x2` vs `3x3`), przełączania modułów w `ModuleManager` oraz braku arbitrażu cenowego we wszystkich `17` kategoriach `/shop`.
+
+21. `recipesYamlGuiEditorMatrixTrimmingAndMechanicalUpgradesWorkCorrectly` — walidacja wydzielonego
+    `recipes.yml` (`16` receptur w `5` kategoriach: `GENERATORS`, `SCROLLS`, `ARMOR`, `MAGIC`, `MISC`),
+    przycinania kształtów `2x2`/`3x3`, slotów kreatora Admin GUI (`/receptury admin`), przełączania
+    i usuwania receptur oraz obliczeń mechanik (`2x2`/`3x3`, `Hutnik Auto-Smelt`, `Wampiryzm`,
+    `Żniwiarz 3x3`, `Double Jump` oraz serializacji PDC zdolności).
 
 ---
 
@@ -373,6 +386,21 @@ Aktualna lista zadań pozostałych do realizacji znajduje się w pliku [`PLAN.md
 ---
 
 ## 4. Historia zmian (Changelog)
+
+### 2026-11-21 — Nietypowe ulepszenia mechaniczne (`ULEPSZENIA_I_RECEPTURY.md`) oraz system `recipes.yml` + GUI Admina i Gracza (`2.0.0-SNAPSHOT`)
+
+- Utworzono dokument [`ULEPSZENIA_I_RECEPTURY.md`](ULEPSZENIA_I_RECEPTURY.md) z katalogiem
+  `100` nietypowych ulepszeń (`po 10` na każdy z `10` elementów ekwipunku) i opisem systemu receptur.
+
+- Zastąpiono zwoje zwykłych zaklęć `9` mechanicznymi zwojami/runami zapisywanymi w PDC:
+  `Kopanie 2x2`, `Kopanie 3x3`, `Hutnik (Auto-Smelt)`, `Drwal (TreeCapitator)`,
+  `Żniwiarz 3x3`, `Wampiryzm (1/3 HP)`, `Uderzenie Pioruna`, `Podwójny Skok (Double Jump)`
+  oraz `Awans Tieru Zbroi` (zaktualizowano `shops/magic.yml`).
+
+- Wydzielono wszystkie własne receptury do `recipes.yml` (`CustomRecipeManager`, `CustomRecipeDefinition`)
+  oraz dodano interaktywny kreator/edytor GUI dla administratorów (`/receptury admin`, bezpieczne
+  przechowywanie wirtualnych szablonów bez ryzyka duplikacji) i przeglądarkę kategorii dla graczy
+  (`/receptury`, `CustomRecipeGUI`, `CustomRecipeCommand`, `21/21` testów w `AradiumAuditTest`).
 
 ### 2026-11-21 — Etap 6: Przedmioty specjalne, receptury, zwoje/runy, przełączanie modułów i balans sklepu (`2.0.0-SNAPSHOT`)
 

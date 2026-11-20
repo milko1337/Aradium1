@@ -12,6 +12,11 @@ commands:
     usage: /customitem give <gracz> <id> [ilosc]
     permission: aradium.admin
     aliases: [citem, specjalnyitem]
+  recipes:
+    description: Otwiera GUI receptur craftingu dla graczy oraz kreator administratora
+    usage: /receptury [admin|view|create|edit|delete|reload]
+    permission: aradium.player
+    aliases: [receptury, kraftingi, craftingi, customrecipes]
   magicitem:
     description: Nadaje magiczne przedmioty graczom
     usage: /magicitem <gracz> <typ> <poziom>
