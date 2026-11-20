@@ -168,3 +168,51 @@ pages:
         name: "&8&lCiężki Rdzeń"
         buy-price: 14500.0
         sell-price: 2500.0
+      zwoj_ostrosci:
+        material: "PAPER"
+        custom-item: "zwoj_ostrosci"
+        name: "&c&lZwój Ostrości &7(+1)"
+        lore:
+          - "&7Zwiększa zaklęcie &cOstrość &7o &e+1 &8(maks. VI)&7."
+        buy-price: 7500.0
+        sell-price: -1.0
+      zwoj_wydajnosci:
+        material: "PAPER"
+        custom-item: "zwoj_wydajnosci"
+        name: "&e&lZwój Wydajności &7(+1)"
+        lore:
+          - "&7Zwiększa zaklęcie &eWydajność &7o &e+1 &8(maks. VI)&7."
+        buy-price: 7500.0
+        sell-price: -1.0
+      zwoj_ochrony:
+        material: "PAPER"
+        custom-item: "zwoj_ochrony"
+        name: "&a&lZwój Ochrony &7(+1)"
+        lore:
+          - "&7Zwiększa zaklęcie &aOchrona &7o &e+1 &8(maks. V)&7."
+        buy-price: 8500.0
+        sell-price: -1.0
+      runa_niezniszczalnosci:
+        material: "AMETHYST_SHARD"
+        custom-item: "runa_niezniszczalnosci"
+        name: "&d&lRuna Niezniszczalności &7(+1)"
+        lore:
+          - "&7Zwiększa zaklęcie &dNiezniszczalność &7o &e+1 &8(maks. V)&7."
+        buy-price: 9500.0
+        sell-price: -1.0
+      zwoj_fortuny:
+        material: "PAPER"
+        custom-item: "zwoj_fortuny"
+        name: "&b&lZwój Fortuny &7(+1)"
+        lore:
+          - "&7Zwiększa zaklęcie &bSzczęście &7o &e+1 &8(maks. IV)&7."
+        buy-price: 15000.0
+        sell-price: -1.0
+      runa_tieru_zbroi:
+        material: "ECHO_SHARD"
+        custom-item: "runa_tieru_zbroi"
+        name: "&6&lRuna Awansu Zbroi &7(+1 Tier)"
+        lore:
+          - "&7Awansuje element magicznej zbroi o &6+1 Tier&7."
+        buy-price: 45000.0
+        sell-price: -1.0

@@ -1,4 +1,4 @@
-# Kategoria Różności i Akcesoria (2 strony)
+# Kategoria Różności i Akcesoria (3 strony)
 
 shop:
   id: "misc"
@@ -278,3 +278,47 @@ pages:
         name: "&8Czarne Łóżko"
         buy-price: 85.0
         sell-price: 15.0
+
+  page3:
+    items:
+      cobble_generator:
+        material: "END_STONE"
+        custom-item: "cobble_generator"
+        name: "&7&lGenerator Bruku"
+        lore:
+          - "&7Stawiany blok generujący bruk i kamień &f1 kratkę wyżej&7."
+        buy-price: 2500.0
+        sell-price: -1.0
+      ore_generator_t1:
+        material: "END_STONE"
+        custom-item: "ore_generator_t1"
+        name: "&e&lGenerator Rud &8(&7Tier I&8)"
+        lore:
+          - "&7Stawiany generator podstawowych rud nad sobą."
+        buy-price: 8500.0
+        sell-price: -1.0
+      ore_generator_t2:
+        material: "END_STONE"
+        custom-item: "ore_generator_t2"
+        name: "&b&lGenerator Rud &8(&eTier II&8)"
+        lore:
+          - "&7Ulepszony generator rud żelaza, złota i diamentów."
+        buy-price: 24000.0
+        sell-price: -1.0
+      ore_generator_t3:
+        material: "END_STONE"
+        custom-item: "ore_generator_t3"
+        name: "&d&lGenerator Rud &8(&6Tier III&8)"
+        lore:
+          - "&7Legendarny generator diamentów, szmaragdów i netherytu."
+        buy-price: 65000.0
+        sell-price: -1.0
+      anti_mob_torch:
+        material: "SOUL_TORCH"
+        custom-item: "anti_mob_torch"
+        name: "&b&lPochodnia Anty-Mob"
+        lore:
+          - "&7Wyłącza naturalny spawn wrogich mobów (promień &b32&7)."
+          - "&aNie blokuje spawnerów!"
+        buy-price: 4500.0
+        sell-price: -1.0

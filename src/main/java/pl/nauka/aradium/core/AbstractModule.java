@@ -22,6 +22,14 @@ public abstract class AbstractModule implements PluginModule {
         this.id = Objects.requireNonNull(id, "id");
     }
 
+    /**
+     * Konstruktor testowy umożliwiający tworzenie instancji modułu bez uruchomionego serwera Paper.
+     */
+    protected AbstractModule(String id) {
+        this.plugin = null;
+        this.id = Objects.requireNonNull(id, "id");
+    }
+
     @Override
     public String getId() {
         return id;
@@ -63,11 +71,17 @@ public abstract class AbstractModule implements PluginModule {
     }
 
     protected void registerListener(Listener listener) {
+        if (plugin == null) {
+            return;
+        }
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
         listeners.add(listener);
     }
 
     protected void registerCommand(String commandName, TabExecutor executor) {
+        if (plugin == null) {
+            return;
+        }
         PluginCommand command = plugin.getCommand(commandName);
         if (command == null) {
             plugin.getLogger().warning("Brak komendy '" + commandName + "' w plugin.yml (moduł: " + id + ").");

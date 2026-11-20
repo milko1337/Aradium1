@@ -5,8 +5,13 @@ api-version: '26.3'
 commands:
   aradium:
     description: Zarzadzanie pluginem Aradium i jego modulami
-    usage: /aradium <reload|modules>
+    usage: /aradium <reload|modules|enable|disable|toggle> [modul]
     permission: aradium.admin
+  customitem:
+    description: Nadaje specjalne generatory, pochodnie anty-mob oraz zwoje ulepszen
+    usage: /customitem give <gracz> <id> [ilosc]
+    permission: aradium.admin
+    aliases: [citem, specjalnyitem]
   magicitem:
     description: Nadaje magiczne przedmioty graczom
     usage: /magicitem <gracz> <typ> <poziom>

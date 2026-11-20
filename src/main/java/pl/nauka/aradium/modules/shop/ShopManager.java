@@ -228,6 +228,7 @@ public class ShopManager {
         }
 
         int stackSize = itemSection.getInt("stack-size", 1);
+        String customItemId = itemSection.getString("custom-item");
         ShopItem item = new ShopItem(
                 itemId,
                 Math.max(0, slot),
@@ -237,7 +238,8 @@ public class ShopManager {
                 buyPrice,
                 sellPrice,
                 targetShop,
-                stackSize
+                stackSize,
+                customItemId
         );
         return new ParsedItemResult(item, hasExplicitSlot);
     }
@@ -262,7 +264,8 @@ public class ShopManager {
                 item.buyPrice(),
                 item.sellPrice(),
                 item.targetShop(),
-                item.defaultStackSize()
+                item.defaultStackSize(),
+                item.customItemId()
         );
     }
 
@@ -298,7 +301,7 @@ public class ShopManager {
         for (ShopCategory category : categories.values()) {
             for (Map<Integer, ShopItem> page : category.pages()) {
                 for (ShopItem item : page.values()) {
-                    if (item.isNavigationItem() || !item.canSell()) {
+                    if (item.isNavigationItem() || item.hasCustomItem() || !item.canSell()) {
                         continue;
                     }
                     ShopItem currentBest = bestSellByMaterial.get(item.material());

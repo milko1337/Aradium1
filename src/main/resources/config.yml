@@ -9,6 +9,9 @@ modules:
   shop: true
   spawners: true
   skyblock: true
+  custom_items: true
+  moderation: true
+  ranks: true
 
 database:
   type: "SQLITE"
@@ -173,6 +176,12 @@ messages:
   invalid_ore: "&cRuda %ore% nie istnieje lub nie jest blokiem! (Wpisz np. DIAMOND_ORE)"
   reload_success: "&aKonfiguracja i moduły Aradium zostały pomyślnie przeładowane!"
   module_list_header: "&6Moduły Aradium:"
+  module_not_found: "&cNie znaleziono modułu: &f%module%&c!"
+  module_toggled: "&7Moduł &e%module% &7został ustawiony na: %status% &8(&7zapisano w config.yml&8)&7."
+  custom_items_disabled: "&cModuł specjalnych przedmiotów jest aktualnie wyłączony!"
+  customitem_usage: "&cUżycie: /customitem give <gracz> <id> [ilość]"
+  customitem_given: "&aOtrzymałeś specjalny przedmiot: &e%item% &8(&ex%amount%&8)&a!"
+  customitem_given_sender: "&aNadano &e%item% x%amount% &agraczowi &f%player%&a."
   economy_disabled: "&cModuł ekonomii jest aktualnie wyłączony!"
   money_self: "&7Twój stan konta: &a%balance%"
   money_other: "&7Stan konta gracza &e%player%&7: &a%balance%"

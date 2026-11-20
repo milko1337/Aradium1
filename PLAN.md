@@ -76,12 +76,12 @@
 
 ---
 
-### 8. Dodatkowe funkcje
+### 8. Dodatkowe funkcje — ✅ UKOŃCZONO (Etap 6)
 
-- [ ] Dodać nowe itemy do pluginu. - specjalne itemy jak generatory cobla, zróżnicowane generatory cobla itp, pochodnia wyłączająca resp mobów obszarowo itp.
-- [ ] Zrównoważyć funkcje z ekonomią SkyBlocka. - po rozbudowie sklepu zrównoważyć ceny itemów z misjami i ulepszeniami wysp.
-- [ ] Dodać nowe mechaniki do pluginu. - dodatkowe mechaniki jak craftingi przedmiotów , specjalne ulepszenia do broni,narzędzi, zbroi
-- [ ] Możliwość wyłączenia poszczególnych modułów pluginu z pliku konfigracyjnego
+- [x] Dodać nowe itemy do pluginu — stawiane generatory bruku/rud (`cobble_generator`, `ore_generator_t1..t3`) oraz `Pochodnia Anty-Mob` (`anti_mob_torch`).
+- [x] Zrównoważyć funkcje z ekonomią SkyBlocka — usunięto arbitraż cenowy w `shops/*.yml` i podpięto nowe przedmioty do `/shop` (`magic.yml`, `misc.yml`).
+- [x] Dodać nowe mechaniki do pluginu — własne receptury `ShapedRecipe` (`custom-items.yml`) oraz 6 zwojów/run ulepszeń do broni, narzędzi i zbroi.
+- [x] Możliwość wyłączenia poszczególnych modułów pluginu z pliku konfiguracyjnego (`config.yml` `modules:` oraz `/aradium <enable|disable|toggle|reload>`).
 
 ### 9. Moderacja czatu 
 
@@ -214,25 +214,28 @@
 
 ---
 
-### Etap 6 (Punkt 8): Dodatkowe funkcje (Nowe itemy, Mechaniki, Balans sklepu, Moduły z `config.yml`)
+### Etap 6 (Punkt 8): Dodatkowe funkcje (Nowe itemy, Mechaniki, Balans sklepu, Moduły z `config.yml`) — ✅ UKOŃCZONY
 
 - **Cel:** Rozbudowa gry o zaawansowane przedmioty techniczne, własny crafting, rozwój ekwipunku oraz konfigurację aktywnych modułów.
 
 - **Zadania:**
-  - **Nowe specjalne itemy:**
-    - Stawiane **specjalne generatory cobla** oraz **zróżnicowane generatory cobla/rud (`T1–T3`)**
-      losujące surowce wg wag z konfiguracji (z zachowaniem danych PDC po wykopaniu).
-    - **Pochodnia Anty-Mob:** blok z PDC wyłączający naturalny spawn potworów
-      (`SpawnReason.NATURAL`) obszarowo w zadanym promieniu na wyspie (bez blokowania spawnerów).
-  - **Nowe mechaniki:**
-    - Własne craftingi przedmiotów (`ShapedRecipe`) dla generatorów, pochodni anty-mob i ulepszaczy.
-    - Specjalne ulepszenia (runy/zwoje) do **broni, narzędzi i zbroi** rozwijające ich statystyki lub tier.
-  - **Wyłączanie poszczególnych modułów z `config.yml`:**
-    - Sekcja `modules:` (`economy`, `skyblock`, `shop`, `spawners`, `armor`, `moderation`, `ranks`)
-      w `config.yml` obsługiwana przez `ModuleManager` przy starcie oraz `/aradium reload`.
-  - **Zrównoważenie funkcji z ekonomią SkyBlocka:**
-    - Pełne dostrojenie cen wszystkich itemów w rozbudowanym sklepie `/shop` (Etap 2)
-      względem nagród z misji, ulepszeń wysp, ulepszeń spawnerów i nowych przedmiotów.
+  - [x] **Nowe specjalne itemy (`modules/customitems/` + `custom-items.yml`):**
+    - Stawiane **specjalne generatory cobla i rud (`cobble_generator`, `ore_generator_t1..t3`)**
+      losujące surowce wg wag z konfiguracji (z zachowaniem danych PDC po wykopaniu i ochroną tłoków/wybuchów).
+    - **Pochodnia Anty-Mob (`anti_mob_torch`):** blok z PDC wyłączający naturalny spawn potworów
+      (`NATURAL`, `PATROL`, `JOCKEY`, `MOUNT`, `REINFORCEMENTS`) obszarowo w promieniu `32` kratek (bez blokowania spawnerów).
+  - [x] **Nowe mechaniki:**
+    - Własne craftingi przedmiotów (`ShapedRecipe`) dla generatorów, pochodni anty-mob oraz zwojów/run.
+    - Specjalne ulepszenia (`zwoj_ostrosci`, `zwoj_wydajnosci`, `zwoj_fortuny`, `zwoj_ochrony`,
+      `runa_niezniszczalnosci`, `runa_tieru_zbroi`) do **broni, narzędzi i zbroi** (Drag & Drop + Off-Hand `Shift+PPM`).
+  - [x] **Wyłączanie poszczególnych modułów z `config.yml`:**
+    - Sekcja `modules:` (`custom_items`, `economy`, `skyblock`, `shop`, `spawners`, `armor`,
+      `magic_items`, `ore_regions`, `moderation`, `ranks`) w `config.yml`, metody `ModuleManager#setModuleEnabled`
+      oraz komendy `/aradium <enable|disable|toggle|reload>`.
+  - [x] **Zrównoważenie funkcji z ekonomią SkyBlocka:**
+    - Usunięto arbitraż cenowy między kategoriami sklepu (`shops/blocks.yml`, `shops/natural.yml`)
+      oraz podpięto nowe generatory, pochodnię anty-mob i zwoje/runy do `/shop` (`magic.yml`, `misc.yml`)
+      w cenach `2500$–65000$` (`20/20` testów).
 
 ---
 

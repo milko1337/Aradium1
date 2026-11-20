@@ -6,6 +6,7 @@ import pl.nauka.aradium.core.AradiumCommand;
 import pl.nauka.aradium.core.ModuleManager;
 import pl.nauka.aradium.core.database.DatabaseManager;
 import pl.nauka.aradium.modules.armor.ArmorModule;
+import pl.nauka.aradium.modules.customitems.CustomItemModule;
 import pl.nauka.aradium.modules.economy.EconomyModule;
 import pl.nauka.aradium.modules.magicitems.MagicItemModule;
 import pl.nauka.aradium.modules.oreregions.OreRegionModule;
@@ -37,6 +38,7 @@ public class AradiumPlugin extends JavaPlugin {
         this.moduleManager.registerModule(new MagicItemModule(this));
         this.moduleManager.registerModule(new OreRegionModule(this));
         this.moduleManager.registerModule(new ArmorModule(this));
+        this.moduleManager.registerModule(new CustomItemModule(this));
         this.moduleManager.enableAll();
 
         PluginCommand aradiumCmd = getCommand("aradium");
@@ -121,5 +123,9 @@ public class AradiumPlugin extends JavaPlugin {
 
     public Optional<ArmorModule> getArmorModule() {
         return moduleManager != null ? moduleManager.getModule(ArmorModule.class) : Optional.empty();
+    }
+
+    public Optional<CustomItemModule> getCustomItemModule() {
+        return moduleManager != null ? moduleManager.getModule(CustomItemModule.class) : Optional.empty();
     }
 }

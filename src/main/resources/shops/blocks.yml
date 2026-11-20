@@ -257,23 +257,23 @@ pages:
       quartz_block:
         material: "QUARTZ_BLOCK"
         name: "&fBlok Kwarcu"
-        buy-price: 65.0
-        sell-price: 20.0
+        buy-price: 88.0
+        sell-price: 24.0
       quartz_bricks:
         material: "QUARTZ_BRICKS"
         name: "&fKwarcowe Cegły"
-        buy-price: 68.0
-        sell-price: 21.0
+        buy-price: 90.0
+        sell-price: 25.0
       quartz_pillar:
         material: "QUARTZ_PILLAR"
         name: "&fKwarcowy Filar"
-        buy-price: 68.0
-        sell-price: 21.0
+        buy-price: 90.0
+        sell-price: 25.0
       chiseled_quartz_block:
         material: "CHISELED_QUARTZ_BLOCK"
         name: "&fRzeźbiony Blok Kwarcu"
-        buy-price: 68.0
-        sell-price: 21.0
+        buy-price: 90.0
+        sell-price: 25.0
       prismarine:
         material: "PRISMARINE"
         name: "&3Pryzmaryn"
@@ -292,8 +292,8 @@ pages:
       sea_lantern:
         material: "SEA_LANTERN"
         name: "&bLatarnia Morska"
-        buy-price: 85.0
-        sell-price: 25.0
+        buy-price: 280.0
+        sell-price: 60.0
 
   page3:
     items:
@@ -380,20 +380,20 @@ pages:
       copper_block:
         material: "COPPER_BLOCK"
         name: "&6Blok Miedzi"
-        buy-price: 55.0
-        sell-price: 16.0
+        buy-price: 144.0
+        sell-price: 40.5
       cut_copper:
         material: "CUT_COPPER"
         name: "&6Cięta Miedź"
-        buy-price: 58.0
-        sell-price: 17.0
+        buy-price: 148.0
+        sell-price: 41.0
       waxed_copper_block:
         material: "WAXED_COPPER_BLOCK"
         name: "&6Woskowany Blok Miedzi"
-        buy-price: 62.0
-        sell-price: 18.0
+        buy-price: 152.0
+        sell-price: 42.0
       waxed_oxidized_copper:
         material: "WAXED_OXIDIZED_COPPER"
         name: "&3Woskowana Utleniona Miedź"
-        buy-price: 75.0
-        sell-price: 22.0
+        buy-price: 160.0
+        sell-price: 44.0

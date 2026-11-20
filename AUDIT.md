@@ -33,10 +33,10 @@
 - **Architektura:** Modularna (`core` + moduły w `modules/*`), sterowana przez
   `ModuleManager` oraz sekcję `modules:` w `config.yml`
 
-- **Skala projektu:** `79` głównych klas Java w `src/main/java` (`0` ostrzeżeń `javac`)
-  oraz `24` pliki zasobów w `src/main/resources`
+- **Skala projektu:** `88` głównych klas Java w `src/main/java` (`0` ostrzeżeń `javac`)
+  oraz `26` plików zasobów w `src/main/resources`
 
-- **Testy automatyczne:** `17/17` testów JUnit 5 (`org.junit.jupiter:junit-jupiter:5.11.4`)
+- **Testy automatyczne:** `20/20` testów JUnit 5 (`org.junit.jupiter:junit-jupiter:5.11.4`)
   w `src/test/java/pl/nauka/aradium/AradiumAuditTest.java`
 
 - **Artefakt wdrożeniowy:** `target/Aradium.jar` (kopiowany na serwer do
@@ -52,13 +52,14 @@
 
 - **`src/main/resources/plugin.yml`**
   - Metadane (`api-version: '26.3'`) oraz uprawnienia `aradium.admin`, `aradium.player`.
-  - Rejestracja komend: `/aradium`, `/magicitem`, `/magicarmor`, `/oreregion`,
+  - Rejestracja komend: `/aradium <reload|modules|enable|disable|toggle>`, `/customitem`
+    (`/citem`, `/specjalnyitem`), `/magicitem`, `/magicarmor`, `/oreregion`,
     `/money`, `/pay`, `/eco`, `/shop`, `/sellall` (`/sprzedajwszystko`),
     `/sellgui` (`/sprzedaj`), `/spawner`, `/island` (`/is`, `/wyspa`).
 
 - **`src/main/resources/config.yml`**
-  - Flagi modułów: `economy`, `shop`, `spawners`, `skyblock`, `magic_items`,
-    `ore_regions`, `armor`.
+  - Flagi modułów: `magic_items`, `ore_regions`, `armor`, `economy`, `shop`, `spawners`,
+    `skyblock`, `custom_items`, `moderation`, `ranks`.
   - Konfiguracja `database`, `economy`, `skyblock`, `ore_regions`, komunikaty
     `messages` oraz definicje 7 magicznych przedmiotów (`magic_items`).
 
@@ -67,24 +68,33 @@
   - Specjalny element `special_armor.buty_lotnika` (niezniszczalne buty latania).
 
 - **`src/main/resources/spawners.yml`**
-  - Definicje `4` niezależnych ścieżek ulepszeń (`upgrades.delay` `1–5`, `upgrades.amount` `1–5`,
-    `upgrades.range` `1–4`, `upgrades.light-immunity` `0–1`), cennik wszystkich `85` mobów z MC
-    (`mobs:` poza bossami `WITHER`, `ENDER_DRAGON`, `WARDEN`) z bazową świnią (`PIG`) oraz
-    zachowana sekcja kompatybilności `tiers`.
+  - Definicje `5` niezależnych ścieżek ulepszeń (`upgrades.delay` `1–5`, `upgrades.amount` `1–5`,
+    `upgrades.range` `1–4`, `upgrades.light-immunity` `0–1`, `upgrades.ground-immunity` `0–1`),
+    cennik wszystkich `85` mobów z MC (`mobs:` poza bossami `WITHER`, `ENDER_DRAGON`, `WARDEN`)
+    z bazową świnią (`PIG`) oraz zachowana sekcja kompatybilności `tiers`.
 
 - **`src/main/resources/blocks-value.yml`**
   - Punktacja bloków używana przy asynchronicznym liczeniu poziomu wyspy (`/is level`).
 
+- **`src/main/resources/cobble-generator.yml`**
+  - Tabela wag dropów (`74%->25%` bruk, `COAL_ORE`–`ANCIENT_DEBRIS`) i nazw surowców
+    dla `5` poziomów podstawowego generatora lawy i wody (`COBBLE_GENERATOR_YIELD`).
+
+- **`src/main/resources/custom-items.yml`**
+  - Konfiguracja `4` stawianych generatorów (`cobble_generator`, `ore_generator_t1..t3`),
+    `Pochodni Anty-Mob` (`anti_mob_torch`, promień `32` kratek), `6` zwojów/run ulepszeń
+    oraz własnych receptur craftingu (`ShapedRecipe`).
+
 - **`src/main/resources/quests.yml`**
-  - Pełne 5 etapów po 7 współdzielonych misji (`35` zadań łącznie), konfiguracja
-    paska postępu, nagrody pieniężne/przedmiotowe oraz bonusy za etapy.
+  - Pełne 7 etapów (`86` współdzielonych zadań wyspy zgodnie z `QUESTY_LISTA.md`),
+    konfiguracja paska postępu, nagrody pieniężne/przedmiotowe oraz bonusy za etapy.
 
 - **`src/main/resources/shops/*.yml` (`17` plików kategorii i podkategorii)**
   - Główne menu `/shop` (`main.yml` — 10 kategorii głównych), podkategorie budowania
     (`building`, `blocks`, `wood`, `natural`, `decorative_blocks`), kategorie tematyczne
     (`ores`, `farming`, `food`, `combat`, `redstone`, `magic`, `mobdrops`, `decoration`,
-    `music`, `storage`, `misc`) z wielostronicowymi sekcjami `pages:` i balansem cen
-    pod SkyBlock.
+    `music`, `storage`, `misc`) z wielostronicowymi sekcjami `pages:`, pozycjami `custom-item:`
+    w `magic.yml` i `misc.yml` oraz zbalansowanymi cenami bez arbitrażu pod SkyBlock.
 
 - **`src/main/resources/regions.yml`**
   - Domyślny szkielet `regions: {}` dla stref odnawialnych rud.
@@ -94,16 +104,17 @@
 ### 1.2. Rdzeń pluginu, baza danych i narzędzia (`core` & `utils`)
 
 - **`AradiumPlugin.java`** (`pl.nauka.aradium`)
-  - Inicjalizacja `DatabaseManager`, rejestracja 7 modułów w `ModuleManager`
-    oraz obsługa `onEnable()` i bezpiecznego zamykania w `onDisable()`.
+  - Inicjalizacja `DatabaseManager`, rejestracja `8` modułów w `ModuleManager`
+    (w tym `CustomItemModule`) oraz obsługa `onEnable()` i bezpiecznego zamykania w `onDisable()`.
 
 - **`core/PluginModule.java` i `core/AbstractModule.java`**
   - Kontrakt cyklu życia modułu (`getId`, `enable`, `disable`, `reload`, `isEnabled`)
     z automatycznym wyrejestrowaniem listenerów (`HandlerList.unregisterAll`) i komend.
 
 - **`core/ModuleManager.java` i `core/AradiumCommand.java`**
-  - Zarządzanie stanem `modules.<id>`, uruchamianie i wyłączanie w odwrotnej
-    kolejności oraz komenda `/aradium <reload|modules>`.
+  - Zarządzanie stanem `modules.<id>` (w tym dynamiczne `setModuleEnabled`),
+    uruchamianie i wyłączanie w odwrotnej kolejności oraz komenda
+    `/aradium <reload|modules|enable|disable|toggle> [moduł]`.
 
 - **`core/database/DatabaseManager.java`**
   - Połączenie JDBC SQLite (`WAL`) lub MySQL oraz schemat 7 tabel SQL:
@@ -222,7 +233,7 @@
 
 ---
 
-### 1.6. Moduły RPG i Świata (`magicitems`, `armor`, `oreregions`)
+### 1.6. Moduły RPG, Przedmiotów Specjalnych i Świata (`magicitems`, `armor`, `oreregions`, `customitems`)
 
 - **`magicitems/` (`MagicItemModule`, `MagicItemDefinition`, `MagicItemListener`, `MagicItemCommand`)**
   - Magiczne przedmioty oparte o PDC i `Registry.MOB_EFFECT`, trwałe cooldowny
@@ -238,9 +249,18 @@
   - Strefy odnawialnych rud z migracją `regions.yml`, niemutowalnym `BlockKey`,
     trwałą kolejką `pending_regens` po restarcie/crashu i komendą `/oreregion`.
 
+- **`customitems/` (`CustomItemModule`, `CustomItemListener`, `CustomItemCommand`, `GeneratorDefinition`, `AntiMobTorchDefinition`, `UpgradeScrollDefinition`, `RecipeDefinition`)**
+  - Stawiane generatory bloków (`cobble_generator`, `ore_generator_t1..t3`) generujące
+    surowce `1` kratkę wyżej z trwałym zapisem w `custom_blocks_data.yml` i ochroną
+    przed tłokami/wybuchami, `Pochodnia Anty-Mob` (`anti_mob_torch`, promień `32` kratek
+    blokujący naturalny spawn potworów bez blokowania spawnerów), własne receptury
+    `ShapedRecipe`, `6` zwojów/run ulepszeń (`SHARPNESS`, `EFFICIENCY`, `FORTUNE`,
+    `PROTECTION`, `UNBREAKING` oraz `runa_tieru_zbroi` dla `ArmorModule`) nakładanych
+    przez Drag & Drop bądź `Off-Hand + Shift + PPM` oraz komenda `/customitem`.
+
 ---
 
-### 1.7. Testy automatyczne (`AradiumAuditTest.java` — 19/19 zaliczonych)
+### 1.7. Testy automatyczne (`AradiumAuditTest.java` — 20/20 zaliczonych)
 
 1. `cuboidRegionNormalizesMinMaxAndChecksBoundaries` — granice regionów rud.
 
@@ -295,6 +315,12 @@
     przeliczania bonusu XP z mobów oraz filtra Anti-Dupe wykluczającego ekwipunek,
     totemy i niestandardowe przedmioty.
 
+20. `customItemsRecipesAntiMobTorchScrollsModuleTogglesAndShopBalanceWorkCorrectly` — walidacja
+    `custom-items.yml` (`4` generatory, `Pochodnia Anty-Mob` `32` kratki, `6` zwojów/run i receptur
+    `ShapedRecipe`), ochrony przed spawnowaniem bez blokowania spawnerów, reguł ulepszeń broni,
+    narzędzi i zbroi, dynamicznego przełączania modułów w `ModuleManager` oraz braku arbitrażu
+    cenowego we wszystkich `17` kategoriach `/shop`.
+
 ---
 
 ### 1.8. Jak dodać nowy moduł
@@ -347,6 +373,27 @@ Aktualna lista zadań pozostałych do realizacji znajduje się w pliku [`PLAN.md
 ---
 
 ## 4. Historia zmian (Changelog)
+
+### 2026-11-21 — Etap 6: Przedmioty specjalne, receptury, zwoje/runy, przełączanie modułów i balans sklepu (`2.0.0-SNAPSHOT`)
+
+- Dodano moduł `custom_items` (`pl.nauka.aradium.modules.customitems`) oraz konfigurację
+  `custom-items.yml`: stawiane generatory (`cobble_generator`, `ore_generator_t1..t3`)
+  z trwałym zapisem w `custom_blocks_data.yml` i ochroną przed tłokami/wybuchami oraz
+  `Pochodnię Anty-Mob` (`anti_mob_torch`, promień `32` kratek blokujący naturalny spawn
+  wrogich mobów bez blokowania spawnerów).
+
+- Wdrożono własne receptury `ShapedRecipe` dla wszystkich `11` nowych przedmiotów,
+  komendę `/customitem give <gracz> <id> [ilość]` oraz `6` zwojów/run ulepszeń broni,
+  narzędzi i zbroi (`zwoj_ostrosci`, `zwoj_wydajnosci`, `zwoj_fortuny`, `zwoj_ochrony`,
+  `runa_niezniszczalnosci`, `runa_tieru_zbroi`) obsługiwanych przez Drag & Drop w
+  ekwipunku i `Off-Hand + Shift + PPM`.
+
+- Rozszerzono `ModuleManager`, `AradiumCommand` i `config.yml` o pełne wyłączanie i
+  przełączanie modułów z konfiguracji oraz komend `/aradium <enable|disable|toggle> <moduł>`.
+
+- Wyrównano ceny duplikujących się pozycji pomiędzy `shops/blocks.yml` i `shops/natural.yml`
+  (eliminacja arbitrażu cenowego), dodano obsługę `custom-item:` w `ShopItem`/`ShopManager`/`ShopGUI`
+  oraz podpięto nowe przedmioty do `shops/magic.yml` i `shops/misc.yml` (`20/20` testów w `AradiumAuditTest`).
 
 ### 2026-11-20 — Obniżenie wierszy misji w `QuestGUI` o jedną linię (`2.0.0-SNAPSHOT`)
 

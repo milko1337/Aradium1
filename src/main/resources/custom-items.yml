@@ -1,0 +1,297 @@
+# Konfiguracja specjalnych przedmiotów, stawianych generatorów, pochodni anty-mob,
+# zwojów/run ulepszeń oraz własnych receptur craftingu (Etap 6 - Moduł custom_items).
+
+material-names:
+  COBBLESTONE: "&7Bruk"
+  STONE: "&7Kamień"
+  COAL_ORE: "&8Ruda Węgla"
+  COPPER_ORE: "&6Ruda Miedzi"
+  IRON_ORE: "&fRuda Żelaza"
+  LAPIS_ORE: "&9Ruda Lazurytu"
+  REDSTONE_ORE: "&cRuda Redstone"
+  GOLD_ORE: "&eRuda Złota"
+  DIAMOND_ORE: "&bRuda Diamentu"
+  EMERALD_ORE: "&aRuda Szmaragdu"
+  ANCIENT_DEBRIS: "&4Pradawne Zgliszcza"
+
+generators:
+  cobble_generator:
+    name: "&7&lGenerator Bruku"
+    material: "END_STONE"
+    regen-delay-ticks: 15
+    lore:
+      - "&7Postaw na ziemi, aby automatycznie"
+      - "&7generował bloki &f1 kratkę wyżej&7."
+      - "&8» &7Skład dropu:"
+    drops:
+      COBBLESTONE: 85.0
+      STONE: 15.0
+    recipe:
+      enabled: true
+      shape:
+        - "CCC"
+        - "CLC"
+        - "CWC"
+      ingredients:
+        C: "COBBLESTONE"
+        L: "LAVA_BUCKET"
+        W: "WATER_BUCKET"
+
+  ore_generator_t1:
+    name: "&e&lGenerator Rud &8(&7Tier I&8)"
+    material: "END_STONE"
+    regen-delay-ticks: 20
+    lore:
+      - "&7Automatyczny generator rud dla wyspy."
+      - "&7Produkuje losowe rudy &f1 kratkę wyżej&7."
+      - "&8» &7Skład dropu:"
+    drops:
+      COBBLESTONE: 55.0
+      COAL_ORE: 20.0
+      COPPER_ORE: 12.0
+      IRON_ORE: 10.0
+      GOLD_ORE: 3.0
+    recipe:
+      enabled: true
+      shape:
+        - "III"
+        - "IGI"
+        - "RRR"
+      ingredients:
+        I: "IRON_INGOT"
+        G: "GOLD_INGOT"
+        R: "REDSTONE_BLOCK"
+
+  ore_generator_t2:
+    name: "&b&lGenerator Rud &8(&eTier II&8)"
+    material: "END_STONE"
+    regen-delay-ticks: 20
+    lore:
+      - "&7Ulepszony generator rud średniego poziomu."
+      - "&7Produkuje cenne surowce &f1 kratkę wyżej&7."
+      - "&8» &7Skład dropu:"
+    drops:
+      COBBLESTONE: 35.0
+      COAL_ORE: 15.0
+      IRON_ORE: 20.0
+      LAPIS_ORE: 10.0
+      REDSTONE_ORE: 8.0
+      GOLD_ORE: 8.0
+      DIAMOND_ORE: 4.0
+    recipe:
+      enabled: true
+      shape:
+        - "DDD"
+        - "GEG"
+        - "BBB"
+      ingredients:
+        D: "DIAMOND"
+        G: "GOLD_BLOCK"
+        E: "END_STONE"
+        B: "IRON_BLOCK"
+
+  ore_generator_t3:
+    name: "&d&lGenerator Rud &8(&6Tier III&8)"
+    material: "END_STONE"
+    regen-delay-ticks: 15
+    lore:
+      - "&7Najpotężniejszy generator rud &6Aradium&7."
+      - "&7Szansa na &aSzmaragdy &7i &4Pradawne Zgliszcza&7!"
+      - "&8» &7Skład dropu:"
+    drops:
+      COBBLESTONE: 15.0
+      IRON_ORE: 20.0
+      GOLD_ORE: 18.0
+      LAPIS_ORE: 10.0
+      REDSTONE_ORE: 10.0
+      DIAMOND_ORE: 15.0
+      EMERALD_ORE: 9.0
+      ANCIENT_DEBRIS: 3.0
+    recipe:
+      enabled: true
+      shape:
+        - "BNB"
+        - "DED"
+        - "NNN"
+      ingredients:
+        B: "DIAMOND_BLOCK"
+        N: "NETHERITE_SCRAP"
+        D: "EMERALD_BLOCK"
+        E: "END_STONE"
+
+anti_mob_torch:
+  id: "anti_mob_torch"
+  name: "&b&lPochodnia Anty-Mob"
+  material: "SOUL_TORCH"
+  radius: 32
+  blocked-spawn-reasons:
+    - "NATURAL"
+    - "JOCKEY"
+    - "MOUNT"
+    - "PATROL"
+    - "REINFORCEMENTS"
+  lore:
+    - "&7Blokuje naturalny spawn wrogich mobów"
+    - "&7w promieniu &b32 kratek &7od pochodni."
+    - "&aNie blokuje mobów ze spawnerów!"
+  recipe:
+    enabled: true
+    shape:
+      - "GDG"
+      - "GTG"
+      - "BBB"
+    ingredients:
+      G: "GHAST_TEAR"
+      D: "DIAMOND"
+      T: "SOUL_TORCH"
+      B: "BLAZE_ROD"
+
+upgrade_scrolls:
+  zwoj_ostrosci:
+    name: "&c&lZwój Ostrości &7(+1)"
+    material: "PAPER"
+    target-category: "WEAPON"
+    upgrade-mode: "ENCHANTMENT"
+    enchantment: "SHARPNESS"
+    max-level: 6
+    lore:
+      - "&7Zwiększa zaklęcie &cOstrość &7o &e+1"
+      - "&7(maksymalnie do poziomu &eVI&7)."
+      - "&8» &7Cel: &fMiecze, Siekiery, Trójząb, Buzdygan"
+      - "&aPrzeciągnij na przedmiot lub użyj w lewej ręce (Shift+PPM)"
+    recipe:
+      enabled: true
+      shape:
+        - "BGB"
+        - "QPQ"
+        - "ISI"
+      ingredients:
+        B: "BLAZE_POWDER"
+        G: "GOLD_INGOT"
+        Q: "QUARTZ"
+        P: "PAPER"
+        I: "IRON_SWORD"
+        S: "DIAMOND"
+
+  zwoj_wydajnosci:
+    name: "&e&lZwój Wydajności &7(+1)"
+    material: "PAPER"
+    target-category: "TOOL"
+    upgrade-mode: "ENCHANTMENT"
+    enchantment: "EFFICIENCY"
+    max-level: 6
+    lore:
+      - "&7Zwiększa zaklęcie &eWydajność &7o &e+1"
+      - "&7(maksymalnie do poziomu &eVI&7)."
+      - "&8» &7Cel: &fKilofy, Siekiery, Łopaty, Motyki"
+      - "&aPrzeciągnij na przedmiot lub użyj w lewej ręce (Shift+PPM)"
+    recipe:
+      enabled: true
+      shape:
+        - "RGR"
+        - "APA"
+        - "RDR"
+      ingredients:
+        R: "REDSTONE_BLOCK"
+        G: "GOLD_BLOCK"
+        A: "AMETHYST_SHARD"
+        P: "PAPER"
+        D: "DIAMOND"
+
+  zwoj_fortuny:
+    name: "&b&lZwój Fortuny &7(+1)"
+    material: "PAPER"
+    target-category: "TOOL"
+    upgrade-mode: "ENCHANTMENT"
+    enchantment: "FORTUNE"
+    max-level: 4
+    blocked-enchantments:
+      - "SILK_TOUCH"
+    lore:
+      - "&7Zwiększa zaklęcie &bSzczęście &7o &e+1"
+      - "&7(maksymalnie do poziomu &eIV&7)."
+      - "&8» &7Cel: &fKilofy, Siekiery, Łopaty, Motyki"
+      - "&cNie działa na narzędzia z Jedwabnym Dotykiem!"
+      - "&aPrzeciągnij na przedmiot lub użyj w lewej ręce (Shift+PPM)"
+    recipe:
+      enabled: true
+      shape:
+        - "EDE"
+        - "LPL"
+        - "EDE"
+      ingredients:
+        E: "EMERALD"
+        D: "DIAMOND"
+        L: "LAPIS_BLOCK"
+        P: "PAPER"
+
+  zwoj_ochrony:
+    name: "&a&lZwój Ochrony &7(+1)"
+    material: "PAPER"
+    target-category: "ARMOR"
+    upgrade-mode: "ENCHANTMENT"
+    enchantment: "PROTECTION"
+    max-level: 5
+    lore:
+      - "&7Zwiększa zaklęcie &aOchrona &7o &e+1"
+      - "&7(maksymalnie do poziomu &eV&7)."
+      - "&8» &7Cel: &fWszystkie elementy zbroi i Elytra"
+      - "&aPrzeciągnij na przedmiot lub użyj w lewej ręce (Shift+PPM)"
+    recipe:
+      enabled: true
+      shape:
+        - "IDI"
+        - "OPO"
+        - "IGI"
+      ingredients:
+        I: "IRON_BLOCK"
+        D: "DIAMOND"
+        O: "OBSIDIAN"
+        P: "PAPER"
+        G: "GOLD_BLOCK"
+
+  runa_niezniszczalnosci:
+    name: "&d&lRuna Niezniszczalności &7(+1)"
+    material: "AMETHYST_SHARD"
+    target-category: "BREAKABLE"
+    upgrade-mode: "ENCHANTMENT"
+    enchantment: "UNBREAKING"
+    max-level: 5
+    lore:
+      - "&7Zwiększa zaklęcie &dNiezniszczalność &7o &e+1"
+      - "&7(maksymalnie do poziomu &eV&7)."
+      - "&8» &7Cel: &fBroń, Narzędzia i Zbroje"
+      - "&aPrzeciągnij na przedmiot lub użyj w lewej ręce (Shift+PPM)"
+    recipe:
+      enabled: true
+      shape:
+        - "OAO"
+        - "ANA"
+        - "OAO"
+      ingredients:
+        O: "OBSIDIAN"
+        A: "AMETHYST_SHARD"
+        N: "DIAMOND"
+
+  runa_tieru_zbroi:
+    name: "&6&lRuna Awansu Zbroi &7(+1 Tier)"
+    material: "ECHO_SHARD"
+    target-category: "MAGIC_ARMOR"
+    upgrade-mode: "ARMOR_TIER"
+    max-level: 5
+    lore:
+      - "&7Awansuje część magicznej zbroi"
+      - "&7(&eGórnik / Handlarz / Wojownik&7) o &6+1 Tier&7!"
+      - "&7Zachowuje dodatkowe zaklęcia na przedmiocie."
+      - "&aPrzeciągnij na zbroję lub użyj w lewej ręce (Shift+PPM)"
+    recipe:
+      enabled: true
+      shape:
+        - "DED"
+        - "ENE"
+        - "BEB"
+      ingredients:
+        D: "DIAMOND_BLOCK"
+        E: "ECHO_SHARD"
+        N: "NETHERITE_INGOT"
+        B: "EMERALD_BLOCK"

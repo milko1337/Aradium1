@@ -5,11 +5,19 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import pl.nauka.aradium.core.ModuleManager;
+import pl.nauka.aradium.core.PluginModule;
 import pl.nauka.aradium.modules.armor.ArmorModule;
 import pl.nauka.aradium.modules.armor.ArmorPieceType;
+import pl.nauka.aradium.modules.armor.ArmorSetDefinition;
 import pl.nauka.aradium.modules.armor.ArmorTierBonus;
+import pl.nauka.aradium.modules.customitems.AntiMobTorchDefinition;
+import pl.nauka.aradium.modules.customitems.CustomItemModule;
+import pl.nauka.aradium.modules.customitems.GeneratorDefinition;
+import pl.nauka.aradium.modules.customitems.UpgradeScrollDefinition;
 import pl.nauka.aradium.modules.economy.EconomyManager;
 import pl.nauka.aradium.modules.magicitems.MagicItemDefinition;
 import pl.nauka.aradium.modules.magicitems.MagicItemModule;
@@ -1168,5 +1176,221 @@ class AradiumAuditTest {
         assertFalse(SpawnerLimitListener.isEligibleMobDropForBonus(Material.BOW, 1, false));
         assertFalse(SpawnerLimitListener.isEligibleMobDropForBonus(Material.TOTEM_OF_UNDYING, 1, false));
         assertFalse(SpawnerLimitListener.isEligibleMobDropForBonus(Material.SPAWNER, 1, false));
+    }
+
+    @Test
+    void customItemsRecipesAntiMobTorchScrollsModuleTogglesAndShopBalanceWorkCorrectly(@TempDir Path tempDir) throws Exception {
+        List<String> warnings = new ArrayList<>();
+        Logger strictLogger = Logger.getLogger("CustomItemsStrictTest");
+        strictLogger.setUseParentHandlers(false);
+        Handler capture = new Handler() {
+            @Override
+            public void publish(LogRecord record) {
+                if (record.getLevel().intValue() >= Level.WARNING.intValue()) {
+                    warnings.add(record.getMessage());
+                }
+            }
+
+            @Override
+            public void flush() {
+            }
+
+            @Override
+            public void close() {
+            }
+        };
+        strictLogger.addHandler(capture);
+
+        CustomItemModule customItems;
+        try (InputStream customStream = getClass().getClassLoader().getResourceAsStream("custom-items.yml")) {
+            assertNotNull(customStream);
+            YamlConfiguration customYaml = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(customStream, StandardCharsets.UTF_8)
+            );
+            customItems = new CustomItemModule(strictLogger);
+            customItems.reload(customYaml);
+            assertTrue(warnings.isEmpty(), "Ostrzeżenia parsowania custom-items.yml: " + warnings);
+        } finally {
+            strictLogger.removeHandler(capture);
+        }
+
+        // 1. Stawiane generatory (cobble_generator + ore_generator_t1..t3) i wagi dropów
+        Map<String, GeneratorDefinition> generators = customItems.getGeneratorsSnapshot();
+        assertEquals(4, generators.size());
+        for (GeneratorDefinition gen : generators.values()) {
+            assertNotNull(gen.recipe());
+            assertTrue(gen.recipe().isValid(), "Niepoprawna receptura generatora: " + gen.id());
+            assertEquals(100.0, gen.totalWeight(), 0.001, "Suma wag != 100% dla " + gen.id());
+            assertFalse(gen.formatDropsLore(Map.of()).isEmpty());
+        }
+        assertEquals(Material.COBBLESTONE, customItems.getGenerator("cobble_generator").rollBlock(0.10));
+        assertEquals(Material.STONE, customItems.getGenerator("cobble_generator").rollBlock(0.95));
+        assertEquals(Material.ANCIENT_DEBRIS, customItems.getGenerator("ore_generator_t3").rollBlock(0.99));
+
+        // 2. Pochodnia Anty-Mob (32 kratki, blokuje naturalny spawn wrogich mobów, nie blokuje spawnerów)
+        AntiMobTorchDefinition torch = customItems.getAntiMobTorch();
+        assertNotNull(torch);
+        assertEquals(32, torch.radius());
+        assertNotNull(torch.recipe());
+        assertTrue(torch.recipe().isValid());
+        assertTrue(torch.isPlacedTorchMaterial(Material.SOUL_TORCH));
+        assertTrue(torch.isPlacedTorchMaterial(Material.SOUL_WALL_TORCH));
+        assertTrue(torch.blocksReason(CreatureSpawnEvent.SpawnReason.NATURAL));
+        assertTrue(torch.blocksReason(CreatureSpawnEvent.SpawnReason.PATROL));
+        assertFalse(torch.blocksReason(CreatureSpawnEvent.SpawnReason.SPAWNER));
+        assertFalse(torch.blocksReason(CreatureSpawnEvent.SpawnReason.BREEDING));
+
+        customItems.registerPlacedAntiMobTorchPos(new CustomItemModule.BlockPos("skyblock_world", 10, 100, 10), 32);
+        assertTrue(customItems.shouldBlockMobSpawn(true, CreatureSpawnEvent.SpawnReason.NATURAL, "skyblock_world", 10, 100, 10));
+        assertTrue(customItems.shouldBlockMobSpawn(true, CreatureSpawnEvent.SpawnReason.NATURAL, "skyblock_world", 42, 100, 10));
+        assertFalse(customItems.shouldBlockMobSpawn(true, CreatureSpawnEvent.SpawnReason.NATURAL, "skyblock_world", 43, 100, 10));
+        assertFalse(customItems.shouldBlockMobSpawn(false, CreatureSpawnEvent.SpawnReason.NATURAL, "skyblock_world", 10, 100, 10));
+        assertFalse(customItems.shouldBlockMobSpawn(true, CreatureSpawnEvent.SpawnReason.SPAWNER, "skyblock_world", 10, 100, 10));
+        assertFalse(customItems.shouldBlockMobSpawn(true, CreatureSpawnEvent.SpawnReason.NATURAL, "world_nether", 10, 100, 10));
+
+        // 3. Zwoje i runy ulepszeń + walidacja kompatybilności i limitów
+        Map<String, UpgradeScrollDefinition> scrolls = customItems.getUpgradeScrollsSnapshot();
+        assertEquals(6, scrolls.size());
+        for (UpgradeScrollDefinition scroll : scrolls.values()) {
+            assertNotNull(scroll.recipe());
+            assertTrue(scroll.recipe().isValid(), "Niepoprawna receptura zwoju: " + scroll.id());
+        }
+
+        UpgradeScrollDefinition sharpScroll = scrolls.get("zwoj_ostrosci");
+        assertTrue(sharpScroll.isCompatibleMaterial(Material.DIAMOND_SWORD));
+        assertTrue(sharpScroll.isCompatibleMaterial(Material.NETHERITE_AXE));
+        assertFalse(sharpScroll.isCompatibleMaterial(Material.DIAMOND_PICKAXE));
+        assertTrue(sharpScroll.evaluateEnchantmentUpgrade(Material.DIAMOND_SWORD, 5, false).success());
+        assertEquals(6, sharpScroll.evaluateEnchantmentUpgrade(Material.DIAMOND_SWORD, 5, false).nextLevel());
+        assertFalse(sharpScroll.evaluateEnchantmentUpgrade(Material.DIAMOND_SWORD, 6, false).success());
+
+        UpgradeScrollDefinition fortuneScroll = scrolls.get("zwoj_fortuny");
+        assertTrue(fortuneScroll.isCompatibleMaterial(Material.DIAMOND_PICKAXE));
+        assertFalse(fortuneScroll.evaluateEnchantmentUpgrade(Material.DIAMOND_PICKAXE, 1, true).success());
+        assertTrue(fortuneScroll.evaluateEnchantmentUpgrade(Material.DIAMOND_PICKAXE, 3, false).success());
+        assertFalse(fortuneScroll.evaluateEnchantmentUpgrade(Material.DIAMOND_PICKAXE, 4, false).success());
+
+        UpgradeScrollDefinition unbreakingScroll = scrolls.get("runa_niezniszczalnosci");
+        assertTrue(unbreakingScroll.isCompatibleMaterial(Material.BOW));
+        assertTrue(unbreakingScroll.isCompatibleMaterial(Material.DIAMOND_CHESTPLATE));
+        assertEquals(ArmorPieceType.CHESTPLATE, CustomItemModule.resolveArmorPieceType(Material.DIAMOND_CHESTPLATE));
+
+        ArmorSetDefinition gornikSet = new ArmorSetDefinition(
+                "gornik",
+                "Górnik",
+                "DIAMOND",
+                "aradium_armor_gornik",
+                1000,
+                Map.of(),
+                Map.of(
+                        1, new ArmorTierBonus(1, Map.of(), 0, List.of(), 1001),
+                        2, new ArmorTierBonus(2, Map.of(), 0, List.of(), 1002)
+                )
+        );
+        assertEquals(2, CustomItemModule.computeNextArmorTier(gornikSet, 1, 5));
+        assertEquals(-1, CustomItemModule.computeNextArmorTier(gornikSet, 2, 5));
+
+        // 4. Wyłączanie i przełączanie modułów z config.yml / ModuleManager
+        try (InputStream cfgStream = getClass().getClassLoader().getResourceAsStream("config.yml")) {
+            assertNotNull(cfgStream);
+            YamlConfiguration cfgYaml = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(cfgStream, StandardCharsets.UTF_8)
+            );
+            assertTrue(cfgYaml.getBoolean("modules.custom_items"));
+            assertTrue(cfgYaml.getBoolean("modules.moderation"));
+            assertTrue(cfgYaml.getBoolean("modules.ranks"));
+            cfgYaml.set("modules.economy", false);
+
+            final boolean[] ecoActive = {false};
+            final boolean[] customActive = {false};
+            PluginModule ecoDummy = new PluginModule() {
+                @Override public String getId() { return "economy"; }
+                @Override public void enable() { ecoActive[0] = true; }
+                @Override public void disable() { ecoActive[0] = false; }
+                @Override public boolean isEnabled() { return ecoActive[0]; }
+            };
+            PluginModule customDummy = new PluginModule() {
+                @Override public String getId() { return "custom_items"; }
+                @Override public void enable() { customActive[0] = true; }
+                @Override public void disable() { customActive[0] = false; }
+                @Override public boolean isEnabled() { return customActive[0]; }
+            };
+
+            ModuleManager modManager = new ModuleManager(cfgYaml, Logger.getLogger("ModToggleTest"), null);
+            modManager.registerModule(ecoDummy);
+            modManager.registerModule(customDummy);
+            modManager.enableAll();
+
+            assertFalse(ecoDummy.isEnabled());
+            assertTrue(customDummy.isEnabled());
+
+            assertTrue(modManager.setModuleEnabled("custom_items", false, true));
+            assertFalse(customDummy.isEnabled());
+            assertFalse(cfgYaml.getBoolean("modules.custom_items"));
+
+            assertTrue(modManager.setModuleEnabled("economy", true, true));
+            assertTrue(ecoDummy.isEnabled());
+            assertTrue(cfgYaml.getBoolean("modules.economy"));
+
+            modManager.reloadAll();
+            assertFalse(customDummy.isEnabled());
+            assertTrue(ecoDummy.isEnabled());
+        }
+
+        // 5. Brak arbitrażu między kategoriami sklepu oraz integracja custom-item w /shop
+        List<String> shopNames = List.of(
+                "main", "building", "blocks", "wood", "natural", "decorative_blocks",
+                "ores", "farming", "food", "combat", "redstone", "magic",
+                "mobdrops", "decoration", "music", "storage", "misc"
+        );
+        Path shopsDir = tempDir.resolve("shops_balance");
+        Files.createDirectories(shopsDir);
+        for (String shopName : shopNames) {
+            try (InputStream stream = getClass().getClassLoader().getResourceAsStream("shops/" + shopName + ".yml")) {
+                assertNotNull(stream);
+                Files.copy(stream, shopsDir.resolve(shopName + ".yml"));
+            }
+        }
+        ShopManager shopManager = new ShopManager(Logger.getLogger("ShopBalanceAudit"));
+        shopManager.loadFromDirectory(shopsDir.toFile());
+
+        Map<Material, Double> minBuyByMat = new java.util.EnumMap<>(Material.class);
+        Map<Material, Double> maxSellByMat = new java.util.EnumMap<>(Material.class);
+        int customShopEntries = 0;
+
+        for (ShopCategory category : shopManager.getCategories()) {
+            for (Map<Integer, ShopItem> page : category.pages()) {
+                for (ShopItem item : page.values()) {
+                    if (item.isNavigationItem()) {
+                        continue;
+                    }
+                    if (item.hasCustomItem()) {
+                        customShopEntries++;
+                        assertTrue(customItems.getAllCustomItemIds().contains(item.customItemId()),
+                                "Nieznany custom-item w sklepie: " + item.customItemId());
+                        assertTrue(item.canBuy());
+                        assertFalse(item.canSell());
+                        continue;
+                    }
+                    if (item.canBuy()) {
+                        minBuyByMat.merge(item.material(), item.buyPrice(), Math::min);
+                    }
+                    if (item.canSell()) {
+                        maxSellByMat.merge(item.material(), item.sellPrice(), Math::max);
+                    }
+                }
+            }
+        }
+
+        assertEquals(11, customShopEntries);
+        for (Map.Entry<Material, Double> sellEntry : maxSellByMat.entrySet()) {
+            Double minBuy = minBuyByMat.get(sellEntry.getKey());
+            if (minBuy != null) {
+                assertTrue(
+                        sellEntry.getValue() < minBuy,
+                        "Arbitraż cenowy dla " + sellEntry.getKey() + ": sell=" + sellEntry.getValue() + ", buy=" + minBuy
+                );
+            }
+        }
     }
 }

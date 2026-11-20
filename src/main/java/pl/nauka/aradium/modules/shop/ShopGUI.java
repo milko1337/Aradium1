@@ -745,6 +745,28 @@ public class ShopGUI {
             return;
         }
 
+        ItemStack customTemplate = null;
+        if (item.hasCustomItem()) {
+            var customModule = plugin.getCustomItemModule().filter(PluginModule::isEnabled).orElse(null);
+            if (customModule == null) {
+                player.sendMessage(ChatUtils.getMessage(
+                        plugin.getConfig(),
+                        "messages.custom_items_disabled",
+                        "&cModuł specjalnych przedmiotów jest aktualnie wyłączony!"
+                ));
+                return;
+            }
+            customTemplate = customModule.createCustomItem(item.customItemId(), 1);
+            if (customTemplate == null) {
+                player.sendMessage(ChatUtils.getMessage(
+                        plugin.getConfig(),
+                        "messages.invalid_item_type",
+                        "&cTaki specjalny przedmiot nie istnieje w custom-items.yml!"
+                ));
+                return;
+            }
+        }
+
         double totalPrice = EconomyManager.normalizeAmount(item.buyPrice() * amount);
         if (totalPrice < 0.0) {
             return;
@@ -761,7 +783,10 @@ public class ShopGUI {
         }
 
         PlayerInventory inventory = player.getInventory();
-        if (getAvailableSpace(inventory, item.material()) < amount) {
+        int availableSpace = customTemplate != null
+                ? getAvailableSpaceForTemplate(inventory, customTemplate)
+                : getAvailableSpace(inventory, item.material());
+        if (availableSpace < amount) {
             player.sendMessage(ChatUtils.getMessage(
                     plugin.getConfig(),
                     "messages.shop_inventory_full",
@@ -780,7 +805,11 @@ public class ShopGUI {
             return;
         }
 
-        giveItemsToPlayer(player, item.material(), amount);
+        if (customTemplate != null) {
+            giveTemplateItemsToPlayer(player, customTemplate, amount);
+        } else {
+            giveItemsToPlayer(player, item.material(), amount);
+        }
         player.sendMessage(ChatUtils.getMessage(
                         plugin.getConfig(),
                         "messages.shop_bought",
@@ -938,12 +967,18 @@ public class ShopGUI {
     }
 
     private static void giveItemsToPlayer(Player player, Material material, int amount) {
+        giveTemplateItemsToPlayer(player, new ItemStack(material, 1), amount);
+    }
+
+    private static void giveTemplateItemsToPlayer(Player player, ItemStack template, int amount) {
         PlayerInventory inventory = player.getInventory();
-        int maxStack = Math.max(1, material.getMaxStackSize());
+        int maxStack = Math.max(1, template.getMaxStackSize());
         int remaining = amount;
         while (remaining > 0) {
             int stackSize = Math.min(remaining, maxStack);
-            Map<Integer, ItemStack> overflow = inventory.addItem(new ItemStack(material, stackSize));
+            ItemStack toGive = template.clone();
+            toGive.setAmount(stackSize);
+            Map<Integer, ItemStack> overflow = inventory.addItem(toGive);
             for (ItemStack leftover : overflow.values()) {
                 player.getWorld().dropItemNaturally(player.getLocation(), leftover);
             }
@@ -981,6 +1016,19 @@ public class ShopGUI {
             if (stack == null || stack.getType() == Material.AIR) {
                 capacity += maxStackSize;
             } else if (isSellableVanillaItem(stack, material) && stack.getAmount() < maxStackSize) {
+                capacity += (maxStackSize - stack.getAmount());
+            }
+        }
+        return capacity;
+    }
+
+    private static int getAvailableSpaceForTemplate(PlayerInventory inventory, ItemStack template) {
+        int maxStackSize = Math.max(1, template.getMaxStackSize());
+        int capacity = 0;
+        for (ItemStack stack : inventory.getStorageContents()) {
+            if (stack == null || stack.getType() == Material.AIR) {
+                capacity += maxStackSize;
+            } else if (stack.isSimilar(template) && stack.getAmount() < maxStackSize) {
                 capacity += (maxStackSize - stack.getAmount());
             }
         }

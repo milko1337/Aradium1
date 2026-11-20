@@ -17,7 +17,8 @@ public record ShopItem(
         double buyPrice,
         double sellPrice,
         String targetShop,
-        int defaultStackSize
+        int defaultStackSize,
+        String customItemId
 ) {
     public ShopItem(
             String id,
@@ -29,7 +30,21 @@ public record ShopItem(
             double sellPrice,
             String targetShop
     ) {
-        this(id, slot, material, name, lore, buyPrice, sellPrice, targetShop, 1);
+        this(id, slot, material, name, lore, buyPrice, sellPrice, targetShop, 1, null);
+    }
+
+    public ShopItem(
+            String id,
+            int slot,
+            Material material,
+            String name,
+            List<String> lore,
+            double buyPrice,
+            double sellPrice,
+            String targetShop,
+            int defaultStackSize
+    ) {
+        this(id, slot, material, name, lore, buyPrice, sellPrice, targetShop, defaultStackSize, null);
     }
 
     public ShopItem {
@@ -39,6 +54,9 @@ public record ShopItem(
         lore = lore != null ? List.copyOf(lore) : List.of();
         targetShop = (targetShop != null && !targetShop.isBlank()) ? targetShop : null;
         defaultStackSize = Math.max(1, Math.min(64, defaultStackSize));
+        customItemId = (customItemId != null && !customItemId.isBlank())
+                ? customItemId.trim().toLowerCase(java.util.Locale.ROOT)
+                : null;
     }
 
     public boolean canBuy() {
@@ -51,5 +69,9 @@ public record ShopItem(
 
     public boolean isNavigationItem() {
         return targetShop != null;
+    }
+
+    public boolean hasCustomItem() {
+        return customItemId != null;
     }
 }
