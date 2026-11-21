@@ -105,6 +105,10 @@
 - **`src/main/resources/regions.yml`**
   - Domyślny szkielet `regions: {}` dla stref odnawialnych rud.
 
+- **`.agents/` (`rules/aradium-standards.md`, `skills/aradium-workflow/SKILL.md`)**
+  - Przenośna konfiguracja agenta Antigravity wersjonowana razem z projektem w Git
+    (reguły architektury, pułapki Paper `26.3`, standard testów i runbook startu na innym PC).
+
 ---
 
 ### 1.2. Rdzeń pluginu, baza danych i narzędzia (`core` & `utils`)
@@ -386,6 +390,13 @@ Aktualna lista zadań pozostałych do realizacji znajduje się w pliku [`PLAN.md
 ---
 
 ## 4. Historia zmian (Changelog)
+
+### 2026-11-21 — Konfiguracja projektu dla Antigravity (`AGENTS.md` i `.agents/`) (`2.0.0-SNAPSHOT`)
+
+- Dodano [`AGENTS.md`](AGENTS.md) w katalogu głównym oraz reguły i skille w `.agents/`
+  (`rules/aradium-conventions.md`, `skills/aradium-release-workflow/SKILL.md`,
+  `skills/aradium-new-module/SKILL.md`), dzięki czemu zasady projektu, kontekst etapów
+  i procedury wdrożeniowe przenoszą się automatycznie między komputerami razem z repozytorium Git.
 
 ### 2026-11-21 — Nietypowe ulepszenia mechaniczne (`ULEPSZENIA_I_RECEPTURY.md`) oraz system `recipes.yml` + GUI Admina i Gracza (`2.0.0-SNAPSHOT`)
 
