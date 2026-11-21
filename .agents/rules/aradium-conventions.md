@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Konwencje kodu i bezpieczeństwa — Aradium
 
 ## Architektura modułowa (`core/`)
